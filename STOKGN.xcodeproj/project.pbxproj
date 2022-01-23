@@ -8,12 +8,20 @@
 
 /* Begin PBXBuildFile section */
 		34D19692279BE4AE00C1CE19 /* STOKGNApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D19691279BE4AE00C1CE19 /* STOKGNApp.swift */; };
-		34D19694279BE4AE00C1CE19 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D19693279BE4AE00C1CE19 /* ContentView.swift */; };
+		34D19694279BE4AE00C1CE19 /* HomePageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D19693279BE4AE00C1CE19 /* HomePageView.swift */; };
 		34D19696279BE4AF00C1CE19 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 34D19695279BE4AF00C1CE19 /* Assets.xcassets */; };
 		34D19699279BE4AF00C1CE19 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 34D19698279BE4AF00C1CE19 /* Preview Assets.xcassets */; };
 		34D196A3279BE4AF00C1CE19 /* STOKGNTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D196A2279BE4AF00C1CE19 /* STOKGNTests.swift */; };
 		34D196AD279BE4AF00C1CE19 /* STOKGNUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D196AC279BE4AF00C1CE19 /* STOKGNUITests.swift */; };
 		34D196AF279BE4AF00C1CE19 /* STOKGNUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D196AE279BE4AF00C1CE19 /* STOKGNUITestsLaunchTests.swift */; };
+		34D196BC279C976500C1CE19 /* Color+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D196BB279C976500C1CE19 /* Color+Ext.swift */; };
+		34F004FD279CB00F00899561 /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F004FC279CB00F00899561 /* ProgressBar.swift */; };
+		34F00500279CC2E800899561 /* Award.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F004FF279CC2E800899561 /* Award.swift */; };
+		34F00502279CCD7B00899561 /* ReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F00501279CCD7B00899561 /* ReviewCell.swift */; };
+		34F00507279CD77100899561 /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F00506279CD77100899561 /* MockData.swift */; };
+		34F00509279CDA5B00899561 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F00508279CDA5B00899561 /* User.swift */; };
+		34F0050D279CDC7100899561 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F0050C279CDC7100899561 /* Location.swift */; };
+		34F0050F279CDCA100899561 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F0050E279CDCA100899561 /* Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,7 +44,7 @@
 /* Begin PBXFileReference section */
 		34D1968E279BE4AE00C1CE19 /* STOKGN.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = STOKGN.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		34D19691279BE4AE00C1CE19 /* STOKGNApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STOKGNApp.swift; sourceTree = "<group>"; };
-		34D19693279BE4AE00C1CE19 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		34D19693279BE4AE00C1CE19 /* HomePageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageView.swift; sourceTree = "<group>"; };
 		34D19695279BE4AF00C1CE19 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		34D19698279BE4AF00C1CE19 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		34D1969E279BE4AF00C1CE19 /* STOKGNTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = STOKGNTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -44,6 +52,14 @@
 		34D196A8279BE4AF00C1CE19 /* STOKGNUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = STOKGNUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		34D196AC279BE4AF00C1CE19 /* STOKGNUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STOKGNUITests.swift; sourceTree = "<group>"; };
 		34D196AE279BE4AF00C1CE19 /* STOKGNUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STOKGNUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		34D196BB279C976500C1CE19 /* Color+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Ext.swift"; sourceTree = "<group>"; };
+		34F004FC279CB00F00899561 /* ProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
+		34F004FF279CC2E800899561 /* Award.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Award.swift; sourceTree = "<group>"; };
+		34F00501279CCD7B00899561 /* ReviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewCell.swift; sourceTree = "<group>"; };
+		34F00506279CD77100899561 /* MockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
+		34F00508279CDA5B00899561 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		34F0050C279CDC7100899561 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		34F0050E279CDCA100899561 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,8 +110,10 @@
 		34D19690279BE4AE00C1CE19 /* STOKGN */ = {
 			isa = PBXGroup;
 			children = (
+				34F004FE279CC2D500899561 /* Model */,
 				34D19691279BE4AE00C1CE19 /* STOKGNApp.swift */,
-				34D19693279BE4AE00C1CE19 /* ContentView.swift */,
+				34D196BF279C98EA00C1CE19 /* Views */,
+				34D196BD279C98A000C1CE19 /* Utilities */,
 				34D19695279BE4AF00C1CE19 /* Assets.xcassets */,
 				34D19697279BE4AF00C1CE19 /* Preview Content */,
 			);
@@ -125,6 +143,68 @@
 				34D196AE279BE4AF00C1CE19 /* STOKGNUITestsLaunchTests.swift */,
 			);
 			path = STOKGNUITests;
+			sourceTree = "<group>";
+		};
+		34D196BD279C98A000C1CE19 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				34D196BE279C98DF00C1CE19 /* Extensions */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		34D196BE279C98DF00C1CE19 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				34D196BB279C976500C1CE19 /* Color+Ext.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		34D196BF279C98EA00C1CE19 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				34F00505279CCDB000899561 /* CustomViews */,
+				34F00503279CCD8800899561 /* CustomCells */,
+				34D196C0279C98FD00C1CE19 /* Screens */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		34D196C0279C98FD00C1CE19 /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				34D19693279BE4AE00C1CE19 /* HomePageView.swift */,
+			);
+			name = Screens;
+			sourceTree = "<group>";
+		};
+		34F004FE279CC2D500899561 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				34F004FF279CC2E800899561 /* Award.swift */,
+				34F00506279CD77100899561 /* MockData.swift */,
+				34F00508279CDA5B00899561 /* User.swift */,
+				34F0050C279CDC7100899561 /* Location.swift */,
+				34F0050E279CDCA100899561 /* Constants.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		34F00503279CCD8800899561 /* CustomCells */ = {
+			isa = PBXGroup;
+			children = (
+				34F00501279CCD7B00899561 /* ReviewCell.swift */,
+			);
+			name = CustomCells;
+			sourceTree = "<group>";
+		};
+		34F00505279CCDB000899561 /* CustomViews */ = {
+			isa = PBXGroup;
+			children = (
+				34F004FC279CB00F00899561 /* ProgressBar.swift */,
+			);
+			name = CustomViews;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -257,8 +337,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				34D19694279BE4AE00C1CE19 /* ContentView.swift in Sources */,
+				34D19694279BE4AE00C1CE19 /* HomePageView.swift in Sources */,
+				34F0050F279CDCA100899561 /* Constants.swift in Sources */,
+				34F00502279CCD7B00899561 /* ReviewCell.swift in Sources */,
+				34F0050D279CDC7100899561 /* Location.swift in Sources */,
 				34D19692279BE4AE00C1CE19 /* STOKGNApp.swift in Sources */,
+				34F00500279CC2E800899561 /* Award.swift in Sources */,
+				34F00509279CDA5B00899561 /* User.swift in Sources */,
+				34F004FD279CB00F00899561 /* ProgressBar.swift in Sources */,
+				34F00507279CD77100899561 /* MockData.swift in Sources */,
+				34D196BC279C976500C1CE19 /* Color+Ext.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
