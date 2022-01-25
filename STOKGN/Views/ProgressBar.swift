@@ -18,12 +18,12 @@ struct ProgressBar: View {
                 Circle()
                     .stroke(lineWidth: 10)
                     .opacity(0.3)
-                    .foregroundColor(award.color)
+                    .foregroundColor(award.category.color)
                 
                 Circle()
                     .trim(from: 0.0, to: CGFloat(min(self.progress, 1.0)))
                     .stroke(style: StrokeStyle(lineWidth: 10, lineCap: .round, lineJoin: .round))
-                    .foregroundColor(award.color)
+                    .foregroundColor(award.category.color)
                     .rotationEffect(Angle(degrees: 270))
                     .animation(.linear, value: true)
                 

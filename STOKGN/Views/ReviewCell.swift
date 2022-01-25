@@ -11,25 +11,37 @@ struct ReviewCell: View {
     
     var user: User
     var location: Location
+    var height: CGFloat
     
     var body: some View {
         
         ZStack {
+            
+            Color.white
+            
             HStack(alignment: .top) {
                 VStack(alignment: .leading) {
 
-                    Image(uiImage: user.photo)
-                        .resizable()
-                        .clipShape(Circle())
-                        .frame(width: 50, height: 50)
-                        .scaledToFit()
+                    HStack {
+                        Image(uiImage: user.photo)
+                            .resizable()
+                            .clipShape(Circle())
+                            .frame(width: 50, height: 50)
+                            .scaledToFit()
                         .font(.title)
+                        
+                        Text("\(user.name) visited")
+                            .minimumScaleFactor(0.75)
+                    }
                     
-                    Text("\(user.name) visited")
+                    
                 
     
                     Text("\(location.name)")
                         .font(.title2)
+                        .fontWeight(.semibold)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.75)
                     
                     Spacer()
                     
@@ -42,7 +54,13 @@ struct ReviewCell: View {
                 ZStack(alignment: .trailing) {
                     
                     //Change to image. Which will default to locations image if user doesn't upload image with review
-                    Color.OKGNBlue
+                    Image(uiImage: location.image)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: height ,height: height)
+                        .clipped()
+                        .clipShape(RoundedRectangle(cornerRadius: 16))
+                    
                     
                     VStack(alignment: .trailing, spacing: 4) {
                         Text("7.8")
@@ -56,17 +74,16 @@ struct ReviewCell: View {
                         
                     }
                 }
-                .frame(width: 180)
+                .frame(width: height)
             }
         }
-        .frame(height: 180)
-        
-        .padding()
+        .frame(height: height)
+        .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 }
 
 struct ReviewCell_Previews: PreviewProvider {
     static var previews: some View {
-        ReviewCell(user: MockUser.mockUser)
+        ReviewCell(user: MockData.mockUser, location: MockData.mockPizzeriaLocation, height: 180)
     }
 }

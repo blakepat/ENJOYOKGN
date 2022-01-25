@@ -17,5 +17,6 @@ extension Color {
     static let OKGNOrange = Color("OKGNOrange")
     static let OKGNDarkYellow = Color("OKGNDarkYellow")
     static let OKGNLightYellow = Color("OKGNLightYellow")
+    static let OKGNDarkBlue = Color("OKGNDarkBlue")
     
 }

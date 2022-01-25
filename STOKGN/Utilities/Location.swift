@@ -6,11 +6,13 @@
 //
 
 import Foundation
+import UIKit
 
 
 struct Location {
     
     var name: String
     var category: Category
+    var image: UIImage
     
 }

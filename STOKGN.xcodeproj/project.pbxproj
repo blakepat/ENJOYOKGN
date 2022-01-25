@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3421BE79279F693600921D70 /* TrophyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BE78279F693600921D70 /* TrophyCell.swift */; };
+		3421BE7B279F6AFE00921D70 /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BE7A279F6AFE00921D70 /* Review.swift */; };
 		34D19692279BE4AE00C1CE19 /* STOKGNApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D19691279BE4AE00C1CE19 /* STOKGNApp.swift */; };
 		34D19694279BE4AE00C1CE19 /* HomePageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D19693279BE4AE00C1CE19 /* HomePageView.swift */; };
 		34D19696279BE4AF00C1CE19 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 34D19695279BE4AF00C1CE19 /* Assets.xcassets */; };
@@ -42,6 +44,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3421BE78279F693600921D70 /* TrophyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrophyCell.swift; sourceTree = "<group>"; };
+		3421BE7A279F6AFE00921D70 /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
 		34D1968E279BE4AE00C1CE19 /* STOKGN.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = STOKGN.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		34D19691279BE4AE00C1CE19 /* STOKGNApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STOKGNApp.swift; sourceTree = "<group>"; };
 		34D19693279BE4AE00C1CE19 /* HomePageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageView.swift; sourceTree = "<group>"; };
@@ -110,10 +114,10 @@
 		34D19690279BE4AE00C1CE19 /* STOKGN */ = {
 			isa = PBXGroup;
 			children = (
-				34F004FE279CC2D500899561 /* Model */,
 				34D19691279BE4AE00C1CE19 /* STOKGNApp.swift */,
-				34D196BF279C98EA00C1CE19 /* Views */,
 				34D196BD279C98A000C1CE19 /* Utilities */,
+				34D196BF279C98EA00C1CE19 /* Views */,
+				34F004FE279CC2D500899561 /* Model */,
 				34D19695279BE4AF00C1CE19 /* Assets.xcassets */,
 				34D19697279BE4AF00C1CE19 /* Preview Content */,
 			);
@@ -148,6 +152,11 @@
 		34D196BD279C98A000C1CE19 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				34F0050E279CDCA100899561 /* Constants.swift */,
+				34F00508279CDA5B00899561 /* User.swift */,
+				34F004FF279CC2E800899561 /* Award.swift */,
+				34F0050C279CDC7100899561 /* Location.swift */,
+				3421BE7A279F6AFE00921D70 /* Review.swift */,
 				34D196BE279C98DF00C1CE19 /* Extensions */,
 			);
 			path = Utilities;
@@ -182,11 +191,7 @@
 		34F004FE279CC2D500899561 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				34F004FF279CC2E800899561 /* Award.swift */,
 				34F00506279CD77100899561 /* MockData.swift */,
-				34F00508279CDA5B00899561 /* User.swift */,
-				34F0050C279CDC7100899561 /* Location.swift */,
-				34F0050E279CDCA100899561 /* Constants.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -195,6 +200,7 @@
 			isa = PBXGroup;
 			children = (
 				34F00501279CCD7B00899561 /* ReviewCell.swift */,
+				3421BE78279F693600921D70 /* TrophyCell.swift */,
 			);
 			name = CustomCells;
 			sourceTree = "<group>";
@@ -337,10 +343,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3421BE79279F693600921D70 /* TrophyCell.swift in Sources */,
 				34D19694279BE4AE00C1CE19 /* HomePageView.swift in Sources */,
 				34F0050F279CDCA100899561 /* Constants.swift in Sources */,
 				34F00502279CCD7B00899561 /* ReviewCell.swift in Sources */,
 				34F0050D279CDC7100899561 /* Location.swift in Sources */,
+				3421BE7B279F6AFE00921D70 /* Review.swift in Sources */,
 				34D19692279BE4AE00C1CE19 /* STOKGNApp.swift in Sources */,
 				34F00500279CC2E800899561 /* Award.swift in Sources */,
 				34F00509279CDA5B00899561 /* User.swift in Sources */,

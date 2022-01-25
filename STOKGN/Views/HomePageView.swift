@@ -18,7 +18,7 @@ struct HomePageView: View {
         ZStack {
             Color.OKGNBlue.edgesIgnoringSafeArea(.all)
             
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 0) {
                 
                 // Name
                 HStack(alignment: .top) {
@@ -43,20 +43,41 @@ struct HomePageView: View {
                         ForEach((0...4), id: \.self) { index in
                             ProgressBar(progress: self.$progressValue, award: AwardTypes.awards[index])
                         }
-                        
-//                        ProgressBar(progress: self.$progressValue)
-//                        ProgressBar(progress: self.$progressValue)
-//                        ProgressBar(progress: self.$progressValue)
-//                        ProgressBar(progress: self.$progressValue)
                     }
                 }
                 .frame(height: 200)
                 
                 // Most recent visit (Just one)
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("Most Recent Visit")
+                        .foregroundColor(.white)
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                    ReviewCell(user: MockData.mockUser, location: MockData.mockPizzeriaLocation, height: 160)
+                        
+                }
+                .padding(8)
                 
-                
-
                 // Favourites from each category
+                
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("Top Rated Visits:")
+                        .foregroundColor(.white)
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                    .padding(.top)
+                    
+                    ScrollView(.vertical) {
+                        LazyVGrid(columns: rows) {
+                            ForEach(MockData.mockReviews) { review in
+                                TrophyCell(review: review)
+                            }
+                        }
+                    }
+                }
+                .padding(.horizontal, 8)
+                
+               
                 
                 
                 
