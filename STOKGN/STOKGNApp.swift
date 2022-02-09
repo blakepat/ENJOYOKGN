@@ -11,7 +11,7 @@ import SwiftUI
 struct STOKGNApp: App {
     var body: some Scene {
         WindowGroup {
-            HomePageView()
+            TabBarView()
         }
     }
 }

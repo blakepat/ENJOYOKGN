@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+let categories: [Category] = [.Winery, .Brewery, .Cafe, .Pizzeria, .Activity]
 
 enum Category {
     
@@ -28,17 +29,65 @@ enum Category {
         // Use Internationalization, as appropriate.
         case .Winery: return Color.OKGNPurple
         case .Brewery: return Color.OKGNPeach
-        case .Cafe: return Color.OKGNDarkYellow
+        case .Cafe: return Color.OKGNLightBlue
         case .Pizzeria: return Color.OKGNPink
-        case .Activity: return Color.OKGNLightYellow
+        case .Activity: return Color.OKGNLightGreen
+        }
+    }
+}
+
+func returnCategoryFromString(_ name: String) -> Category {
+    switch name {
+    // Use Internationalization, as appropriate.
+    case "Winery": return .Winery
+    case "Brewery": return .Brewery
+    case "Cafe": return .Cafe
+    case "Pizzeria": return .Pizzeria
+    case "Activity": return .Activity
+    default:
+        return .Activity
+    }
+}
+
+
+enum Ranking {
+    
+    case first, second, third
+    
+    var trophyImage : Image {
+        switch self {
+        case .first: return Image("GoldTrophy")
+        case .second: return Image("SilverTrophy")
+        case .third: return Image("BronzeTrophy")
         }
     }
     
-//    static let pizzaAward = Award(name: "El Presidente Award", caption: "Eat at 10 Pizzerias", color: Color.OKGNPink)
-//    static let wineryAward = Award(name: "Sommelier Award", caption: "Drink at 10 Wineries", color: Color.OKGNPurple)
-//    static let breweryAward = Award(name: "Brewmaster Award", caption: "Drink at 10 Breweries", color: Color.OKGNPeach)
-//    static let cafeAward = Award(name: "Java Joe Award", caption: "Visit 10 Cafe's", color: Color.OKGNDarkYellow)
-//    static let activityAward = Award(name: "Adventurer Award", caption: "Complete 10 Activities", color: Color.OKGNLightYellow)
-    
 }
 
+
+enum RecordType {
+    static let location = "OKGNLocation"
+    static let profile = "OKGNProfile"
+}
+
+
+// To-do: Change these default images (something more bland and small in storage size
+enum PlaceholderImage {
+    static let avatar = UIImage(named: "default-profileAvatar")!
+    static let square = UIImage(named: "MockReviewPhoto")!
+    static let banner = UIImage(named: "MockLocationPhoto")!
+}
+
+
+enum ImageDimension {
+    case square, banner
+    
+    static func getPlaceholder(for dimension: ImageDimension) -> UIImage {
+        switch dimension {
+        case .square:
+            return PlaceholderImage.square
+        case .banner:
+            return PlaceholderImage.banner
+        }
+    }
+}

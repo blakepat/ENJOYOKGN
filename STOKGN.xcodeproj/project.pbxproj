@@ -9,6 +9,20 @@
 /* Begin PBXBuildFile section */
 		3421BE79279F693600921D70 /* TrophyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BE78279F693600921D70 /* TrophyCell.swift */; };
 		3421BE7B279F6AFE00921D70 /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BE7A279F6AFE00921D70 /* Review.swift */; };
+		3421BE7D27A1D1D100921D70 /* Date+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BE7C27A1D1D100921D70 /* Date+Ext.swift */; };
+		3421BE8127AC73A800921D70 /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BE8027AC73A800921D70 /* TabBarView.swift */; };
+		3421BE8327AC760500921D70 /* DetailedVisitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BE8227AC760500921D70 /* DetailedVisitView.swift */; };
+		3421BE8527AC7D8300921D70 /* XDismissButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BE8427AC7D8300921D70 /* XDismissButton.swift */; };
+		3421BE8727B1F06200921D70 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BE8627B1F06200921D70 /* MapView.swift */; };
+		3421BE8B27B1F6EB00921D70 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3421BE8A27B1F6EB00921D70 /* CloudKit.framework */; };
+		3421BE8D27B1FB8A00921D70 /* OKGNLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BE8C27B1FB8A00921D70 /* OKGNLocation.swift */; };
+		3421BE8F27B1FC2300921D70 /* CKAsset+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BE8E27B1FC2300921D70 /* CKAsset+Ext.swift */; };
+		3421BE9127B1FD6E00921D70 /* OKGNProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BE9027B1FD6E00921D70 /* OKGNProfile.swift */; };
+		3421BE9327B347C100921D70 /* LocationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BE9227B347C100921D70 /* LocationListView.swift */; };
+		3421BE9527B348B600921D70 /* LocationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BE9427B348B600921D70 /* LocationCell.swift */; };
+		3421BE9727B34A1400921D70 /* LocationDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BE9627B34A1400921D70 /* LocationDetailView.swift */; };
+		3421BE9927B34EF600921D70 /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BE9827B34EF600921D70 /* CloudKitManager.swift */; };
+		3421BE9C27B353C400921D70 /* CKRecord+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BE9B27B353C400921D70 /* CKRecord+Ext.swift */; };
 		34D19692279BE4AE00C1CE19 /* STOKGNApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D19691279BE4AE00C1CE19 /* STOKGNApp.swift */; };
 		34D19694279BE4AE00C1CE19 /* HomePageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D19693279BE4AE00C1CE19 /* HomePageView.swift */; };
 		34D19696279BE4AF00C1CE19 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 34D19695279BE4AF00C1CE19 /* Assets.xcassets */; };
@@ -46,6 +60,21 @@
 /* Begin PBXFileReference section */
 		3421BE78279F693600921D70 /* TrophyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrophyCell.swift; sourceTree = "<group>"; };
 		3421BE7A279F6AFE00921D70 /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
+		3421BE7C27A1D1D100921D70 /* Date+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Ext.swift"; sourceTree = "<group>"; };
+		3421BE8027AC73A800921D70 /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
+		3421BE8227AC760500921D70 /* DetailedVisitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedVisitView.swift; sourceTree = "<group>"; };
+		3421BE8427AC7D8300921D70 /* XDismissButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDismissButton.swift; sourceTree = "<group>"; };
+		3421BE8627B1F06200921D70 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
+		3421BE8827B1F6E700921D70 /* STOKGN.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = STOKGN.entitlements; sourceTree = "<group>"; };
+		3421BE8A27B1F6EB00921D70 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		3421BE8C27B1FB8A00921D70 /* OKGNLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OKGNLocation.swift; sourceTree = "<group>"; };
+		3421BE8E27B1FC2300921D70 /* CKAsset+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CKAsset+Ext.swift"; sourceTree = "<group>"; };
+		3421BE9027B1FD6E00921D70 /* OKGNProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OKGNProfile.swift; sourceTree = "<group>"; };
+		3421BE9227B347C100921D70 /* LocationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationListView.swift; sourceTree = "<group>"; };
+		3421BE9427B348B600921D70 /* LocationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationCell.swift; sourceTree = "<group>"; };
+		3421BE9627B34A1400921D70 /* LocationDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDetailView.swift; sourceTree = "<group>"; };
+		3421BE9827B34EF600921D70 /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CloudKitManager.swift; path = Managers/CloudKitManager.swift; sourceTree = "<group>"; };
+		3421BE9B27B353C400921D70 /* CKRecord+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CKRecord+Ext.swift"; sourceTree = "<group>"; };
 		34D1968E279BE4AE00C1CE19 /* STOKGN.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = STOKGN.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		34D19691279BE4AE00C1CE19 /* STOKGNApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STOKGNApp.swift; sourceTree = "<group>"; };
 		34D19693279BE4AE00C1CE19 /* HomePageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageView.swift; sourceTree = "<group>"; };
@@ -71,6 +100,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3421BE8B27B1F6EB00921D70 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -91,6 +121,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3421BE8927B1F6EB00921D70 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3421BE8A27B1F6EB00921D70 /* CloudKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		34D19685279BE4AE00C1CE19 = {
 			isa = PBXGroup;
 			children = (
@@ -98,6 +136,7 @@
 				34D196A1279BE4AF00C1CE19 /* STOKGNTests */,
 				34D196AB279BE4AF00C1CE19 /* STOKGNUITests */,
 				34D1968F279BE4AE00C1CE19 /* Products */,
+				3421BE8927B1F6EB00921D70 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -114,6 +153,7 @@
 		34D19690279BE4AE00C1CE19 /* STOKGN */ = {
 			isa = PBXGroup;
 			children = (
+				3421BE8827B1F6E700921D70 /* STOKGN.entitlements */,
 				34D19691279BE4AE00C1CE19 /* STOKGNApp.swift */,
 				34D196BD279C98A000C1CE19 /* Utilities */,
 				34D196BF279C98EA00C1CE19 /* Views */,
@@ -153,10 +193,7 @@
 			isa = PBXGroup;
 			children = (
 				34F0050E279CDCA100899561 /* Constants.swift */,
-				34F00508279CDA5B00899561 /* User.swift */,
-				34F004FF279CC2E800899561 /* Award.swift */,
-				34F0050C279CDC7100899561 /* Location.swift */,
-				3421BE7A279F6AFE00921D70 /* Review.swift */,
+				3421BE9827B34EF600921D70 /* CloudKitManager.swift */,
 				34D196BE279C98DF00C1CE19 /* Extensions */,
 			);
 			path = Utilities;
@@ -166,6 +203,9 @@
 			isa = PBXGroup;
 			children = (
 				34D196BB279C976500C1CE19 /* Color+Ext.swift */,
+				3421BE7C27A1D1D100921D70 /* Date+Ext.swift */,
+				3421BE8E27B1FC2300921D70 /* CKAsset+Ext.swift */,
+				3421BE9B27B353C400921D70 /* CKRecord+Ext.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -184,6 +224,10 @@
 			isa = PBXGroup;
 			children = (
 				34D19693279BE4AE00C1CE19 /* HomePageView.swift */,
+				3421BE8027AC73A800921D70 /* TabBarView.swift */,
+				3421BE8627B1F06200921D70 /* MapView.swift */,
+				3421BE9227B347C100921D70 /* LocationListView.swift */,
+				3421BE9627B34A1400921D70 /* LocationDetailView.swift */,
 			);
 			name = Screens;
 			sourceTree = "<group>";
@@ -191,7 +235,13 @@
 		34F004FE279CC2D500899561 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				3421BE7A279F6AFE00921D70 /* Review.swift */,
+				34F004FF279CC2E800899561 /* Award.swift */,
 				34F00506279CD77100899561 /* MockData.swift */,
+				3421BE8C27B1FB8A00921D70 /* OKGNLocation.swift */,
+				34F0050C279CDC7100899561 /* Location.swift */,
+				3421BE9027B1FD6E00921D70 /* OKGNProfile.swift */,
+				34F00508279CDA5B00899561 /* User.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -201,6 +251,7 @@
 			children = (
 				34F00501279CCD7B00899561 /* ReviewCell.swift */,
 				3421BE78279F693600921D70 /* TrophyCell.swift */,
+				3421BE9427B348B600921D70 /* LocationCell.swift */,
 			);
 			name = CustomCells;
 			sourceTree = "<group>";
@@ -209,6 +260,8 @@
 			isa = PBXGroup;
 			children = (
 				34F004FC279CB00F00899561 /* ProgressBar.swift */,
+				3421BE8227AC760500921D70 /* DetailedVisitView.swift */,
+				3421BE8427AC7D8300921D70 /* XDismissButton.swift */,
 			);
 			name = CustomViews;
 			sourceTree = "<group>";
@@ -345,16 +398,29 @@
 			files = (
 				3421BE79279F693600921D70 /* TrophyCell.swift in Sources */,
 				34D19694279BE4AE00C1CE19 /* HomePageView.swift in Sources */,
+				3421BE8127AC73A800921D70 /* TabBarView.swift in Sources */,
+				3421BE8D27B1FB8A00921D70 /* OKGNLocation.swift in Sources */,
+				3421BE7D27A1D1D100921D70 /* Date+Ext.swift in Sources */,
 				34F0050F279CDCA100899561 /* Constants.swift in Sources */,
+				3421BE9527B348B600921D70 /* LocationCell.swift in Sources */,
 				34F00502279CCD7B00899561 /* ReviewCell.swift in Sources */,
 				34F0050D279CDC7100899561 /* Location.swift in Sources */,
+				3421BE9C27B353C400921D70 /* CKRecord+Ext.swift in Sources */,
 				3421BE7B279F6AFE00921D70 /* Review.swift in Sources */,
 				34D19692279BE4AE00C1CE19 /* STOKGNApp.swift in Sources */,
+				3421BE8727B1F06200921D70 /* MapView.swift in Sources */,
 				34F00500279CC2E800899561 /* Award.swift in Sources */,
+				3421BE9927B34EF600921D70 /* CloudKitManager.swift in Sources */,
+				3421BE8F27B1FC2300921D70 /* CKAsset+Ext.swift in Sources */,
 				34F00509279CDA5B00899561 /* User.swift in Sources */,
+				3421BE9727B34A1400921D70 /* LocationDetailView.swift in Sources */,
+				3421BE8327AC760500921D70 /* DetailedVisitView.swift in Sources */,
 				34F004FD279CB00F00899561 /* ProgressBar.swift in Sources */,
+				3421BE9127B1FD6E00921D70 /* OKGNProfile.swift in Sources */,
 				34F00507279CD77100899561 /* MockData.swift in Sources */,
+				3421BE9327B347C100921D70 /* LocationListView.swift in Sources */,
 				34D196BC279C976500C1CE19 /* Color+Ext.swift in Sources */,
+				3421BE8527AC7D8300921D70 /* XDismissButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -512,6 +578,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = STOKGN/STOKGN.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"STOKGN/Preview Content\"";
@@ -528,7 +595,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.blakepat.STOKGN;
+				PRODUCT_BUNDLE_IDENTIFIER = com.blakepat.EnjoyOKGN;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -541,6 +608,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = STOKGN/STOKGN.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"STOKGN/Preview Content\"";
@@ -557,7 +625,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.blakepat.STOKGN;
+				PRODUCT_BUNDLE_IDENTIFIER = com.blakepat.EnjoyOKGN;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ProgressBar: View {
     
-    @Binding var progress: Float
+    @Binding var progress: Int
     var award: Award
     
     var body: some View {
@@ -21,14 +21,14 @@ struct ProgressBar: View {
                     .foregroundColor(award.category.color)
                 
                 Circle()
-                    .trim(from: 0.0, to: CGFloat(min(self.progress, 1.0)))
+                    .trim(from: 0.0, to: CGFloat(min(Float(self.progress) / 10, 1.0)))
                     .stroke(style: StrokeStyle(lineWidth: 10, lineCap: .round, lineJoin: .round))
                     .foregroundColor(award.category.color)
                     .rotationEffect(Angle(degrees: 270))
                     .animation(.linear, value: true)
                 
                 //Eventually going to change this to Trophies for each award
-                Text(String(format: "%0.f/10%", min(self.progress, 1.0) * 10.0))
+                Text(String(format: "%0.f/10%", min(Float(self.progress) / 10, 1.0) * 10.0))
                     .font(.body)
                     .foregroundColor(.white)
                     .fontWeight(.semibold)
@@ -56,6 +56,6 @@ struct ProgressBar: View {
 
 struct ProgressBar_Previews: PreviewProvider {
     static var previews: some View {
-        ProgressBar(progress: .constant(10), award: AwardTypes.pizzaAward)
+        ProgressBar(progress: .constant(10), award: AwardTypes.pizzeriaAward)
     }
 }

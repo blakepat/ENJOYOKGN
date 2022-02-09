@@ -19,7 +19,7 @@ struct TrophyCell: View {
             
             HStack {
                 VStack(spacing: 4) {
-                    Image("GoldTrophy")
+                    review.ranking?.trophyImage
                         .resizable()
                         .scaledToFit()
                     

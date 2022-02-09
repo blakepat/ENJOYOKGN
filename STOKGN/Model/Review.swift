@@ -17,6 +17,7 @@ struct Review: Identifiable {
     var reviewCaption: String
     var photo: UIImage
     var rating: String
-    var isHighest: Bool
+    var ranking: Ranking?
+    var date: Date
     
 }
