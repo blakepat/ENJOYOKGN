@@ -23,11 +23,20 @@
 		3421BE9727B34A1400921D70 /* LocationDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BE9627B34A1400921D70 /* LocationDetailView.swift */; };
 		3421BE9927B34EF600921D70 /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BE9827B34EF600921D70 /* CloudKitManager.swift */; };
 		3421BE9C27B353C400921D70 /* CKRecord+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BE9B27B353C400921D70 /* CKRecord+Ext.swift */; };
-		34D19692279BE4AE00C1CE19 /* STOKGNApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D19691279BE4AE00C1CE19 /* STOKGNApp.swift */; };
+		3421BE9F27B48B2900921D70 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BE9E27B48B2900921D70 /* LocationManager.swift */; };
+		3421BEA127B48BE400921D70 /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BEA027B48BE400921D70 /* MapViewModel.swift */; };
+		3421BEA327B4935B00921D70 /* AlertItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BEA227B4935B00921D70 /* AlertItem.swift */; };
+		3421BEA527B7045A00921D70 /* OnboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BEA427B7045A00921D70 /* OnboardView.swift */; };
+		34BEA49F27B7502B006F91C1 /* PhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BEA49E27B7502B006F91C1 /* PhotoPicker.swift */; };
+		34BEA4A127B75873006F91C1 /* UIImage+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BEA4A027B75873006F91C1 /* UIImage+Ext.swift */; };
+		34BEA4A327B882D0006F91C1 /* NameEditorAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BEA4A227B882D0006F91C1 /* NameEditorAlert.swift */; };
+		34BEA4A627BAF1D6006F91C1 /* HomePageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BEA4A527BAF1D6006F91C1 /* HomePageViewModel.swift */; };
+		34BEA4AA27BC6E9C006F91C1 /* LocationDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BEA4A927BC6E9C006F91C1 /* LocationDetailViewModel.swift */; };
+		34D19692279BE4AE00C1CE19 /* EnjoyOKGNApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D19691279BE4AE00C1CE19 /* EnjoyOKGNApp.swift */; };
 		34D19694279BE4AE00C1CE19 /* HomePageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D19693279BE4AE00C1CE19 /* HomePageView.swift */; };
 		34D19696279BE4AF00C1CE19 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 34D19695279BE4AF00C1CE19 /* Assets.xcassets */; };
 		34D19699279BE4AF00C1CE19 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 34D19698279BE4AF00C1CE19 /* Preview Assets.xcassets */; };
-		34D196A3279BE4AF00C1CE19 /* STOKGNTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D196A2279BE4AF00C1CE19 /* STOKGNTests.swift */; };
+		34D196A3279BE4AF00C1CE19 /* EnjoyOKGNTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D196A2279BE4AF00C1CE19 /* EnjoyOKGNTests.swift */; };
 		34D196AD279BE4AF00C1CE19 /* STOKGNUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D196AC279BE4AF00C1CE19 /* STOKGNUITests.swift */; };
 		34D196AF279BE4AF00C1CE19 /* STOKGNUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D196AE279BE4AF00C1CE19 /* STOKGNUITestsLaunchTests.swift */; };
 		34D196BC279C976500C1CE19 /* Color+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D196BB279C976500C1CE19 /* Color+Ext.swift */; };
@@ -65,7 +74,7 @@
 		3421BE8227AC760500921D70 /* DetailedVisitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedVisitView.swift; sourceTree = "<group>"; };
 		3421BE8427AC7D8300921D70 /* XDismissButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDismissButton.swift; sourceTree = "<group>"; };
 		3421BE8627B1F06200921D70 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
-		3421BE8827B1F6E700921D70 /* STOKGN.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = STOKGN.entitlements; sourceTree = "<group>"; };
+		3421BE8827B1F6E700921D70 /* EnjoyOKGN.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EnjoyOKGN.entitlements; sourceTree = "<group>"; };
 		3421BE8A27B1F6EB00921D70 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		3421BE8C27B1FB8A00921D70 /* OKGNLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OKGNLocation.swift; sourceTree = "<group>"; };
 		3421BE8E27B1FC2300921D70 /* CKAsset+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CKAsset+Ext.swift"; sourceTree = "<group>"; };
@@ -75,14 +84,23 @@
 		3421BE9627B34A1400921D70 /* LocationDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDetailView.swift; sourceTree = "<group>"; };
 		3421BE9827B34EF600921D70 /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CloudKitManager.swift; path = Managers/CloudKitManager.swift; sourceTree = "<group>"; };
 		3421BE9B27B353C400921D70 /* CKRecord+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CKRecord+Ext.swift"; sourceTree = "<group>"; };
-		34D1968E279BE4AE00C1CE19 /* STOKGN.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = STOKGN.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		34D19691279BE4AE00C1CE19 /* STOKGNApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STOKGNApp.swift; sourceTree = "<group>"; };
+		3421BE9E27B48B2900921D70 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		3421BEA027B48BE400921D70 /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
+		3421BEA227B4935B00921D70 /* AlertItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertItem.swift; sourceTree = "<group>"; };
+		3421BEA427B7045A00921D70 /* OnboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardView.swift; sourceTree = "<group>"; };
+		34BEA49E27B7502B006F91C1 /* PhotoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPicker.swift; sourceTree = "<group>"; };
+		34BEA4A027B75873006F91C1 /* UIImage+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Ext.swift"; sourceTree = "<group>"; };
+		34BEA4A227B882D0006F91C1 /* NameEditorAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameEditorAlert.swift; sourceTree = "<group>"; };
+		34BEA4A527BAF1D6006F91C1 /* HomePageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageViewModel.swift; sourceTree = "<group>"; };
+		34BEA4A927BC6E9C006F91C1 /* LocationDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDetailViewModel.swift; sourceTree = "<group>"; };
+		34D1968E279BE4AE00C1CE19 /* EnjoyOKGN.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EnjoyOKGN.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		34D19691279BE4AE00C1CE19 /* EnjoyOKGNApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnjoyOKGNApp.swift; sourceTree = "<group>"; };
 		34D19693279BE4AE00C1CE19 /* HomePageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageView.swift; sourceTree = "<group>"; };
 		34D19695279BE4AF00C1CE19 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		34D19698279BE4AF00C1CE19 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		34D1969E279BE4AF00C1CE19 /* STOKGNTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = STOKGNTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		34D196A2279BE4AF00C1CE19 /* STOKGNTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STOKGNTests.swift; sourceTree = "<group>"; };
-		34D196A8279BE4AF00C1CE19 /* STOKGNUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = STOKGNUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		34D1969E279BE4AF00C1CE19 /* EnjoyOKGNTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EnjoyOKGNTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		34D196A2279BE4AF00C1CE19 /* EnjoyOKGNTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnjoyOKGNTests.swift; sourceTree = "<group>"; };
+		34D196A8279BE4AF00C1CE19 /* EnjoyOKGNUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EnjoyOKGNUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		34D196AC279BE4AF00C1CE19 /* STOKGNUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STOKGNUITests.swift; sourceTree = "<group>"; };
 		34D196AE279BE4AF00C1CE19 /* STOKGNUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STOKGNUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		34D196BB279C976500C1CE19 /* Color+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Ext.swift"; sourceTree = "<group>"; };
@@ -129,12 +147,47 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		34BEA49D27B75006006F91C1 /* UIKit Components */ = {
+			isa = PBXGroup;
+			children = (
+				34BEA49E27B7502B006F91C1 /* PhotoPicker.swift */,
+			);
+			name = "UIKit Components";
+			sourceTree = "<group>";
+		};
+		34BEA4A427BAF1C4006F91C1 /* HomePageView */ = {
+			isa = PBXGroup;
+			children = (
+				34D19693279BE4AE00C1CE19 /* HomePageView.swift */,
+				34BEA4A527BAF1D6006F91C1 /* HomePageViewModel.swift */,
+			);
+			name = HomePageView;
+			sourceTree = "<group>";
+		};
+		34BEA4A727BC6E5A006F91C1 /* MapView */ = {
+			isa = PBXGroup;
+			children = (
+				3421BE8627B1F06200921D70 /* MapView.swift */,
+				3421BEA027B48BE400921D70 /* MapViewModel.swift */,
+			);
+			name = MapView;
+			sourceTree = "<group>";
+		};
+		34BEA4A827BC6E7D006F91C1 /* LocationDetailView */ = {
+			isa = PBXGroup;
+			children = (
+				3421BE9627B34A1400921D70 /* LocationDetailView.swift */,
+				34BEA4A927BC6E9C006F91C1 /* LocationDetailViewModel.swift */,
+			);
+			name = LocationDetailView;
+			sourceTree = "<group>";
+		};
 		34D19685279BE4AE00C1CE19 = {
 			isa = PBXGroup;
 			children = (
-				34D19690279BE4AE00C1CE19 /* STOKGN */,
-				34D196A1279BE4AF00C1CE19 /* STOKGNTests */,
-				34D196AB279BE4AF00C1CE19 /* STOKGNUITests */,
+				34D19690279BE4AE00C1CE19 /* EnjoyOKGN */,
+				34D196A1279BE4AF00C1CE19 /* EnjoyOKGNTests */,
+				34D196AB279BE4AF00C1CE19 /* EnjoyOKGNUITests */,
 				34D1968F279BE4AE00C1CE19 /* Products */,
 				3421BE8927B1F6EB00921D70 /* Frameworks */,
 			);
@@ -143,25 +196,25 @@
 		34D1968F279BE4AE00C1CE19 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				34D1968E279BE4AE00C1CE19 /* STOKGN.app */,
-				34D1969E279BE4AF00C1CE19 /* STOKGNTests.xctest */,
-				34D196A8279BE4AF00C1CE19 /* STOKGNUITests.xctest */,
+				34D1968E279BE4AE00C1CE19 /* EnjoyOKGN.app */,
+				34D1969E279BE4AF00C1CE19 /* EnjoyOKGNTests.xctest */,
+				34D196A8279BE4AF00C1CE19 /* EnjoyOKGNUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		34D19690279BE4AE00C1CE19 /* STOKGN */ = {
+		34D19690279BE4AE00C1CE19 /* EnjoyOKGN */ = {
 			isa = PBXGroup;
 			children = (
-				3421BE8827B1F6E700921D70 /* STOKGN.entitlements */,
-				34D19691279BE4AE00C1CE19 /* STOKGNApp.swift */,
+				3421BE8827B1F6E700921D70 /* EnjoyOKGN.entitlements */,
+				34D19691279BE4AE00C1CE19 /* EnjoyOKGNApp.swift */,
 				34D196BD279C98A000C1CE19 /* Utilities */,
 				34D196BF279C98EA00C1CE19 /* Views */,
 				34F004FE279CC2D500899561 /* Model */,
 				34D19695279BE4AF00C1CE19 /* Assets.xcassets */,
 				34D19697279BE4AF00C1CE19 /* Preview Content */,
 			);
-			path = STOKGN;
+			path = EnjoyOKGN;
 			sourceTree = "<group>";
 		};
 		34D19697279BE4AF00C1CE19 /* Preview Content */ = {
@@ -172,21 +225,21 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		34D196A1279BE4AF00C1CE19 /* STOKGNTests */ = {
+		34D196A1279BE4AF00C1CE19 /* EnjoyOKGNTests */ = {
 			isa = PBXGroup;
 			children = (
-				34D196A2279BE4AF00C1CE19 /* STOKGNTests.swift */,
+				34D196A2279BE4AF00C1CE19 /* EnjoyOKGNTests.swift */,
 			);
-			path = STOKGNTests;
+			path = EnjoyOKGNTests;
 			sourceTree = "<group>";
 		};
-		34D196AB279BE4AF00C1CE19 /* STOKGNUITests */ = {
+		34D196AB279BE4AF00C1CE19 /* EnjoyOKGNUITests */ = {
 			isa = PBXGroup;
 			children = (
 				34D196AC279BE4AF00C1CE19 /* STOKGNUITests.swift */,
 				34D196AE279BE4AF00C1CE19 /* STOKGNUITestsLaunchTests.swift */,
 			);
-			path = STOKGNUITests;
+			path = EnjoyOKGNUITests;
 			sourceTree = "<group>";
 		};
 		34D196BD279C98A000C1CE19 /* Utilities */ = {
@@ -194,6 +247,8 @@
 			children = (
 				34F0050E279CDCA100899561 /* Constants.swift */,
 				3421BE9827B34EF600921D70 /* CloudKitManager.swift */,
+				3421BE9E27B48B2900921D70 /* LocationManager.swift */,
+				3421BEA227B4935B00921D70 /* AlertItem.swift */,
 				34D196BE279C98DF00C1CE19 /* Extensions */,
 			);
 			path = Utilities;
@@ -206,6 +261,7 @@
 				3421BE7C27A1D1D100921D70 /* Date+Ext.swift */,
 				3421BE8E27B1FC2300921D70 /* CKAsset+Ext.swift */,
 				3421BE9B27B353C400921D70 /* CKRecord+Ext.swift */,
+				34BEA4A027B75873006F91C1 /* UIImage+Ext.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -223,11 +279,12 @@
 		34D196C0279C98FD00C1CE19 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
-				34D19693279BE4AE00C1CE19 /* HomePageView.swift */,
 				3421BE8027AC73A800921D70 /* TabBarView.swift */,
-				3421BE8627B1F06200921D70 /* MapView.swift */,
+				34BEA4A427BAF1C4006F91C1 /* HomePageView */,
+				34BEA4A727BC6E5A006F91C1 /* MapView */,
 				3421BE9227B347C100921D70 /* LocationListView.swift */,
-				3421BE9627B34A1400921D70 /* LocationDetailView.swift */,
+				34BEA4A827BC6E7D006F91C1 /* LocationDetailView */,
+				3421BEA427B7045A00921D70 /* OnboardView.swift */,
 			);
 			name = Screens;
 			sourceTree = "<group>";
@@ -259,9 +316,11 @@
 		34F00505279CCDB000899561 /* CustomViews */ = {
 			isa = PBXGroup;
 			children = (
+				34BEA49D27B75006006F91C1 /* UIKit Components */,
 				34F004FC279CB00F00899561 /* ProgressBar.swift */,
 				3421BE8227AC760500921D70 /* DetailedVisitView.swift */,
 				3421BE8427AC7D8300921D70 /* XDismissButton.swift */,
+				34BEA4A227B882D0006F91C1 /* NameEditorAlert.swift */,
 			);
 			name = CustomViews;
 			sourceTree = "<group>";
@@ -269,9 +328,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		34D1968D279BE4AE00C1CE19 /* STOKGN */ = {
+		34D1968D279BE4AE00C1CE19 /* EnjoyOKGN */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 34D196B2279BE4AF00C1CE19 /* Build configuration list for PBXNativeTarget "STOKGN" */;
+			buildConfigurationList = 34D196B2279BE4AF00C1CE19 /* Build configuration list for PBXNativeTarget "EnjoyOKGN" */;
 			buildPhases = (
 				34D1968A279BE4AE00C1CE19 /* Sources */,
 				34D1968B279BE4AE00C1CE19 /* Frameworks */,
@@ -281,14 +340,14 @@
 			);
 			dependencies = (
 			);
-			name = STOKGN;
+			name = EnjoyOKGN;
 			productName = STOKGN;
-			productReference = 34D1968E279BE4AE00C1CE19 /* STOKGN.app */;
+			productReference = 34D1968E279BE4AE00C1CE19 /* EnjoyOKGN.app */;
 			productType = "com.apple.product-type.application";
 		};
-		34D1969D279BE4AF00C1CE19 /* STOKGNTests */ = {
+		34D1969D279BE4AF00C1CE19 /* EnjoyOKGNTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 34D196B5279BE4AF00C1CE19 /* Build configuration list for PBXNativeTarget "STOKGNTests" */;
+			buildConfigurationList = 34D196B5279BE4AF00C1CE19 /* Build configuration list for PBXNativeTarget "EnjoyOKGNTests" */;
 			buildPhases = (
 				34D1969A279BE4AF00C1CE19 /* Sources */,
 				34D1969B279BE4AF00C1CE19 /* Frameworks */,
@@ -299,14 +358,14 @@
 			dependencies = (
 				34D196A0279BE4AF00C1CE19 /* PBXTargetDependency */,
 			);
-			name = STOKGNTests;
+			name = EnjoyOKGNTests;
 			productName = STOKGNTests;
-			productReference = 34D1969E279BE4AF00C1CE19 /* STOKGNTests.xctest */;
+			productReference = 34D1969E279BE4AF00C1CE19 /* EnjoyOKGNTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		34D196A7279BE4AF00C1CE19 /* STOKGNUITests */ = {
+		34D196A7279BE4AF00C1CE19 /* EnjoyOKGNUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 34D196B8279BE4AF00C1CE19 /* Build configuration list for PBXNativeTarget "STOKGNUITests" */;
+			buildConfigurationList = 34D196B8279BE4AF00C1CE19 /* Build configuration list for PBXNativeTarget "EnjoyOKGNUITests" */;
 			buildPhases = (
 				34D196A4279BE4AF00C1CE19 /* Sources */,
 				34D196A5279BE4AF00C1CE19 /* Frameworks */,
@@ -317,9 +376,9 @@
 			dependencies = (
 				34D196AA279BE4AF00C1CE19 /* PBXTargetDependency */,
 			);
-			name = STOKGNUITests;
+			name = EnjoyOKGNUITests;
 			productName = STOKGNUITests;
-			productReference = 34D196A8279BE4AF00C1CE19 /* STOKGNUITests.xctest */;
+			productReference = 34D196A8279BE4AF00C1CE19 /* EnjoyOKGNUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -345,7 +404,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 34D19689279BE4AE00C1CE19 /* Build configuration list for PBXProject "STOKGN" */;
+			buildConfigurationList = 34D19689279BE4AE00C1CE19 /* Build configuration list for PBXProject "EnjoyOKGN" */;
 			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -358,9 +417,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				34D1968D279BE4AE00C1CE19 /* STOKGN */,
-				34D1969D279BE4AF00C1CE19 /* STOKGNTests */,
-				34D196A7279BE4AF00C1CE19 /* STOKGNUITests */,
+				34D1968D279BE4AE00C1CE19 /* EnjoyOKGN */,
+				34D1969D279BE4AF00C1CE19 /* EnjoyOKGNTests */,
+				34D196A7279BE4AF00C1CE19 /* EnjoyOKGNUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -396,6 +455,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34BEA4AA27BC6E9C006F91C1 /* LocationDetailViewModel.swift in Sources */,
 				3421BE79279F693600921D70 /* TrophyCell.swift in Sources */,
 				34D19694279BE4AE00C1CE19 /* HomePageView.swift in Sources */,
 				3421BE8127AC73A800921D70 /* TabBarView.swift in Sources */,
@@ -404,23 +464,31 @@
 				34F0050F279CDCA100899561 /* Constants.swift in Sources */,
 				3421BE9527B348B600921D70 /* LocationCell.swift in Sources */,
 				34F00502279CCD7B00899561 /* ReviewCell.swift in Sources */,
+				34BEA49F27B7502B006F91C1 /* PhotoPicker.swift in Sources */,
 				34F0050D279CDC7100899561 /* Location.swift in Sources */,
 				3421BE9C27B353C400921D70 /* CKRecord+Ext.swift in Sources */,
 				3421BE7B279F6AFE00921D70 /* Review.swift in Sources */,
-				34D19692279BE4AE00C1CE19 /* STOKGNApp.swift in Sources */,
+				34D19692279BE4AE00C1CE19 /* EnjoyOKGNApp.swift in Sources */,
+				3421BE9F27B48B2900921D70 /* LocationManager.swift in Sources */,
 				3421BE8727B1F06200921D70 /* MapView.swift in Sources */,
 				34F00500279CC2E800899561 /* Award.swift in Sources */,
+				34BEA4A327B882D0006F91C1 /* NameEditorAlert.swift in Sources */,
 				3421BE9927B34EF600921D70 /* CloudKitManager.swift in Sources */,
 				3421BE8F27B1FC2300921D70 /* CKAsset+Ext.swift in Sources */,
 				34F00509279CDA5B00899561 /* User.swift in Sources */,
 				3421BE9727B34A1400921D70 /* LocationDetailView.swift in Sources */,
+				3421BEA527B7045A00921D70 /* OnboardView.swift in Sources */,
 				3421BE8327AC760500921D70 /* DetailedVisitView.swift in Sources */,
 				34F004FD279CB00F00899561 /* ProgressBar.swift in Sources */,
+				3421BEA327B4935B00921D70 /* AlertItem.swift in Sources */,
 				3421BE9127B1FD6E00921D70 /* OKGNProfile.swift in Sources */,
 				34F00507279CD77100899561 /* MockData.swift in Sources */,
 				3421BE9327B347C100921D70 /* LocationListView.swift in Sources */,
 				34D196BC279C976500C1CE19 /* Color+Ext.swift in Sources */,
+				34BEA4A127B75873006F91C1 /* UIImage+Ext.swift in Sources */,
 				3421BE8527AC7D8300921D70 /* XDismissButton.swift in Sources */,
+				3421BEA127B48BE400921D70 /* MapViewModel.swift in Sources */,
+				34BEA4A627BAF1D6006F91C1 /* HomePageViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -428,7 +496,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				34D196A3279BE4AF00C1CE19 /* STOKGNTests.swift in Sources */,
+				34D196A3279BE4AF00C1CE19 /* EnjoyOKGNTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -446,12 +514,12 @@
 /* Begin PBXTargetDependency section */
 		34D196A0279BE4AF00C1CE19 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 34D1968D279BE4AE00C1CE19 /* STOKGN */;
+			target = 34D1968D279BE4AE00C1CE19 /* EnjoyOKGN */;
 			targetProxy = 34D1969F279BE4AF00C1CE19 /* PBXContainerItemProxy */;
 		};
 		34D196AA279BE4AF00C1CE19 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 34D1968D279BE4AE00C1CE19 /* STOKGN */;
+			target = 34D1968D279BE4AE00C1CE19 /* EnjoyOKGN */;
 			targetProxy = 34D196A9279BE4AF00C1CE19 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -578,13 +646,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = STOKGN/STOKGN.entitlements;
+				CODE_SIGN_ENTITLEMENTS = EnjoyOKGN/EnjoyOKGN.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"STOKGN/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"EnjoyOKGN/Preview Content\"";
 				DEVELOPMENT_TEAM = 5S28H6FD88;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Enjoy OKGN uses your location to show you where you are in reference to points of interest";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -596,7 +666,8 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.blakepat.EnjoyOKGN;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = EnjoyOKGN;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -608,13 +679,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = STOKGN/STOKGN.entitlements;
+				CODE_SIGN_ENTITLEMENTS = EnjoyOKGN/EnjoyOKGN.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"STOKGN/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"EnjoyOKGN/Preview Content\"";
 				DEVELOPMENT_TEAM = 5S28H6FD88;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Enjoy OKGN uses your location to show you where you are in reference to points of interest";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -626,7 +699,8 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.blakepat.EnjoyOKGN;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = EnjoyOKGN;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -649,7 +723,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/STOKGN.app/STOKGN";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EnjoyOKGN.app/EnjoyOKGN";
 			};
 			name = Debug;
 		};
@@ -669,7 +743,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/STOKGN.app/STOKGN";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EnjoyOKGN.app/EnjoyOKGN";
 			};
 			name = Release;
 		};
@@ -712,7 +786,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		34D19689279BE4AE00C1CE19 /* Build configuration list for PBXProject "STOKGN" */ = {
+		34D19689279BE4AE00C1CE19 /* Build configuration list for PBXProject "EnjoyOKGN" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				34D196B0279BE4AF00C1CE19 /* Debug */,
@@ -721,7 +795,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		34D196B2279BE4AF00C1CE19 /* Build configuration list for PBXNativeTarget "STOKGN" */ = {
+		34D196B2279BE4AF00C1CE19 /* Build configuration list for PBXNativeTarget "EnjoyOKGN" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				34D196B3279BE4AF00C1CE19 /* Debug */,
@@ -730,7 +804,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		34D196B5279BE4AF00C1CE19 /* Build configuration list for PBXNativeTarget "STOKGNTests" */ = {
+		34D196B5279BE4AF00C1CE19 /* Build configuration list for PBXNativeTarget "EnjoyOKGNTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				34D196B6279BE4AF00C1CE19 /* Debug */,
@@ -739,7 +813,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		34D196B8279BE4AF00C1CE19 /* Build configuration list for PBXNativeTarget "STOKGNUITests" */ = {
+		34D196B8279BE4AF00C1CE19 /* Build configuration list for PBXNativeTarget "EnjoyOKGNUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				34D196B9279BE4AF00C1CE19 /* Debug */,
