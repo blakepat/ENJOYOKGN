@@ -30,6 +30,7 @@ final class HomePageViewModel: ObservableObject {
     @Published var isShowingDetailedModalView = false
     @Published var isShowingSaveAlert = false
     
+    @Published var detailedReviewToShow: OKGNReview?
     @Published var alertItem: AlertItem?
     @Published var topRatedFilter: Category?
     @Published var wineryCount = 0
@@ -37,16 +38,17 @@ final class HomePageViewModel: ObservableObject {
     @Published var cafeCount = 0
     @Published var pizzeriaCount = 0
     @Published var activityCount = 0
-    @Published var userReviews: [Review]? {
+    @Published var userReviews: [OKGNReview]? {
         didSet {
-            wineryCount = userReviews?.filter({$0.location.category == .Winery}).count ?? 0
-            breweryCount = userReviews?.filter({$0.location.category == .Brewery}).count ?? 0
-            cafeCount = userReviews?.filter({$0.location.category == .Cafe}).count ?? 0
-            pizzeriaCount = userReviews?.filter({$0.location.category == .Pizzeria}).count ?? 0
-            activityCount = userReviews?.filter({$0.location.category == .Activity}).count ?? 0
+            wineryCount = userReviews?.filter({returnCategoryFromString($0.location.category) == .Winery}).count ?? 0
+            breweryCount = userReviews?.filter({returnCategoryFromString($0.location.category) == .Brewery}).count ?? 0
+            cafeCount = userReviews?.filter({returnCategoryFromString($0.location.category) == .Cafe}).count ?? 0
+            pizzeriaCount = userReviews?.filter({returnCategoryFromString($0.location.category) == .Pizzeria}).count ?? 0
+            activityCount = userReviews?.filter({returnCategoryFromString($0.location.category) == .Activity}).count ?? 0
+            print("userREviews set in model")
         }
     }
-    
+
     func createProfile() {
         //Create our CKRecord from the profile view
         let profileRecord = createProfileRecord()
@@ -65,6 +67,7 @@ final class HomePageViewModel: ObservableObject {
                     case .success(let records):
                     for record in records where record.recordType == RecordType.profile {
                         self.existingProfileRecord = record
+                        CloudKitManager.shared.profileRecordID = record.recordID
                     }
                     case .failure(_):
                     self.alertItem = AlertContext.profileCreateFailure
