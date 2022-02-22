@@ -27,6 +27,8 @@
 		3421BEA127B48BE400921D70 /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BEA027B48BE400921D70 /* MapViewModel.swift */; };
 		3421BEA327B4935B00921D70 /* AlertItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BEA227B4935B00921D70 /* AlertItem.swift */; };
 		3421BEA527B7045A00921D70 /* OnboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BEA427B7045A00921D70 /* OnboardView.swift */; };
+		3480A9F627C470670031BB09 /* OKGNAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3480A9F527C470670031BB09 /* OKGNAnnotation.swift */; };
+		3480A9F927C4772B0031BB09 /* TabBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3480A9F827C4772B0031BB09 /* TabBarViewModel.swift */; };
 		34BEA49F27B7502B006F91C1 /* PhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BEA49E27B7502B006F91C1 /* PhotoPicker.swift */; };
 		34BEA4A127B75873006F91C1 /* UIImage+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BEA4A027B75873006F91C1 /* UIImage+Ext.swift */; };
 		34BEA4A627BAF1D6006F91C1 /* HomePageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BEA4A527BAF1D6006F91C1 /* HomePageViewModel.swift */; };
@@ -87,6 +89,8 @@
 		3421BEA027B48BE400921D70 /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
 		3421BEA227B4935B00921D70 /* AlertItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertItem.swift; sourceTree = "<group>"; };
 		3421BEA427B7045A00921D70 /* OnboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardView.swift; sourceTree = "<group>"; };
+		3480A9F527C470670031BB09 /* OKGNAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OKGNAnnotation.swift; sourceTree = "<group>"; };
+		3480A9F827C4772B0031BB09 /* TabBarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewModel.swift; sourceTree = "<group>"; };
 		34BEA49E27B7502B006F91C1 /* PhotoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPicker.swift; sourceTree = "<group>"; };
 		34BEA4A027B75873006F91C1 /* UIImage+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Ext.swift"; sourceTree = "<group>"; };
 		34BEA4A527BAF1D6006F91C1 /* HomePageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageViewModel.swift; sourceTree = "<group>"; };
@@ -143,6 +147,23 @@
 				3421BE8A27B1F6EB00921D70 /* CloudKit.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3480A9F427C470500031BB09 /* Map Annotation */ = {
+			isa = PBXGroup;
+			children = (
+				3480A9F527C470670031BB09 /* OKGNAnnotation.swift */,
+			);
+			name = "Map Annotation";
+			sourceTree = "<group>";
+		};
+		3480A9F727C477180031BB09 /* TabBarView */ = {
+			isa = PBXGroup;
+			children = (
+				3421BE8027AC73A800921D70 /* TabBarView.swift */,
+				3480A9F827C4772B0031BB09 /* TabBarViewModel.swift */,
+			);
+			name = TabBarView;
 			sourceTree = "<group>";
 		};
 		34BEA49D27B75006006F91C1 /* UIKit Components */ = {
@@ -295,7 +316,7 @@
 		34D196C0279C98FD00C1CE19 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
-				3421BE8027AC73A800921D70 /* TabBarView.swift */,
+				3480A9F727C477180031BB09 /* TabBarView */,
 				34BEA4A427BAF1C4006F91C1 /* HomePageView */,
 				34BEA4AE27BD9B33006F91C1 /* CreateReviewView */,
 				34BEA4A727BC6E5A006F91C1 /* MapView */,
@@ -330,6 +351,7 @@
 		34F00505279CCDB000899561 /* CustomViews */ = {
 			isa = PBXGroup;
 			children = (
+				3480A9F427C470500031BB09 /* Map Annotation */,
 				34BEA49D27B75006006F91C1 /* UIKit Components */,
 				34F004FC279CB00F00899561 /* ProgressBar.swift */,
 				3421BE8227AC760500921D70 /* DetailedVisitView.swift */,
@@ -473,6 +495,7 @@
 				3421BE79279F693600921D70 /* TrophyCell.swift in Sources */,
 				34D19694279BE4AE00C1CE19 /* HomePageView.swift in Sources */,
 				3421BE8127AC73A800921D70 /* TabBarView.swift in Sources */,
+				3480A9F927C4772B0031BB09 /* TabBarViewModel.swift in Sources */,
 				3421BE8D27B1FB8A00921D70 /* OKGNLocation.swift in Sources */,
 				3421BE7D27A1D1D100921D70 /* Date+Ext.swift in Sources */,
 				34F0050F279CDCA100899561 /* Constants.swift in Sources */,
@@ -491,6 +514,7 @@
 				3421BEA527B7045A00921D70 /* OnboardView.swift in Sources */,
 				3421BE8327AC760500921D70 /* DetailedVisitView.swift in Sources */,
 				34F004FD279CB00F00899561 /* ProgressBar.swift in Sources */,
+				3480A9F627C470670031BB09 /* OKGNAnnotation.swift in Sources */,
 				3421BEA327B4935B00921D70 /* AlertItem.swift in Sources */,
 				3421BE9127B1FD6E00921D70 /* OKGNProfile.swift in Sources */,
 				34F00507279CD77100899561 /* MockData.swift in Sources */,

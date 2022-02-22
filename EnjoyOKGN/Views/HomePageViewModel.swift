@@ -11,11 +11,6 @@ enum ProfileContext { case create, update }
 
 final class HomePageViewModel: ObservableObject {
     
-    @Published var isShowingOnboardView = false
-    var hasSeenOnboardView: Bool {
-        return UserDefaults.standard.bool(forKey: "hasSeenOnboardView")
-    }
-    
     @Published var isShowingPhotoPicker = false
     @Published var profile: OKGNProfile?
     private var existingProfileRecord: CKRecord? {
