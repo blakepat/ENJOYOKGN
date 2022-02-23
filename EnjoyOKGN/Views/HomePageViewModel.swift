@@ -6,10 +6,16 @@
 //
 
 import CloudKit
+import SwiftUI
 
 enum ProfileContext { case create, update }
 
 final class HomePageViewModel: ObservableObject {
+    
+    var profileManager: ProfileManager
+    init(profileManager: ProfileManager) {
+        self.profileManager = profileManager
+    }
     
     @Published var isShowingPhotoPicker = false
     @Published var profile: OKGNProfile?
@@ -17,8 +23,6 @@ final class HomePageViewModel: ObservableObject {
         didSet { profileContext = .update }
     }
     var profileContext: ProfileContext = .create
-    @Published var avatar = PlaceholderImage.avatar
-    @Published var name = "enter name..."
     
     @Published var isShowingVenuesVisitedSubCategories = false
     @Published var isShowingTopRatedFilterAlert = false
@@ -35,11 +39,11 @@ final class HomePageViewModel: ObservableObject {
     @Published var activityCount = 0
     @Published var userReviews: [OKGNReview]? {
         didSet {
-            wineryCount = userReviews?.filter({returnCategoryFromString($0.location.category) == .Winery}).count ?? 0
-            breweryCount = userReviews?.filter({returnCategoryFromString($0.location.category) == .Brewery}).count ?? 0
-            cafeCount = userReviews?.filter({returnCategoryFromString($0.location.category) == .Cafe}).count ?? 0
-            pizzeriaCount = userReviews?.filter({returnCategoryFromString($0.location.category) == .Pizzeria}).count ?? 0
-            activityCount = userReviews?.filter({returnCategoryFromString($0.location.category) == .Activity}).count ?? 0
+            wineryCount = userReviews?.filter({returnCategoryFromString($0.locationCategory) == .Winery}).count ?? 0
+            breweryCount = userReviews?.filter({returnCategoryFromString($0.locationCategory) == .Brewery}).count ?? 0
+            cafeCount = userReviews?.filter({returnCategoryFromString($0.locationCategory) == .Cafe}).count ?? 0
+            pizzeriaCount = userReviews?.filter({returnCategoryFromString($0.locationCategory) == .Pizzeria}).count ?? 0
+            activityCount = userReviews?.filter({returnCategoryFromString($0.locationCategory) == .Activity}).count ?? 0
             print("userREviews set in model")
         }
     }
@@ -92,8 +96,8 @@ final class HomePageViewModel: ObservableObject {
                     existingProfileRecord = record
                     let importedProfile = OKGNProfile(record: record)
                     profile = importedProfile
-                    name = importedProfile.name
-                    avatar = importedProfile.createProfileImage()
+                    profileManager.name = importedProfile.name
+                    profileManager.avatar = importedProfile.createProfileImage()
                 }
             case .failure(_):
                 //show alert
@@ -109,8 +113,8 @@ final class HomePageViewModel: ObservableObject {
             return
         }
         
-        profileRecord[OKGNProfile.kName] = name
-        profileRecord[OKGNProfile.kAvatar] = avatar.convertToCKAsset()
+        profileRecord[OKGNProfile.kName] = profileManager.name
+        profileRecord[OKGNProfile.kAvatar] = profileManager.avatar.convertToCKAsset(path: "profileAvatar")
         
         CloudKitManager.shared.save(record: profileRecord) { result in
             DispatchQueue.main.async { [self] in
@@ -128,8 +132,8 @@ final class HomePageViewModel: ObservableObject {
     
     private func createProfileRecord() -> CKRecord {
         let profileRecord = CKRecord(recordType: RecordType.profile)
-        profileRecord[OKGNProfile.kName] = name
-        profileRecord[OKGNProfile.kAvatar] = avatar.convertToCKAsset()
+        profileRecord[OKGNProfile.kName] = profileManager.name
+        profileRecord[OKGNProfile.kAvatar] = profileManager.avatar.convertToCKAsset(path: "profileAvatar")
         
         return profileRecord
         

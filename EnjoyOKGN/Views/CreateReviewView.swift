@@ -10,6 +10,7 @@ import CloudKit
 
 struct CreateReviewView: View {
     
+    @EnvironmentObject var profileManager: ProfileManager
     @State var locationName: String = ""
     @State var caption: String = ""
     @State var selectedDate: Date = Date()
@@ -256,14 +257,19 @@ struct CreateReviewView: View {
                         //create a rereference to profile
                         reviewRecord[OKGNReview.kReviewer] = CKRecord.Reference(recordID: profileRecordID, action: .none)
                         reviewRecord[OKGNReview.kCaption] = caption
-                        reviewRecord[OKGNReview.kPhoto] = selectedImage.convertToCKAsset()
+                        reviewRecord[OKGNReview.kPhoto] = selectedImage.convertToCKAsset(path: "selectedPhoto")
                         reviewRecord[OKGNReview.kRating] = "\(firstNumber).\(secondNumber)"
                         reviewRecord[OKGNReview.kDate] = selectedDate
-                            
+                        reviewRecord[OKGNReview.klocationName] = locationName
+                        reviewRecord[OKGNReview.klocationCategory] = selectedLocation?.category.description
+                        reviewRecord[OKGNReview.kReviewerName] = profileManager.name
+                        reviewRecord[OKGNReview.kReviewerAvatar] = profileManager.avatar.convertToCKAsset(path: "profileAvatar")
                         
+
                     } else {
                         //To-do: show  alert that was unable to get locations
                         print("unable to get locations")
+                        break
                     }
                     
                     //save review to cloudkit
@@ -274,6 +280,7 @@ struct CreateReviewView: View {
                             print("✅ created review successfully")
                         case .failure(_):
                             print("❌ failed saving review")
+                            break
                         }
                     }
                     

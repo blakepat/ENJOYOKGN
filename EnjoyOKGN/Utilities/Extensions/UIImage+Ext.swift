@@ -10,7 +10,8 @@ import UIKit
 
 extension UIImage {
     
-    func convertToCKAsset() -> CKAsset? {
+    func convertToCKAsset(path: String) -> CKAsset? {
+        
         
         // Get apps base document directory url
         guard let urlPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
@@ -19,7 +20,7 @@ extension UIImage {
         }
         
         // Append unique id for profile image
-        let fileUrl = urlPath.appendingPathComponent("selectedAvatarImage")
+        let fileUrl = urlPath.appendingPathComponent(path)
         
         // Write the image data to the locations to the address
         
