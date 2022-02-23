@@ -12,15 +12,20 @@ enum ProfileContext { case create, update }
 
 final class HomePageViewModel: ObservableObject {
     
-    var profileManager: ProfileManager
-    init(profileManager: ProfileManager) {
-        self.profileManager = profileManager
-    }
+    let cacheManager = CacheManager.instance
+    
+    @ObservedObject var profileManager = ProfileManager()
+//    init(profileManager: ProfileManager) {
+//        self.profileManager = profileManager
+//    }
     
     @Published var isShowingPhotoPicker = false
     @Published var profile: OKGNProfile?
-    private var existingProfileRecord: CKRecord? {
-        didSet { profileContext = .update }
+    var existingProfileRecord: CKRecord? {
+        didSet {
+            profileContext = .update
+            print("context changed to update")
+        }
     }
     var profileContext: ProfileContext = .create
     
@@ -98,6 +103,9 @@ final class HomePageViewModel: ObservableObject {
                     profile = importedProfile
                     profileManager.name = importedProfile.name
                     profileManager.avatar = importedProfile.createProfileImage()
+                    cacheManager.addAvatarToCache(avatar: importedProfile.createProfileImage())
+                    cacheManager.addNameToCache(name: importedProfile.name)
+                    
                 }
             case .failure(_):
                 //show alert
@@ -115,6 +123,8 @@ final class HomePageViewModel: ObservableObject {
         
         profileRecord[OKGNProfile.kName] = profileManager.name
         profileRecord[OKGNProfile.kAvatar] = profileManager.avatar.convertToCKAsset(path: "profileAvatar")
+        cacheManager.addNameToCache(name: profileManager.name)
+        cacheManager.addAvatarToCache(avatar: profileManager.avatar)
         
         CloudKitManager.shared.save(record: profileRecord) { result in
             DispatchQueue.main.async { [self] in

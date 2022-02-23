@@ -9,56 +9,22 @@ import SwiftUI
 
 struct FriendReviewFeed: View {
     
-    @State var reviews: [OKGNReview] = [] {
-        didSet {
-            print(reviews)
-        }
-    }
+    @EnvironmentObject var reviewManager: ReviewManager
     
     var body: some View {
         List {
-            ForEach(reviews) { review in
+            ForEach(reviewManager.reviews) { review in
                 ReviewCell(review: review)
             }
         }
-//        .onReceive(CloudKitManager.shared.$profileRecordID) { _ in
-//            DispatchQueue.main.async {
-//                guard let profileID = CloudKitManager.shared.profileRecordID else {
-//                    print("😟 could not get profileID")
-//                    return
-//                }
-//                CloudKitManager.shared.getUserReviews(for: profileID) { result in
-//                    switch result {
-//                    case .success(let receivedReviews):
-//                        reviews = receivedReviews
-//                    case .failure(_):
-//                        print("😞 could not get reviews for friend feed")
-//                    }
-//                }
-//            }
-//
-//        }
         .onAppear {
-            DispatchQueue.main.async {
-                guard let profileID = CloudKitManager.shared.profileRecordID else {
-                    print("😟 could not get profileID")
-                    return
-                }
-                CloudKitManager.shared.getUserReviews(for: profileID) { result in
-                    switch result {
-                    case .success(let receivedReviews):
-                        reviews = receivedReviews
-                    case .failure(_):
-                        print("😞 could not get reviews for friend feed")
-                    }
-                }
-            }
+            reviewManager.otherGetReviews()
         }
     }
 }
 
-struct FriendReviewFeed_Previews: PreviewProvider {
-    static var previews: some View {
-        FriendReviewFeed(reviews: [MockData.pizzeriaReview1.convertToOKGNReview()])
-    }
-}
+//struct FriendReviewFeed_Previews: PreviewProvider {
+//    static var previews: some View {
+//        FriendReviewFeed(reviewManager: ReviewManager())
+//    }
+//}

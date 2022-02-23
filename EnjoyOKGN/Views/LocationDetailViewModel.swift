@@ -15,7 +15,11 @@ final class LocationDetailViewModel: ObservableObject {
     @Published var detailedReviewToShow: OKGNReview?
     
     let columns: [GridItem] = Array(repeating: .init(.flexible()), count: 1)
-    var reviews: [OKGNReview]
+    var reviews: [OKGNReview] {
+        didSet {
+            print("😎 \(reviews)")
+        }
+    }
     var location: OKGNLocation
     @Published var alertItem: AlertItem?
     
