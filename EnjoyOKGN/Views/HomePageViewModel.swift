@@ -19,12 +19,14 @@ final class HomePageViewModel: ObservableObject {
 //        self.profileManager = profileManager
 //    }
     
+    let rows: [GridItem] = Array(repeating: .init(.flexible()), count: 1)
+    
     @Published var isShowingPhotoPicker = false
     @Published var profile: OKGNProfile?
     var existingProfileRecord: CKRecord? {
         didSet {
             profileContext = .update
-            print("context changed to update")
+            print("😎 Profile Context changed to update")
         }
     }
     var profileContext: ProfileContext = .create
@@ -49,7 +51,7 @@ final class HomePageViewModel: ObservableObject {
             cafeCount = userReviews?.filter({returnCategoryFromString($0.locationCategory) == .Cafe}).count ?? 0
             pizzeriaCount = userReviews?.filter({returnCategoryFromString($0.locationCategory) == .Pizzeria}).count ?? 0
             activityCount = userReviews?.filter({returnCategoryFromString($0.locationCategory) == .Activity}).count ?? 0
-            print("userREviews set in model")
+            print("🥳 \(userReviews?.count ?? 0) User Reviews set for HomePageModel")
         }
     }
 
@@ -84,7 +86,7 @@ final class HomePageViewModel: ObservableObject {
     func getProfile() {
         guard let userRecord = CloudKitManager.shared.userRecord else {
             // show an alert
-            print("1")
+            print("❌ No user record found when calling getProfile()")
             return
         }
         
@@ -97,8 +99,9 @@ final class HomePageViewModel: ObservableObject {
             switch result {
             case .success(let record):
                 DispatchQueue.main.async { [self] in
-                    print("success getting profile")
+                    print("✅ success getting profile")
                     existingProfileRecord = record
+                    CloudKitManager.shared.profile = record
                     let importedProfile = OKGNProfile(record: record)
                     profile = importedProfile
                     profileManager.name = importedProfile.name
@@ -147,5 +150,42 @@ final class HomePageViewModel: ObservableObject {
         
         return profileRecord
         
+    }
+    
+    
+    func changeNameAlertView() {
+        let alert = UIAlertController(title: "Name Editor", message: "Create display name that is 20 characters or less", preferredStyle: .alert)
+        alert.addTextField { (nameForm) in
+            nameForm.placeholder = "name..."
+            nameForm.autocorrectionType = .no
+        }
+        
+        let save = UIAlertAction(title: "Save", style: .default) { [self] save in
+            
+            if alert.textFields![0].text?.count ?? 0 > 0 && alert.textFields![0].text?.count ?? 21 < 21 {
+                profileManager.name = alert.textFields![0].text!
+                existingProfileRecord == nil ? print("•Profile CREATED") : print("😍Profile UPDATED")
+                profileContext == .create ? createProfile() : updateProfile()
+                isShowingSaveAlert = false
+                cacheManager.addNameToCache(name: alert.textFields![0].text!)
+            }
+        }
+        
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { _ in
+            self.isShowingSaveAlert = false
+        }
+        
+        alert.addAction(save)
+        alert.addAction(cancel)
+        
+        let keyWindow = UIApplication.shared.connectedScenes
+                .filter({$0.activationState == .foregroundActive})
+                .compactMap({$0 as? UIWindowScene})
+                .first?.windows
+                .filter({$0.isKeyWindow}).first
+        
+        keyWindow?.rootViewController?.present(alert, animated: true) {
+            
+        }
     }
 }

@@ -10,7 +10,7 @@ import CloudKit
 
 struct CreateReviewView: View {
     
-    @EnvironmentObject var profileManager: ProfileManager
+    let cacheManager = CacheManager.instance
     @State var locationName: String = ""
     @State var caption: String = ""
     @State var selectedDate: Date = Date()
@@ -20,7 +20,6 @@ struct CreateReviewView: View {
     @State var selectedLocation: OKGNLocation?
     @State var selectedImage: UIImage = PlaceholderImage.square
     @State var alertItem: AlertItem?
-    
     @State var isShowingPhotoPicker = false
     
     init(date: Date, locations: [OKGNLocation]) {
@@ -227,10 +226,8 @@ struct CreateReviewView: View {
                         print(error)
                     }
                 }
+            }
         }
-        }
-        
-
     }
     
     func createReview() {
@@ -262,9 +259,8 @@ struct CreateReviewView: View {
                         reviewRecord[OKGNReview.kDate] = selectedDate
                         reviewRecord[OKGNReview.klocationName] = locationName
                         reviewRecord[OKGNReview.klocationCategory] = selectedLocation?.category.description
-                        reviewRecord[OKGNReview.kReviewerName] = profileManager.name
-                        reviewRecord[OKGNReview.kReviewerAvatar] = profileManager.avatar.convertToCKAsset(path: "profileAvatar")
-                        
+                        reviewRecord[OKGNReview.kReviewerName] = cacheManager.getNameFromCache()
+                        reviewRecord[OKGNReview.kReviewerAvatar] = cacheManager.getAvatarFromCache()?.convertToCKAsset(path: "profileAvatar")
 
                     } else {
                         //To-do: show  alert that was unable to get locations
