@@ -13,7 +13,6 @@ final class FriendManager: ObservableObject {
     @Published var friends: [OKGNProfile] = []
     
     func addFriend(friendName: String, completed: @escaping (Result<CKRecord, Error>) -> Void) {
-        print("🥶 \(friendName)")
         //Search for friend and add reference to adder on friends account
         let predicate = NSPredicate(format: "name == %@", friendName)
         let query = CKQuery(recordType: "OKGNProfile", predicate: predicate)
@@ -28,29 +27,43 @@ final class FriendManager: ObservableObject {
             
             completed(.success(friendProfile[0]))
         }
-        
-        
-        //Also add reference to friend on adders account
-        
     }
     
-    //REFERENCE
-//    func getUserReviews(for profileID: CKRecord.ID, completed: @escaping (Result<[OKGNReview], Error>) -> Void) {
-//        let reference = CKRecord.Reference(recordID: profileID, action: .none)
-//        let predicate = NSPredicate(format: "reviewer == %@", reference)
-//        let query = CKQuery(recordType: "OKGNReview", predicate: predicate)
-//
-//        CKContainer.default().publicCloudDatabase.perform(query, inZoneWith: nil) { records, error in
-//            guard let records = records, error == nil else {
-//                completed(.failure(error!))
-//                print(error!)
-//                return
-//            }
-//
-//            let reviews = records.map { $0.convertToOKGNReview() }
-//            completed(.success(reviews))
-//
-//        }
-//    }
+    
+    func acceptFriendRequest(profileReference: CKRecord.Reference, completed: @escaping (Result<[CKRecord], Error>) -> Void) {
+
+        let predicate = NSPredicate(format: "friends CONTAINS %@", profileReference)
+        let query = CKQuery(recordType: "OKGNProfile", predicate: predicate)
+        
+        CKContainer.default().publicCloudDatabase.perform(query, inZoneWith: nil) { friendRequests, error in
+            guard let friendRequests = friendRequests, error == nil else {
+                completed(.failure(error!))
+                print(error!)
+                print("😭 Error retreiving friend REQUESTS")
+                return
+            }
+            
+            completed(.success(friendRequests))
+        }
+    }
+    
+
+    func getFriends(friendList: CKRecord.Reference, completed: @escaping (Result<[OKGNProfile], Error>) -> Void) {
+        let predicate = NSPredicate(format: "friends CONTAINS %@", friendList)
+        let query = CKQuery(recordType: "OKGNProfile", predicate: predicate)
+        
+        CKContainer.default().publicCloudDatabase.perform(query, inZoneWith: nil) { friends, error in
+            guard let friends = friends, error == nil else {
+                completed(.failure(error!))
+                print(error!)
+                print("😭 Error querying friend list")
+                return
+            }
+            
+            completed(.success(friends.map({ $0.convertToOKGNProfile() })))
+        }
+        
+        
+    }
     
 }

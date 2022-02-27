@@ -26,7 +26,6 @@ final class HomePageViewModel: ObservableObject {
     var existingProfileRecord: CKRecord? {
         didSet {
             profileContext = .update
-            print("😎 Profile Context changed to update")
         }
     }
     var profileContext: ProfileContext = .create
@@ -51,7 +50,6 @@ final class HomePageViewModel: ObservableObject {
             cafeCount = userReviews?.filter({returnCategoryFromString($0.locationCategory) == .Cafe}).count ?? 0
             pizzeriaCount = userReviews?.filter({returnCategoryFromString($0.locationCategory) == .Pizzeria}).count ?? 0
             activityCount = userReviews?.filter({returnCategoryFromString($0.locationCategory) == .Activity}).count ?? 0
-            print("🥳 \(userReviews?.count ?? 0) User Reviews set for HomePageModel")
         }
     }
 
@@ -100,6 +98,7 @@ final class HomePageViewModel: ObservableObject {
             case .success(let record):
                 DispatchQueue.main.async { [self] in
                     print("✅ success getting profile")
+                    
                     existingProfileRecord = record
                     CloudKitManager.shared.profile = record
                     let importedProfile = OKGNProfile(record: record)

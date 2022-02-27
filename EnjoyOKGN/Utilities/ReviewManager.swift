@@ -31,12 +31,10 @@ final class ReviewManager: ObservableObject {
                         var sortedReviews: [OKGNReview] = receivedReviews.filter({returnCategoryFromString($0.locationCategory) == category}).sorted { $0.rating > $1.rating }
                         for i in 0..<min(sortedReviews.count, 3) {
                             sortedReviews[i].ranking = rankings[i]
-                            print(i)
                         }
                         self.reviews.append(contentsOf: sortedReviews)
                     }
-                }
-                    
+                }                    
 
             case .failure(_):
                 print("❌ Error fetching reviews!")

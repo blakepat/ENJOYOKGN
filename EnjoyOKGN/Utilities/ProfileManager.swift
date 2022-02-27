@@ -12,6 +12,11 @@ final class ProfileManager: ObservableObject {
     
     @Published var avatar: UIImage = PlaceholderImage.avatar
     @Published var name: String = "Enter name..."
+//    @Published var friends: [OKGNProfile] = [] {
+//        didSet {
+//            print("💜 Friends SET \(friends)")
+//        }
+//    }
 }
 
 

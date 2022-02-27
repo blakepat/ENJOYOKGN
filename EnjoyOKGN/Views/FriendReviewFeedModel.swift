@@ -13,13 +13,14 @@ final class FriendReviewFeedModel: ObservableObject {
     
     @ObservedObject var friendManager = FriendManager()
     
-    
     @Published var isShowingFriendsList = false
         
     @Published var detailedReviewToShow: OKGNReview?
     @Published var isShowingDetailedModalView = false
     @Published var isShowingAddFriendAlert = false
+    @Published var isShowingFriendRequestAlert = false
     
+    @Published var twoButtonAlertItem: TwoButtonAlertItem?
     
     func showFriendSearchView() {
         let alert = UIAlertController(title: "Add Friend", message: "Add friend via their display name", preferredStyle: .alert)
