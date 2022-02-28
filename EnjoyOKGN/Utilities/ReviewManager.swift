@@ -11,9 +11,10 @@ import CloudKit
 
 final class ReviewManager: ObservableObject {
     
-    @Published var reviews: [OKGNReview] = [] 
+    @Published var userReviews: [OKGNReview] = []
+    @Published var friendsReviews: [OKGNReview] = []
     
-    func getReviews() {
+    func getUserReviews() {
         guard let profileID = CloudKitManager.shared.profileRecordID else {
             print("❌ could not get profileID")
             return
@@ -25,14 +26,14 @@ final class ReviewManager: ObservableObject {
                 DispatchQueue.main.async {
                     print("✅ REVIEWS SET")
                     
-                    self.reviews = []
+                    self.userReviews = []
                     
                     for category in categories {
                         var sortedReviews: [OKGNReview] = receivedReviews.filter({returnCategoryFromString($0.locationCategory) == category}).sorted { $0.rating > $1.rating }
                         for i in 0..<min(sortedReviews.count, 3) {
                             sortedReviews[i].ranking = rankings[i]
                         }
-                        self.reviews.append(contentsOf: sortedReviews)
+                        self.userReviews.append(contentsOf: sortedReviews)
                     }
                 }                    
 
@@ -42,5 +43,30 @@ final class ReviewManager: ObservableObject {
         }
     }
     
+    func getFriendsReviews() {
+        guard let profile = CloudKitManager.shared.profile else {
+            print("❌ could not get profileID")
+            return
+        }
+        
+        CloudKitManager.shared.getFriendsReviews(for: CloudKitManager.shared.profile?.convertToOKGNProfile().friends ?? []) { result in
+            switch result {
+            case .success(let receivedReviews):
+                DispatchQueue.main.async {
+                    print("✅✅ FRIENDS REVIEWS SET")
+                    
+                    self.friendsReviews = []
+                    self.friendsReviews.append(contentsOf: receivedReviews.sorted { $0.date > $1.date } )
+                }
+
+            case .failure(_):
+                print("❌ Error fetching reviews!")
+            }
+        }
+    }
+    
+    func deleteReview(recordID: CKRecord.ID) {
+        
+    }
     
 }

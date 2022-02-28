@@ -19,17 +19,21 @@ struct FriendReviewFeed: View {
             ZStack {
                 
                 Color.OKGNDarkGray
-                    .edgesIgnoringSafeArea(.top)
+                    .edgesIgnoringSafeArea(.all)
                 
-                ScrollView {
+                List {
                     
                     if viewModel.isShowingFriendsList {
                         ForEach(viewModel.friendManager.friends) { friend in
                             FriendCell(profile: friend)
+                                .padding(.horizontal)
                         }
+                        .listRowBackground(Color.OKGNDarkGray)
+                        
                     } else {
-                        ForEach(reviewManager.reviews) { review in
+                        ForEach(reviewManager.friendsReviews) { review in
                             ReviewCell(review: review)
+                                .padding(.horizontal)
                                 .onTapGesture {
                                     withAnimation {
                                         viewModel.isShowingDetailedModalView = true
@@ -37,8 +41,11 @@ struct FriendReviewFeed: View {
                                     viewModel.detailedReviewToShow = review
                                 }
                         }
+                        .listRowBackground(Color.OKGNDarkGray)
                     }
+                
                 }
+                .listStyle(.plain)
                 
                 if viewModel.isShowingDetailedModalView {
                     Color(.systemBackground)
@@ -56,7 +63,6 @@ struct FriendReviewFeed: View {
                     }
                 }
             }
-            .padding(.horizontal)
             .navigationTitle("Friend's Reviews")
             .toolbar(content: {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -79,7 +85,7 @@ struct FriendReviewFeed: View {
                 }
             })
             .onAppear {
-                reviewManager.getReviews()
+                reviewManager.getFriendsReviews()
                 
                 if let profile = CloudKitManager.shared.profileRecordID {
                     viewModel.friendManager.getFriends(friendList: CKRecord.Reference(recordID: profile, action: .none)) { result in
@@ -147,6 +153,7 @@ struct FriendReviewFeed: View {
                 }
             }
         }
+//        .background(Color.OKGNDarkGray)
         .navigationViewStyle(StackNavigationViewStyle()) // This is called so there is issues with constraints in console
         .alert(item: $viewModel.twoButtonAlertItem, content: { alertItem in
             Alert(title: alertItem.title, message: alertItem.message, primaryButton: alertItem.acceptButton, secondaryButton: alertItem.dismissButton)
