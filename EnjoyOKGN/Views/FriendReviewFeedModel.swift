@@ -23,9 +23,9 @@ final class FriendReviewFeedModel: ObservableObject {
     @Published var twoButtonAlertItem: TwoButtonAlertItem?
     
     func showFriendSearchView() {
-        let alert = UIAlertController(title: "Add Friend", message: "Add friend via their display name", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Add Friend", message: "Follow a friend via their display name", preferredStyle: .alert)
         alert.addTextField { (nameForm) in
-            nameForm.placeholder = "friend's name..."
+            nameForm.placeholder = "friend's username..."
             nameForm.autocorrectionType = .no
         }
         
@@ -39,12 +39,13 @@ final class FriendReviewFeedModel: ObservableObject {
 
             if alert.textFields![0].text?.count ?? 0 > 0 && alert.textFields![0].text?.count ?? 21 < 21 {
                 // Call function to add friend here
-                self.friendManager.addFriend(friendName: alert.textFields![0].text ?? "") { result in
+                CloudKitManager.shared.getFriendRecord(friendName: alert.textFields![0].text ?? "") { result in
                     switch result {
                     case .success(let friend):
                         print("✅🥶 \(friend.convertToOKGNProfile().name) - friend retreived")
                 
-                        userProfile[OKGNProfile.kFriends] = [CKRecord.Reference(record: friend, action: .none)]
+                        userProfile[OKGNProfile.kRequests] = [CKRecord.Reference(record: friend, action: .none)]
+                        self.friendManager.removeDeletedBeforeReAdding(follower: friend)
                         CloudKitManager.shared.save(record: userProfile) { result in
                             switch result {
                             case .success(_):
@@ -76,6 +77,38 @@ final class FriendReviewFeedModel: ObservableObject {
         
         keyWindow?.rootViewController?.present(alert, animated: true) {
             
+        }
+    }
+    
+    
+    func displayFollowRequests() {
+        if let profileRecordID = CloudKitManager.shared.profileRecordID {
+            CloudKitManager.shared.getFollowRequests(for: CKRecord.Reference(recordID: profileRecordID, action: .none)) { result in
+                switch result {
+                case .success(let followRequests):
+                    print("✅ Success getting follow requests")
+                    DispatchQueue.main.async { [self] in
+                        for follower in followRequests {
+                            
+                        
+                            twoButtonAlertItem = TwoButtonAlertItem(title: Text("Follow Request!"),
+                                                                              message: Text("\(follower.convertToOKGNProfile().name) has requested to follow you!"),
+                                                                    acceptButton: .default(Text("Accept"), action: { [self] in
+                                friendManager.removeRequestAfterAccepting(follower: follower)
+                                friendManager.acceptFollower(follower)
+                            }),
+                                                                              dismissButton: .cancel(Text("Decline"), action: {
+                                //🥶 TO-DO: Decline friend request
+                                print("🥶 Friend Request Declined")
+
+                            }))
+                        }
+                    }
+
+                case .failure(_):
+                    print("❌ Error creating friend requests")
+                }
+            }
         }
     }
 }

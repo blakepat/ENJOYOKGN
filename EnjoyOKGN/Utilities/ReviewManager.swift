@@ -49,24 +49,33 @@ final class ReviewManager: ObservableObject {
             return
         }
         
-        CloudKitManager.shared.getFriendsReviews(for: CloudKitManager.shared.profile?.convertToOKGNProfile().friends ?? []) { result in
+        
+        CloudKitManager.shared.getFriends(for: CKRecord.Reference(recordID: profile.recordID, action: .none)) { result in
             switch result {
-            case .success(let receivedReviews):
-                DispatchQueue.main.async {
-                    print("✅✅ FRIENDS REVIEWS SET")
-                    
-                    self.friendsReviews = []
-                    self.friendsReviews.append(contentsOf: receivedReviews.sorted { $0.date > $1.date } )
-                }
+                
+            case .success(let friends):
+                
+                if friends == [] { self.friendsReviews = [] }
+                
+                CloudKitManager.shared.getFriendsReviews(for: friends.map { CKRecord.Reference(recordID: $0.recordID, action: .none) }) { result in
+                    switch result {
+                    case .success(let receivedReviews):
+                        DispatchQueue.main.async {
+                            print("✅ FRIENDS REVIEWS SET")
+                            
+                            self.friendsReviews = []
+                            self.friendsReviews.append(contentsOf: receivedReviews.sorted { $0.date > $1.date } )
+                        }
 
+                    case .failure(_):
+                        print("❌ Error fetching reviews!")
+                    }
+                }
             case .failure(_):
-                print("❌ Error fetching reviews!")
+                print("❌ Error getting friends for reviews")
             }
         }
-    }
-    
-    func deleteReview(recordID: CKRecord.ID) {
         
+
     }
-    
 }

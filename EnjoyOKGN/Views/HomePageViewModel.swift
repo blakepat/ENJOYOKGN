@@ -23,12 +23,13 @@ final class HomePageViewModel: ObservableObject {
     
     @Published var isShowingPhotoPicker = false
     @Published var profile: OKGNProfile?
-    var existingProfileRecord: CKRecord? {
+    @Published var existingProfileRecord: CKRecord? {
         didSet {
             profileContext = .update
+            print("✅ Existing profile set and context changed to .update!")
         }
     }
-    var profileContext: ProfileContext = .create
+    @Published var profileContext: ProfileContext = .create
     
     @Published var isShowingVenuesVisitedSubCategories = false
     @Published var isShowingTopRatedFilterAlert = false
@@ -167,6 +168,7 @@ final class HomePageViewModel: ObservableObject {
                 profileContext == .create ? createProfile() : updateProfile()
                 isShowingSaveAlert = false
                 cacheManager.addNameToCache(name: alert.textFields![0].text!)
+                
             }
         }
         

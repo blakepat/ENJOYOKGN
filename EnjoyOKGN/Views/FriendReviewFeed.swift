@@ -12,6 +12,7 @@ struct FriendReviewFeed: View {
     
     @EnvironmentObject var reviewManager: ReviewManager
     @EnvironmentObject var profileManager: ProfileManager
+    @StateObject var friendManager = FriendManager()
     @ObservedObject var viewModel = FriendReviewFeedModel()
     
     var body: some View {
@@ -24,9 +25,12 @@ struct FriendReviewFeed: View {
                 List {
                     
                     if viewModel.isShowingFriendsList {
-                        ForEach(viewModel.friendManager.friends) { friend in
+                        ForEach(friendManager.friends) { friend in
                             FriendCell(profile: friend)
                                 .padding(.horizontal)
+                        }
+                        .onDelete { index in
+                            friendManager.deleteFriends(index: index)
                         }
                         .listRowBackground(Color.OKGNDarkGray)
                         
@@ -43,7 +47,6 @@ struct FriendReviewFeed: View {
                         }
                         .listRowBackground(Color.OKGNDarkGray)
                     }
-                
                 }
                 .listStyle(.plain)
                 
@@ -84,76 +87,19 @@ struct FriendReviewFeed: View {
                     }
                 }
             })
-            .onAppear {
-                reviewManager.getFriendsReviews()
-                
-                if let profile = CloudKitManager.shared.profileRecordID {
-                    viewModel.friendManager.getFriends(friendList: CKRecord.Reference(recordID: profile, action: .none)) { result in
-                        switch result {
-                        case .success(let friends):
-                            print("✅ Success getting friends list")
-                            viewModel.friendManager.friends = friends
-                        case .failure(_):
-                            print("❌ Error getting friend list")
-                        }
-                    }
-                }
-                
-                if let profileRecordID = CloudKitManager.shared.profileRecordID {
-                    viewModel.friendManager.acceptFriendRequest(profileReference: CKRecord.Reference(recordID: profileRecordID, action: .none)) { result in
-                        switch result {
-                        case .success(let friendRequests):
-                            print("✅ Success getting friend requests")
-                            DispatchQueue.main.async {
-                                for friend in friendRequests {
-                                    
-                                    guard let userProfile = CloudKitManager.shared.profile else {
-                                        //TO-DO: create alert for unable to get profile
-                                        return
-                                    }
-                                    
-                                    if userProfile.convertToOKGNProfile().friends.contains(CKRecord.Reference(recordID: friend.recordID, action: .none)) {
-                                        return
-                                    }
-                                    
-                                    viewModel.twoButtonAlertItem = TwoButtonAlertItem(title: Text("Friend Request!"),
-                                                                                      message: Text("\(friend.convertToOKGNProfile().name) sent you a friend request!"),
-                                                                                      acceptButton: .default(Text("Accept"), action: {
-                                        viewModel.friendManager.addFriend(friendName: friend.convertToOKGNProfile().name) { result in
-                                            switch result {
-
-                                            case .success(_):
-                                                userProfile[OKGNProfile.kFriends] = [CKRecord.Reference(record: friend, action: .none)]
-                                                CloudKitManager.shared.save(record: userProfile) { result in
-                                                    switch result {
-                                                    case .success(_):
-                                                        print("✅friend added!")
-                                                    case .failure(let error):
-                                                        print("❌ failed adding friend")
-                                                        print(error)
-                                                    }
-                                                }
-                                            case .failure(_):
-                                                print("")
-                                            }
-                                        }
-                                    }),
-                                                                                      dismissButton: .cancel(Text("Decline"), action: {
-                                        //🥶 TO-DO: Decline friend request
-                                        print("🥶 Friend Request Declined")
-
-                                    }))
-                                }
-                            }
-
-                        case .failure(_):
-                            print("❌ Error creating friend requests")
-                        }
+            .onReceive(CloudKitManager.shared.$profile) { _ in
+                DispatchQueue.main.async {
+                    if let profile = CloudKitManager.shared.profile {
+                        friendManager.friendMediator(for: profile)
                     }
                 }
             }
+            .onAppear {
+                reviewManager.getFriendsReviews()
+                friendManager.compareRequestsAndFriends()
+                viewModel.displayFollowRequests()
+            }
         }
-//        .background(Color.OKGNDarkGray)
         .navigationViewStyle(StackNavigationViewStyle()) // This is called so there is issues with constraints in console
         .alert(item: $viewModel.twoButtonAlertItem, content: { alertItem in
             Alert(title: alertItem.title, message: alertItem.message, primaryButton: alertItem.acceptButton, secondaryButton: alertItem.dismissButton)
