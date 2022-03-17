@@ -217,14 +217,11 @@ struct CreateReviewView: View {
             .sheet(isPresented: $isShowingPhotoPicker, content: {
                 PhotoPicker(image: $selectedImage)
             })
-            .onAppear {
-                CloudKitManager.shared.getLocations { result in
-                    switch result {
-                    case .success(let importedLocations):
-                        locations = importedLocations
-                    case .failure(let error):
-                        print(error)
-                    }
+            .task {
+                do {
+                    locations = try await CloudKitManager.shared.getLocations()
+                } catch {
+                    print("❌ Error getting locations for create review screen")
                 }
             }
         }
@@ -240,10 +237,9 @@ struct CreateReviewView: View {
                 
             }
             
-            CloudKitManager.shared.fetchRecord(with: profileRecordID) { result in
-                switch result {
-                    
-                case .success(_):
+            Task {
+                do {
+                    let _ = try await CloudKitManager.shared.fetchRecord(with: profileRecordID)
                     let reviewRecord = CKRecord(recordType: RecordType.review)
                     //Create a reference to the location
                     if !locations.isEmpty {
@@ -265,30 +261,22 @@ struct CreateReviewView: View {
                     } else {
                         //To-do: show  alert that was unable to get locations
                         print("unable to get locations")
-                        break
                     }
                     
                     //save review to cloudkit
-                    CloudKitManager.shared.batchSave(records: [reviewRecord]) { result in
-                        switch result {
-                        case .success(_):
-                            //To-do: update cached users reviews
-                            print("✅ created review successfully")
-                        case .failure(_):
-                            print("❌ failed saving review")
-                            break
-                        }
+                    do {
+                        let _ = try await CloudKitManager.shared.batchSave(records: [reviewRecord])
+                        print("✅ created review successfully")
+                    } catch {
+                        print("❌ failed saving review")
                     }
-                    
-                case .failure(_):
+                } catch {
                     print("failure in fetching record review")
-                    break
                 }
-                
-                resetReviewPage()
-                alertItem = AlertContext.successfullyCreatedReview
-            
             }
+            resetReviewPage()
+            alertItem = AlertContext.successfullyCreatedReview
+            
         }
     }
     

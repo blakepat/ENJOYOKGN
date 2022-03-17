@@ -39,26 +39,48 @@ final class FriendReviewFeedModel: ObservableObject {
 
             if alert.textFields![0].text?.count ?? 0 > 0 && alert.textFields![0].text?.count ?? 21 < 21 {
                 // Call function to add friend here
-                CloudKitManager.shared.getFriendRecord(friendName: alert.textFields![0].text ?? "") { result in
-                    switch result {
-                    case .success(let friend):
+                
+                Task {
+                    do {
+                        let friend = try await CloudKitManager.shared.getFriendRecord(friendName: alert.textFields![0].text ?? "")
+                        
                         print("✅🥶 \(friend.convertToOKGNProfile().name) - friend retreived")
                 
                         userProfile[OKGNProfile.kRequests] = [CKRecord.Reference(record: friend, action: .none)]
                         self.friendManager.removeDeletedBeforeReAdding(follower: friend)
-                        CloudKitManager.shared.save(record: userProfile) { result in
-                            switch result {
-                            case .success(_):
-                                print("✅✅ friend added!")
-                            case .failure(let error):
-                                print("❌❌ failed adding friend")
-                                print(error)
-                            }
+                        
+                        do {
+                            let _ = try await CloudKitManager.shared.save(record: userProfile)
+                            print("✅✅ friend added!")
+                        } catch {
+                            print("❌❌ failed adding friend")
+                            print(error)
                         }
-                    case .failure(_):
+                    } catch {
                         print("❌ Error fetching friend")
                     }
                 }
+                
+//                CloudKitManager.shared.getFriendRecord(friendName: alert.textFields![0].text ?? "") { result in
+//                    switch result {
+//                    case .success(let friend):
+//                        print("✅🥶 \(friend.convertToOKGNProfile().name) - friend retreived")
+//
+//                        userProfile[OKGNProfile.kRequests] = [CKRecord.Reference(record: friend, action: .none)]
+//                        self.friendManager.removeDeletedBeforeReAdding(follower: friend)
+//                        CloudKitManager.shared.save(record: userProfile) { result in
+//                            switch result {
+//                            case .success(_):
+//                                print("✅✅ friend added!")
+//                            case .failure(let error):
+//                                print("❌❌ failed adding friend")
+//                                print(error)
+//                            }
+//                        }
+//                    case .failure(_):
+//                        print("❌ Error fetching friend")
+//                    }
+//                }
             }
         }
         
@@ -83,9 +105,10 @@ final class FriendReviewFeedModel: ObservableObject {
     
     func displayFollowRequests() {
         if let profileRecordID = CloudKitManager.shared.profileRecordID {
-            CloudKitManager.shared.getFollowRequests(for: CKRecord.Reference(recordID: profileRecordID, action: .none)) { result in
-                switch result {
-                case .success(let followRequests):
+            Task {
+                do {
+                    let followRequests = try await CloudKitManager.shared.getFollowRequests(for: CKRecord.Reference(recordID: profileRecordID, action: .none))
+                    
                     print("✅ Success getting follow requests")
                     DispatchQueue.main.async { [self] in
                         for follower in followRequests {
@@ -104,11 +127,37 @@ final class FriendReviewFeedModel: ObservableObject {
                             }))
                         }
                     }
-
-                case .failure(_):
+                } catch {
                     print("❌ Error creating friend requests")
                 }
             }
+            
+//            CloudKitManager.shared.getFollowRequests(for: CKRecord.Reference(recordID: profileRecordID, action: .none)) { result in
+//                switch result {
+//                case .success(let followRequests):
+//                    print("✅ Success getting follow requests")
+//                    DispatchQueue.main.async { [self] in
+//                        for follower in followRequests {
+//
+//
+//                            twoButtonAlertItem = TwoButtonAlertItem(title: Text("Follow Request!"),
+//                                                                              message: Text("\(follower.convertToOKGNProfile().name) has requested to follow you!"),
+//                                                                    acceptButton: .default(Text("Accept"), action: { [self] in
+//                                friendManager.removeRequestAfterAccepting(follower: follower)
+//                                friendManager.acceptFollower(follower)
+//                            }),
+//                                                                              dismissButton: .cancel(Text("Decline"), action: {
+//                                //🥶 TO-DO: Decline friend request
+//                                print("🥶 Friend Request Declined")
+//
+//                            }))
+//                        }
+//                    }
+//
+//                case .failure(_):
+//                    print("❌ Error creating friend requests")
+//                }
+//            }
         }
     }
 }

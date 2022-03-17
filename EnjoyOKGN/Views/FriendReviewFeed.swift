@@ -10,6 +10,7 @@ import CloudKit
 
 struct FriendReviewFeed: View {
     
+    @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var reviewManager: ReviewManager
     @EnvironmentObject var profileManager: ProfileManager
     @StateObject var friendManager = FriendManager()
@@ -19,15 +20,16 @@ struct FriendReviewFeed: View {
         NavigationView {
             ZStack {
                 
-                Color.OKGNDarkGray
+                (colorScheme == .dark ? Color.OKGNDarkGray : Color.white)
                     .edgesIgnoringSafeArea(.all)
                 
                 List {
-                    
                     if viewModel.isShowingFriendsList {
                         ForEach(friendManager.friends) { friend in
-                            FriendCell(profile: friend)
-                                .padding(.horizontal)
+                            NavigationLink(destination: FriendProfileView(friend: friend)) {
+                                FriendCell(profile: friend)
+                                    .padding(.horizontal)
+                            }
                         }
                         .onDelete { index in
                             friendManager.deleteFriends(index: index)
@@ -66,7 +68,7 @@ struct FriendReviewFeed: View {
                     }
                 }
             }
-            .navigationTitle("Friend's Reviews")
+            .navigationTitle(viewModel.isShowingFriendsList ? "Friends" : "Friend's Reviews")
             .toolbar(content: {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {

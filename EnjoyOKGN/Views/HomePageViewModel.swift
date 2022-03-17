@@ -19,8 +19,6 @@ final class HomePageViewModel: ObservableObject {
 //        self.profileManager = profileManager
 //    }
     
-    let rows: [GridItem] = Array(repeating: .init(.flexible()), count: 1)
-    
     @Published var isShowingPhotoPicker = false
     @Published var profile: OKGNProfile?
     @Published var existingProfileRecord: CKRecord? {
@@ -66,17 +64,15 @@ final class HomePageViewModel: ObservableObject {
         
         userRecord["userProfile"] = CKRecord.Reference(recordID: profileRecord.recordID, action: .none)
         
-        CloudKitManager.shared.batchSave(records: [userRecord, profileRecord]) { result in
-            DispatchQueue.main.async {
-                switch result {
-                    case .success(let records):
-                    for record in records where record.recordType == RecordType.profile {
-                        self.existingProfileRecord = record
-                        CloudKitManager.shared.profileRecordID = record.recordID
-                    }
-                    case .failure(_):
-                    self.alertItem = AlertContext.profileCreateFailure
+        Task {
+            do {
+                let records = try await CloudKitManager.shared.batchSave(records: [userRecord, profileRecord])
+                for record in records where record.recordType == RecordType.profile {
+                    self.existingProfileRecord = record
+                    CloudKitManager.shared.profileRecordID = record.recordID
                 }
+            } catch {
+                self.alertItem = AlertContext.profileCreateFailure
             }
         }
     }
@@ -93,10 +89,10 @@ final class HomePageViewModel: ObservableObject {
             return
         }
         
-        let profileRecordID = profileReference.recordID
-        CloudKitManager.shared.fetchRecord(with: profileRecordID) { result in
-            switch result {
-            case .success(let record):
+        Task {
+            do {
+                let profileRecordID = profileReference.recordID
+                let record = try await CloudKitManager.shared.fetchRecord(with: profileRecordID)
                 DispatchQueue.main.async { [self] in
                     print("✅ success getting profile")
                     
@@ -108,12 +104,9 @@ final class HomePageViewModel: ObservableObject {
                     profileManager.avatar = importedProfile.createProfileImage()
                     cacheManager.addAvatarToCache(avatar: importedProfile.createProfileImage())
                     cacheManager.addNameToCache(name: importedProfile.name)
-                    
                 }
-            case .failure(_):
-                //show alert
-                break
-                
+            } catch {
+                print(error)
             }
         }
     }
@@ -129,15 +122,12 @@ final class HomePageViewModel: ObservableObject {
         cacheManager.addNameToCache(name: profileManager.name)
         cacheManager.addAvatarToCache(avatar: profileManager.avatar)
         
-        CloudKitManager.shared.save(record: profileRecord) { result in
-            DispatchQueue.main.async { [self] in
-                switch result {
-                case .success(_):
-                    alertItem = AlertContext.profileUpdateSuccess
-                case .failure(_):
-                    //TO-DO: show alert that was unable to update profile
-                    alertItem = AlertContext.profileUpdateFailure
-                }
+        Task {
+            do {
+                let _ = try await CloudKitManager.shared.save(record: profileRecord)
+                alertItem = AlertContext.profileUpdateSuccess
+            } catch {
+                alertItem = AlertContext.profileUpdateFailure
             }
         }
     }
