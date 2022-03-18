@@ -7,6 +7,7 @@
 
 import SwiftUI
 import MapKit
+import CloudKit
 
 
 final class LocationDetailViewModel: ObservableObject {
@@ -19,6 +20,8 @@ final class LocationDetailViewModel: ObservableObject {
     
     var location: OKGNLocation
     @Published var alertItem: AlertItem?
+    
+    @Published var isFavourited = false
     
     
     init(location: OKGNLocation, reviews: [OKGNReview]) {
@@ -52,6 +55,68 @@ final class LocationDetailViewModel: ObservableObject {
         
     }
     
+    func checkIfLocationIsFavourited() {
+        
+        guard let profileRecord = CloudKitManager.shared.profile else {
+            //TO-DO: create alert for unable to get profile
+            return
+        }
+        
+        print(profileRecord.convertToOKGNProfile().favouriteLocations)
+        
+        if profileRecord.convertToOKGNProfile().favouriteLocations.contains(where: { $0 == CKRecord.Reference(recordID: location.id, action: .none) }) {
+            isFavourited = true
+        } else {
+            isFavourited = false
+        }
+        
+    }
+    
+    
+    func favouriteLocation() {
+        
+        guard let profileRecord = CloudKitManager.shared.profile else {
+            //TO-DO: create alert for unable to get profile
+            return
+        }
+        
+        profileRecord[OKGNProfile.kFavouriteLocations] = [CKRecord.Reference(recordID: location.id, action: .none)]
+        
+        Task {
+            do {
+                let _ = try await CloudKitManager.shared.save(record: profileRecord)
+                alertItem = AlertContext.locationFavouritedSuccess
+            } catch {
+                alertItem = AlertContext.locationFavouritedFailed
+            }
+        }
+    }
+    
+    
+    func unfavouriteLocation() {
+        
+        guard let profileRecord = CloudKitManager.shared.profile else {
+            //TO-DO: create alert for unable to get profile
+            return
+        }
+        
+        var locations: [CKRecord.Reference] = []
+        
+        for savedLocation in profileRecord.convertToOKGNProfile().favouriteLocations where savedLocation.recordID != location.id {
+            locations.append(savedLocation)
+        }
+        
+        profileRecord[OKGNProfile.kFavouriteLocations] = locations
+        
+        Task {
+            do {
+                let _ = try await CloudKitManager.shared.save(record: profileRecord)
+                alertItem = AlertContext.locationUnfavouritedSuccess
+            } catch {
+                alertItem = AlertContext.locationUnfavouritedFailed
+            }
+        }
+    }
 }
 
 

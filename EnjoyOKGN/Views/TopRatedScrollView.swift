@@ -70,7 +70,6 @@ struct TopRatedScrollView: View {
                         ReviewCell(review: review)
                             .padding(.horizontal, 4)
                             .onTapGesture {
-                                print("🤡🤡")
                                 detailedReviewToShow = review
                                 withAnimation {
                                     isShowingDetailedModalView = true
