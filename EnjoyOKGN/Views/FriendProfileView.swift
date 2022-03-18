@@ -9,6 +9,7 @@ import SwiftUI
 
 struct FriendProfileView: View {
     
+    @EnvironmentObject var reviewManager: ReviewManager
     @StateObject var viewModel = FriendProfileViewModel()
     var friend: OKGNProfile
     
@@ -46,22 +47,52 @@ struct FriendProfileView: View {
                 
                 
                 //trophies
-                TrophyScrollView(pizzeriaCount: 3,
-                                 wineryCount: 6,
-                                 breweryCount: 10,
-                                 cafeCount: 2,
-                                 activityCount: 0)
+                TrophyScrollView(pizzeriaCount: viewModel.pizzeriaCount,
+                                 wineryCount: viewModel.wineryCount,
+                                 breweryCount: viewModel.breweryCount,
+                                 cafeCount: viewModel.cafeCount,
+                                 activityCount: viewModel.activityCount)
                 
                 
                 //top rated reviews (similar to home page)
                 TopRatedScrollView(isShowingTopRatedFilterAlert: $viewModel.isShowingTopRatedFilterAlert,
                                    isShowingDetailedModalView: $viewModel.isShowingDetailedModalView,
+                                   detailedReviewToShow: $viewModel.detailedReviewToShow,
                                    topRatedFilter: viewModel.topRatedFilter,
-                                   detailedReviewToShow: viewModel.detailedReviewToShow)
+                                   reviews: reviewManager.friendReviews,
+                                   isFriendReviews: true)
             }
+            
+            
+            
+            if viewModel.isShowingDetailedModalView {
+                Color(.systemBackground)
+                    .ignoresSafeArea(.all)
+                    .opacity(0.4)
+                    .transition(.opacity)
+                    .animation(.easeOut, value: viewModel.isShowingDetailedModalView)
+                    .zIndex(1)
+                
+                if let reviewToShow = viewModel.detailedReviewToShow {
+                    DetailedVisitModalView(review: reviewToShow, isShowingDetailedVisitView: $viewModel.isShowingDetailedModalView)
+                        .transition(.opacity.combined(with: .slide))
+                        .animation(.easeOut, value: viewModel.isShowingDetailedModalView)
+                        .zIndex(2)
+                }
+            }
+            
+            
         }
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
+        .onReceive(reviewManager.$friendReviews) { _ in
+            DispatchQueue.main.async {
+                viewModel.friendReviews = reviewManager.friendReviews
+            }
+        }
+        .task {
+            reviewManager.getOneFriendReviews(id: friend.id)
+        }
     }
 }
 

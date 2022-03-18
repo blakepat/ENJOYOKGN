@@ -273,9 +273,10 @@ struct CreateReviewView: View {
                 } catch {
                     print("failure in fetching record review")
                 }
+                resetReviewPage()
+                alertItem = AlertContext.successfullyCreatedReview
             }
-            resetReviewPage()
-            alertItem = AlertContext.successfullyCreatedReview
+
             
         }
     }

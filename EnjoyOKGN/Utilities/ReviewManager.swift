@@ -12,7 +12,8 @@ import CloudKit
 final class ReviewManager: ObservableObject {
     
     @Published var userReviews: [OKGNReview] = []
-    @Published var friendsReviews: [OKGNReview] = []
+    @Published var allFriendsReviews: [OKGNReview] = []
+    @Published var friendReviews: [OKGNReview] = []
     
     func getUserReviews() {
         guard let profileID = CloudKitManager.shared.profileRecordID else {
@@ -41,30 +42,35 @@ final class ReviewManager: ObservableObject {
                 print("❌ Error fetching reviews!")
             }
         }
-//        CloudKitManager.shared.getUserReviews(for: profileID) { result in
-//            switch result {
-//            case .success(let receivedReviews):
-//                DispatchQueue.main.async {
-//                    print("✅ REVIEWS SET")
-//                    
-//                    self.userReviews = []
-//                    
-//                    for category in categories {
-//                        var sortedReviews: [OKGNReview] = receivedReviews.filter({returnCategoryFromString($0.locationCategory) == category}).sorted { $0.rating > $1.rating }
-//                        for i in 0..<min(sortedReviews.count, 3) {
-//                            sortedReviews[i].ranking = rankings[i]
-//                        }
-//                        self.userReviews.append(contentsOf: sortedReviews)
-//                    }
-//                }                    
-//
-//            case .failure(_):
-//                print("❌ Error fetching reviews!")
-//            }
-//        }
     }
     
-    func getFriendsReviews() {
+    
+    func getOneFriendReviews(id: CKRecord.ID) {
+        Task {
+            do {
+                let receivedReviews = try await CloudKitManager.shared.getUserReviews(for: id)
+                
+                DispatchQueue.main.async {
+                    print("✅ ONE FRIEND REVIEWS SET")
+                    
+                    self.friendReviews = []
+                    
+                    for category in categories {
+                        var sortedReviews: [OKGNReview] = receivedReviews.filter({returnCategoryFromString($0.locationCategory) == category}).sorted { $0.rating > $1.rating }
+                        for i in 0..<min(sortedReviews.count, 3) {
+                            sortedReviews[i].ranking = rankings[i]
+                        }
+                        self.friendReviews.append(contentsOf: sortedReviews)
+                    }
+                }
+            } catch {
+                print("❌ Error fetching reviews!")
+            }
+        }
+    }
+    
+    
+    func getAllFriendsReviews() {
         guard let profile = CloudKitManager.shared.profile else {
             print("❌ could not get profileID")
             return
@@ -74,14 +80,14 @@ final class ReviewManager: ObservableObject {
             do {
                 let friends = try await CloudKitManager.shared.getFriends(for: CKRecord.Reference(recordID: profile.recordID, action: .none))
                 
-                if friends == [] { self.friendsReviews = [] }
+                if friends == [] { self.allFriendsReviews = [] }
                 
                 let receivedReviews = try await CloudKitManager.shared.getFriendsReviews(for: friends.map { CKRecord.Reference(recordID: $0.recordID, action: .none) })
                 DispatchQueue.main.async {
                     print("✅ FRIENDS REVIEWS SET")
                     
-                    self.friendsReviews = []
-                    self.friendsReviews.append(contentsOf: receivedReviews.sorted { $0.date > $1.date } )
+                    self.allFriendsReviews = []
+                    self.allFriendsReviews.append(contentsOf: receivedReviews.sorted { $0.date > $1.date } )
                 }
                 
 //                CloudKitManager.shared.getFriendsReviews(for: friends.map { CKRecord.Reference(recordID: $0.recordID, action: .none) }) { result in

@@ -37,7 +37,7 @@ struct FriendReviewFeed: View {
                         .listRowBackground(Color.OKGNDarkGray)
                         
                     } else {
-                        ForEach(reviewManager.friendsReviews) { review in
+                        ForEach(reviewManager.allFriendsReviews) { review in
                             ReviewCell(review: review)
                                 .padding(.horizontal)
                                 .onTapGesture {
@@ -97,7 +97,7 @@ struct FriendReviewFeed: View {
                 }
             }
             .onAppear {
-                reviewManager.getFriendsReviews()
+                reviewManager.getAllFriendsReviews()
                 friendManager.compareRequestsAndFriends()
                 viewModel.displayFollowRequests()
             }

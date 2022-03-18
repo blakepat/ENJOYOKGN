@@ -15,9 +15,6 @@ final class HomePageViewModel: ObservableObject {
     let cacheManager = CacheManager.instance
     
     @ObservedObject var profileManager = ProfileManager()
-//    init(profileManager: ProfileManager) {
-//        self.profileManager = profileManager
-//    }
     
     @Published var isShowingPhotoPicker = false
     @Published var profile: OKGNProfile?

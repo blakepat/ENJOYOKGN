@@ -14,8 +14,10 @@ struct TopRatedScrollView: View {
     
     @Binding var isShowingTopRatedFilterAlert: Bool
     @Binding var isShowingDetailedModalView: Bool
+    @Binding var detailedReviewToShow: OKGNReview?
     @State var topRatedFilter: Category?
-    @State var detailedReviewToShow: OKGNReview?
+    @State var reviews: [OKGNReview]
+    @State var isFriendReviews: Bool
     
     let rows: [GridItem] = Array(repeating: .init(.flexible()), count: 1)
     
@@ -61,10 +63,14 @@ struct TopRatedScrollView: View {
             
             ScrollView(.vertical) {
                 LazyVGrid(columns: rows) {
-                    ForEach(reviewManager.userReviews.filter({topRatedFilter == nil ? $0.ranking == .first : returnCategoryFromString($0.locationCategory)  == topRatedFilter && ($0.ranking == .first || $0.ranking == .second || $0.ranking == .third) })) { review in
+                    
+                    let reviews = isFriendReviews ? reviewManager.friendReviews : reviewManager.userReviews
+                    
+                    ForEach(reviews.filter({topRatedFilter == nil ? $0.ranking == .first : returnCategoryFromString($0.locationCategory)  == topRatedFilter && ($0.ranking == .first || $0.ranking == .second || $0.ranking == .third) })) { review in
                         ReviewCell(review: review)
                             .padding(.horizontal, 4)
                             .onTapGesture {
+                                print("🤡🤡")
                                 detailedReviewToShow = review
                                 withAnimation {
                                     isShowingDetailedModalView = true
