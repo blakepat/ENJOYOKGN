@@ -71,14 +71,10 @@ struct SideMenuView: View {
                         }
                         .padding(.top)
                         .listStyle(.sidebar)
-                        
-
-                        
                     }
                     .background(VisualEffectView(effect: UIBlurEffect(style: .systemThinMaterialDark)))
                     .frame(width: 200)
                     .offset(x: menuOpen ? 0 : -400, y: -geo.safeAreaInsets.bottom / 200)
-//                    .offset(y:)
                     .animation(.easeInOut, value: menuOpen)
                     .edgesIgnoringSafeArea(.top)
                     
