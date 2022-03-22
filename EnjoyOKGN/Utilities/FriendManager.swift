@@ -24,7 +24,11 @@ final class FriendManager: ObservableObject {
 //                try await CloudKitManager.shared.getFriendRecord(friendName: friend.convertToOKGNProfile().name)
 //
                 if let userProfile = CloudKitManager.shared.profile {
-                    userProfile[OKGNProfile.kFollowers] = [CKRecord.Reference(record: friend, action: .none)]
+                    
+                    var followers = userProfile.convertToOKGNProfile().followers
+                    followers.append(CKRecord.Reference(record: friend, action: .none))
+                    
+                    userProfile[OKGNProfile.kFollowers] = followers
                     //To-do: erase request from request list after adding.
                     userProfile[OKGNProfile.kRequests] = self.getRequestsMinusNewFollower(newFollower: CKRecord.Reference(record: friend, action: .none),
                                                                                           profile: userProfile)

@@ -83,6 +83,10 @@ struct CreateReviewView: View {
                                     } label: {
                                         Text(location.name)
                                             .foregroundColor(.white)
+                                            .onTapGesture {
+                                                locationName = location.name
+                                                selectedLocation = location
+                                            }
                                     }
                                     .listRowBackground(VisualEffectView(effect: UIBlurEffect(style: .systemThinMaterialDark)))
                                 }
@@ -90,7 +94,7 @@ struct CreateReviewView: View {
                         }
                     }
                     .clipShape(RoundedRectangle(cornerRadius: 16))
-                    .frame(height: 180)
+                    .frame(height: 140)
                     .padding(.horizontal, 16)
                 }
                 
@@ -183,7 +187,7 @@ struct CreateReviewView: View {
                         Image(uiImage: selectedImage)
                             .resizable()
                             .scaledToFill()
-                            .frame(width: 120 ,height: 120)
+                            .frame(width: 80 ,height: 80)
                             .clipped()
                             .clipShape(RoundedRectangle(cornerRadius: 16))
                             .onTapGesture {
@@ -224,6 +228,9 @@ struct CreateReviewView: View {
                     print("❌ Error getting locations for create review screen")
                 }
             }
+        }
+        .onTapGesture {
+            hideKeyboard()
         }
     }
     

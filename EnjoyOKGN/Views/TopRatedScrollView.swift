@@ -23,22 +23,24 @@ struct TopRatedScrollView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("Top Rated Visits:")
-                .foregroundColor(.white)
-                .font(.title2)
-                .fontWeight(.semibold)
-                .padding(.top)
             
-            HStack {
-                Text("Sort:")
-                    .foregroundColor(.gray)
-                
-                Text("\(topRatedFilter == nil ? "all" : topRatedFilter!.description)")
+            
+            HStack(spacing: 0) {
+                Text("Top Rated Visits: ")
                     .foregroundColor(.white)
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                    
+                
+                Text("\(topRatedFilter == nil ? "Champions" : topRatedFilter!.description)")
+                    .font(.title2)
+                    .foregroundColor(topRatedFilter == nil ? .OKGNDarkYellow : topRatedFilter!.color)
                 
                 Text("▼")
-                    .font(.footnote)
-                    .foregroundColor(.white)
+                    .padding(.leading, 8)
+                    .font(.body)
+                    .foregroundColor(.gray)
+                    
             }
             .padding(.horizontal, 4)
             .onTapGesture {
@@ -66,15 +68,34 @@ struct TopRatedScrollView: View {
                     
                     let reviews = isFriendReviews ? reviewManager.friendReviews : reviewManager.userReviews
                     
-                    ForEach(reviews.filter({topRatedFilter == nil ? $0.ranking == .first : returnCategoryFromString($0.locationCategory)  == topRatedFilter && ($0.ranking == .first || $0.ranking == .second || $0.ranking == .third) })) { review in
-                        ReviewCell(review: review)
-                            .padding(.horizontal, 4)
-                            .onTapGesture {
-                                detailedReviewToShow = review
-                                withAnimation {
-                                    isShowingDetailedModalView = true
+                    ForEach(reviews.filter({topRatedFilter == nil ? $0.ranking == .first : returnCategoryFromString($0.locationCategory) == topRatedFilter && ($0.ranking == .first || $0.ranking == .second || $0.ranking == .third) })) { review in
+                        
+                        VStack(spacing: 0) {
+                            
+                            if topRatedFilter == nil {
+                                HStack {
+                                    Text(review.locationCategory.description)
+                                        .foregroundColor(returnCategoryFromString(review.locationCategory.description).color)
+                                        .fontWeight(.semibold)
+                                    +
+                                    Text(" Leader")
+                                        .fontWeight(.semibold)
+                                        
+                                    Spacer()
                                 }
+                                .padding(.leading, 8)
+                                
                             }
+                            
+                            ReviewCell(review: review)
+                                .padding(.horizontal, 4)
+                                .onTapGesture {
+                                    detailedReviewToShow = review
+                                    withAnimation {
+                                        isShowingDetailedModalView = true
+                                    }
+                                }
+                        }
                     }
                 }
             }

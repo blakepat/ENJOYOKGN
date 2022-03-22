@@ -73,14 +73,17 @@ final class LocationDetailViewModel: ObservableObject {
     }
     
     
-    func favouriteLocation() {
+    @MainActor func favouriteLocation() {
         
         guard let profileRecord = CloudKitManager.shared.profile else {
             //TO-DO: create alert for unable to get profile
             return
         }
         
-        profileRecord[OKGNProfile.kFavouriteLocations] = [CKRecord.Reference(recordID: location.id, action: .none)]
+        var locations: [CKRecord.Reference] = profileRecord.convertToOKGNProfile().favouriteLocations
+        locations.append(CKRecord.Reference(recordID: location.id, action: .none))
+        
+        profileRecord[OKGNProfile.kFavouriteLocations] = locations
         
         Task {
             do {

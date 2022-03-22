@@ -28,7 +28,6 @@ struct FriendReviewFeed: View {
                         ForEach(friendManager.friends) { friend in
                             NavigationLink(destination: FriendProfileView(friend: friend)) {
                                 FriendCell(profile: friend)
-                                    .padding(.horizontal)
                             }
                         }
                         .onDelete { index in
@@ -39,12 +38,12 @@ struct FriendReviewFeed: View {
                     } else {
                         ForEach(reviewManager.allFriendsReviews) { review in
                             ReviewCell(review: review)
-                                .padding(.horizontal)
                                 .onTapGesture {
                                     withAnimation {
                                         viewModel.isShowingDetailedModalView = true
+                                        viewModel.detailedReviewToShow = review
                                     }
-                                    viewModel.detailedReviewToShow = review
+                                    
                                 }
                         }
                         .listRowBackground(Color.OKGNDarkGray)

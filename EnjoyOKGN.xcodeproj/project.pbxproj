@@ -58,6 +58,7 @@
 		34F9660C27E3DDE3006C0288 /* TopRatedScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F9660B27E3DDE3006C0288 /* TopRatedScrollView.swift */; };
 		34F9660E27E3DE13006C0288 /* FriendProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F9660D27E3DE13006C0288 /* FriendProfileViewModel.swift */; };
 		34F9661027E3E0FA006C0288 /* TrophyScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F9660F27E3E0FA006C0288 /* TrophyScrollView.swift */; };
+		34F9661227E559B8006C0288 /* View+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F9661127E559B8006C0288 /* View+Ext.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -133,6 +134,7 @@
 		34F9660B27E3DDE3006C0288 /* TopRatedScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopRatedScrollView.swift; sourceTree = "<group>"; };
 		34F9660D27E3DE13006C0288 /* FriendProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendProfileViewModel.swift; sourceTree = "<group>"; };
 		34F9660F27E3E0FA006C0288 /* TrophyScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrophyScrollView.swift; sourceTree = "<group>"; };
+		34F9661127E559B8006C0288 /* View+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Ext.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -331,6 +333,7 @@
 				3421BE8E27B1FC2300921D70 /* CKAsset+Ext.swift */,
 				3421BE9B27B353C400921D70 /* CKRecord+Ext.swift */,
 				34BEA4A027B75873006F91C1 /* UIImage+Ext.swift */,
+				34F9661127E559B8006C0288 /* View+Ext.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -548,6 +551,7 @@
 				3480A9FB27C4D6020031BB09 /* SideMenuView.swift in Sources */,
 				3421BE8D27B1FB8A00921D70 /* OKGNLocation.swift in Sources */,
 				3421BE7D27A1D1D100921D70 /* Date+Ext.swift in Sources */,
+				34F9661227E559B8006C0288 /* View+Ext.swift in Sources */,
 				34F0050F279CDCA100899561 /* Constants.swift in Sources */,
 				3421BE9527B348B600921D70 /* LocationCell.swift in Sources */,
 				34F00502279CCD7B00899561 /* ReviewCell.swift in Sources */,

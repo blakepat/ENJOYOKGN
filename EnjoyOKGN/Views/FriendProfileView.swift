@@ -19,7 +19,7 @@ struct FriendProfileView: View {
             
             Color.OKGNDarkGray.edgesIgnoringSafeArea(.all)
             
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 0) {
                 
                 ZStack {
                     RoundedRectangle(cornerRadius: 16).stroke(lineWidth: 8)
