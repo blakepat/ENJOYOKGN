@@ -11,7 +11,16 @@ struct FriendCell: View {
     
     var profile: OKGNProfile
     
+    @State var wineryCount: Int = 0
+    @State var breweryCount: Int = 0
+    @State var cafeCount: Int = 0
+    @State var pizzeriaCount: Int = 0
+    @State var activityCount: Int = 0
+    
+    @State var userReviews: [OKGNReview]
+    
     var body: some View {
+        
         ZStack {
             Color.OKGNDarkYellow
             
@@ -30,14 +39,43 @@ struct FriendCell: View {
                         .font(.title)
                 }
    
-                VStack {
+                VStack(alignment: .leading, spacing: 0) {
                     Text(profile.name)
                         .font(.title2)
                         .fontWeight(.semibold)
                         .foregroundColor(.black)
                     
                     HStack {
-                        //Add trophies here eventually
+                        if wineryCount >= 10 {
+                            Image(uiImage: AwardTypes.wineryAward.trophy)
+                                .resizable()
+                                .frame(width: 40, height: 40)
+                                .scaledToFill()
+                        }
+                        if breweryCount >= 10 {
+                            Image(uiImage: AwardTypes.breweryAward.trophy)
+                                .resizable()
+                                .frame(width: 40, height: 40)
+                                .scaledToFill()
+                        }
+                        if cafeCount >= 10 {
+                            Image(uiImage: AwardTypes.cafeAward.trophy)
+                                .resizable()
+                                .frame(width: 40, height: 40)
+                                .scaledToFill()
+                        }
+                        if pizzeriaCount >= 10 {
+                            Image(uiImage: AwardTypes.pizzeriaAward.trophy)
+                                .resizable()
+                                .frame(width: 40, height: 40)
+                                .scaledToFill()
+                        }
+                        if activityCount >= 10 {
+                            Image(uiImage: AwardTypes.activityAward.trophy)
+                                .resizable()
+                                .frame(width: 40, height: 40)
+                                .scaledToFill()
+                        }
                     }
                 }
   
@@ -47,11 +85,18 @@ struct FriendCell: View {
         }
         .frame(height: 100)
         .clipShape(RoundedRectangle(cornerRadius: 16))
+        .onAppear {
+            wineryCount = userReviews.filter({returnCategoryFromString($0.locationCategory) == .Winery}).count
+            breweryCount = userReviews.filter({returnCategoryFromString($0.locationCategory) == .Brewery}).count
+            cafeCount = userReviews.filter({returnCategoryFromString($0.locationCategory) == .Cafe}).count
+            pizzeriaCount = userReviews.filter({returnCategoryFromString($0.locationCategory) == .Pizzeria}).count
+            activityCount = userReviews.filter({returnCategoryFromString($0.locationCategory) == .Activity}).count
+        }
     }
 }
 
-struct FriendCell_Previews: PreviewProvider {
-    static var previews: some View {
-        FriendCell(profile: MockData.mockUser.convertToOKGNProfile())
-    }
-}
+//struct FriendCell_Previews: PreviewProvider {
+//    static var previews: some View {
+//        FriendCell(profile: MockData.mockUser.convertToOKGNProfile())
+//    }
+//}

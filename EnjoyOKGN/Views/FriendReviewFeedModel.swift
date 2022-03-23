@@ -21,6 +21,8 @@ final class FriendReviewFeedModel: ObservableObject {
     @Published var isShowingFriendRequestAlert = false
     
     @Published var twoButtonAlertItem: TwoButtonAlertItem?
+    @Published var friendReviews: [OKGNReview]?
+    
     
     func showFriendSearchView() {
         let alert = UIAlertController(title: "Add Friend", message: "Follow a friend via their display name", preferredStyle: .alert)
@@ -102,6 +104,10 @@ final class FriendReviewFeedModel: ObservableObject {
         }
     }
     
+    
+    func refreshFriendList() {
+        
+    }
     
     func displayFollowRequests() {
         if let profileRecordID = CloudKitManager.shared.profileRecordID {

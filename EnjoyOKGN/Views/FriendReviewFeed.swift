@@ -14,7 +14,7 @@ struct FriendReviewFeed: View {
     @EnvironmentObject var reviewManager: ReviewManager
     @EnvironmentObject var profileManager: ProfileManager
     @StateObject var friendManager = FriendManager()
-    @ObservedObject var viewModel = FriendReviewFeedModel()
+    @StateObject var viewModel = FriendReviewFeedModel()
     
     var body: some View {
         NavigationView {
@@ -26,8 +26,12 @@ struct FriendReviewFeed: View {
                 List {
                     if viewModel.isShowingFriendsList {
                         ForEach(friendManager.friends) { friend in
-                            NavigationLink(destination: FriendProfileView(friend: friend)) {
-                                FriendCell(profile: friend)
+                            HStack {
+                                NavigationLink(destination: FriendProfileView(friend: friend)) {
+                                    HStack {
+                                        FriendCell(profile: friend, userReviews: viewModel.friendReviews?.filter({ $0.reviewerName == friend.name }) ?? [])
+                                    }
+                                }
                             }
                         }
                         .onDelete { index in
@@ -36,6 +40,7 @@ struct FriendReviewFeed: View {
                         .listRowBackground(Color.OKGNDarkGray)
                         
                     } else {
+                        
                         ForEach(reviewManager.allFriendsReviews) { review in
                             ReviewCell(review: review)
                                 .onTapGesture {
@@ -93,6 +98,11 @@ struct FriendReviewFeed: View {
                     if let profile = CloudKitManager.shared.profile {
                         friendManager.friendMediator(for: profile)
                     }
+                }
+            }
+            .onReceive(reviewManager.$allFriendsReviews) { _ in
+                DispatchQueue.main.async {
+                    viewModel.friendReviews = reviewManager.allFriendsReviews
                 }
             }
             .onAppear {

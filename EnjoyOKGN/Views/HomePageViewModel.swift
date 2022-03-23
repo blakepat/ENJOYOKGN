@@ -119,6 +119,8 @@ final class HomePageViewModel: ObservableObject {
         cacheManager.addNameToCache(name: profileManager.name)
         cacheManager.addAvatarToCache(avatar: profileManager.avatar)
         
+        updateProfileForReviews(avatar: profileManager.avatar, name: profileManager.name)
+        
         Task {
             do {
                 let _ = try await CloudKitManager.shared.save(record: profileRecord)
@@ -128,6 +130,22 @@ final class HomePageViewModel: ObservableObject {
             }
         }
     }
+    
+    
+    func updateProfileForReviews(avatar: UIImage, name: String) {
+        guard let id = CloudKitManager.shared.profileRecordID else { return }
+        
+        Task {
+            let reviewsToUpdate = try await CloudKitManager.shared.getUserReviewsForProfileUpdate(for: id)
+            
+            for review in reviewsToUpdate {
+                review[OKGNReview.kReviewerAvatar] = avatar.convertToCKAsset(path: "profileAvatar")
+                review[OKGNReview.kReviewerName] = name
+            }
+           let _ = try await CloudKitManager.shared.batchSave(records: reviewsToUpdate)
+        }
+    }
+    
     
     
     private func createProfileRecord() -> CKRecord {

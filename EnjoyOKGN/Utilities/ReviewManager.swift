@@ -44,6 +44,7 @@ final class ReviewManager: ObservableObject {
         }
     }
     
+
     
     func getOneFriendReviews(id: CKRecord.ID) {
         Task {
@@ -86,8 +87,10 @@ final class ReviewManager: ObservableObject {
                 DispatchQueue.main.async {
                     print("✅ FRIENDS REVIEWS SET")
                     
+                    let rankedReviews = self.getRankingForFriendsReviews(reviews: receivedReviews, friends: friends.map { $0.convertToOKGNProfile() })
+                    
                     self.allFriendsReviews = []
-                    self.allFriendsReviews.append(contentsOf: receivedReviews.sorted { $0.date > $1.date } )
+                    self.allFriendsReviews.append(contentsOf: rankedReviews )
                 }
                 
 //                CloudKitManager.shared.getFriendsReviews(for: friends.map { CKRecord.Reference(recordID: $0.recordID, action: .none) }) { result in
@@ -136,5 +139,26 @@ final class ReviewManager: ObservableObject {
 //        }
         
 
+    }
+    
+    
+    func getRankingForFriendsReviews(reviews: [OKGNReview], friends: [OKGNProfile]) -> [OKGNReview] {
+        
+        var rankedFriendReviews: [OKGNReview] = []
+        
+        for friend in friends {
+            for category in categories {
+                
+                var sortedReviews: [OKGNReview] = reviews.filter({ returnCategoryFromString($0.locationCategory) == category && $0.reviewerName == friend.name }).sorted { $0.rating > $1.rating }
+                for i in 0..<min(sortedReviews.count, 3) {
+                    sortedReviews[i].ranking = rankings[i]
+                }
+                
+                rankedFriendReviews.append(contentsOf: sortedReviews)
+
+            }
+        }
+        
+        return rankedFriendReviews.sorted(by: { $0.date > $1.date })
     }
 }

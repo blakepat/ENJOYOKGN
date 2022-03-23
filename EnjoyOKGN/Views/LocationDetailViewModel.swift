@@ -17,16 +17,20 @@ final class LocationDetailViewModel: ObservableObject {
     
     let columns: [GridItem] = Array(repeating: .init(.flexible()), count: 1)
     @Published var reviews: [OKGNReview]
+    @Published var friendsReviews: [OKGNReview]
     
     var location: OKGNLocation
     @Published var alertItem: AlertItem?
     
     @Published var isFavourited = false
+    @Published var showFriendsReviews = false
     
     
-    init(location: OKGNLocation, reviews: [OKGNReview]) {
+    
+    init(location: OKGNLocation, reviews: [OKGNReview],  friendsReviews: [OKGNReview]) {
         self.location = location
         self.reviews = reviews
+        self.friendsReviews = friendsReviews
     }
     
     func getDirectionsToLocation() {
@@ -61,8 +65,6 @@ final class LocationDetailViewModel: ObservableObject {
             //TO-DO: create alert for unable to get profile
             return
         }
-        
-        print(profileRecord.convertToOKGNProfile().favouriteLocations)
         
         if profileRecord.convertToOKGNProfile().favouriteLocations.contains(where: { $0 == CKRecord.Reference(recordID: location.id, action: .none) }) {
             isFavourited = true
