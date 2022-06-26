@@ -16,45 +16,64 @@ struct FriendReviewFeed: View {
     @StateObject var friendManager = FriendManager()
     @StateObject var viewModel = FriendReviewFeedModel()
     
+    @State var isShowingFriendsList = false
+    
+    init() {
+        UITableView.appearance().backgroundColor = UIColor(named: "OKGNDarkGray")
+        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor : UIColor.white]
+    }
+    
+    
     var body: some View {
         NavigationView {
             ZStack {
                 
-                (colorScheme == .dark ? Color.OKGNDarkGray : Color.white)
-                    .edgesIgnoringSafeArea(.all)
+                Color.OKGNDarkGray.ignoresSafeArea()
                 
-                List {
-                    if viewModel.isShowingFriendsList {
-                        ForEach(friendManager.friends) { friend in
-                            HStack {
-                                NavigationLink(destination: FriendProfileView(friend: friend)) {
-                                    HStack {
-                                        FriendCell(profile: friend, userReviews: viewModel.friendReviews?.filter({ $0.reviewerName == friend.name }) ?? [])
+//                (colorScheme == .dark ? Color.OKGNDarkGray : Color.white)
+//                    .edgesIgnoringSafeArea(.all)
+                
+                
+                    if isShowingFriendsList {
+                        List {
+                            ForEach(friendManager.friends) { friend in
+                                HStack {
+                                    NavigationLink(destination: FriendProfileView(friend: friend)) {
+                                        HStack {
+                                            FriendCell(profile: friend, userReviews: viewModel.friendReviews?.filter({ $0.reviewerName == friend.name }) ?? [])
+                                        }
                                     }
                                 }
                             }
+                            .onDelete { index in
+                                friendManager.deleteFriends(index: index)
+                            }
+                            .listRowBackground(Color.OKGNDarkGray)
                         }
-                        .onDelete { index in
-                            friendManager.deleteFriends(index: index)
-                        }
-                        .listRowBackground(Color.OKGNDarkGray)
-                        
-                    } else {
-                        
-                        ForEach(reviewManager.allFriendsReviews) { review in
-                            ReviewCell(review: review)
-                                .onTapGesture {
-                                    withAnimation {
-                                        viewModel.isShowingDetailedModalView = true
-                                        viewModel.detailedReviewToShow = review
-                                    }
-                                    
-                                }
-                        }
-                        .listRowBackground(Color.OKGNDarkGray)
+                        .listStyle(.plain)
+                        .transition(.move(edge: .leading))
+                    
                     }
-                }
-                .listStyle(.plain)
+                
+                    if !isShowingFriendsList {
+                        List {
+                            ForEach(reviewManager.allFriendsReviews) { review in
+                                ReviewCell(review: review)
+                                    .transition(.move(edge: .trailing))
+                                    .onTapGesture {
+                                        withAnimation {
+                                            viewModel.isShowingDetailedModalView = true
+                                            viewModel.detailedReviewToShow = review
+                                        }
+                                    }
+                            }
+                            .listRowBackground(Color.OKGNDarkGray)
+                        }
+                        .listStyle(.plain)
+                        .transition(.move(edge: .trailing))
+                        
+                    }
+                
                 
                 if viewModel.isShowingDetailedModalView {
                     Color(.systemBackground)
@@ -72,7 +91,8 @@ struct FriendReviewFeed: View {
                     }
                 }
             }
-            .navigationTitle(viewModel.isShowingFriendsList ? "Friends" : "Friend's Reviews")
+            .navigationTitle(isShowingFriendsList ? "Friends" : "Friend's Reviews")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar(content: {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
@@ -81,16 +101,17 @@ struct FriendReviewFeed: View {
                         viewModel.showFriendSearchView()
                     } label: {
                         Image(systemName: "plus")
-                            .foregroundColor(.blue)
+                            .foregroundColor(Color.OKGNDarkYellow)
                     }
                 }
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        viewModel.isShowingFriendsList.toggle()
-                    } label: {
-                        Text(viewModel.isShowingFriendsList ? "Reviews" : "Friends")
-                            .foregroundColor(.blue)
-                    }
+                    Image(systemName: isShowingFriendsList ? "list.bullet.rectangle.fill" : "person.3.fill")
+                        .onTapGesture {
+                            withAnimation {
+                                isShowingFriendsList.toggle()
+                            }
+                        }
+                        .foregroundColor(Color.OKGNDarkYellow)
                 }
             })
             .onReceive(CloudKitManager.shared.$profile) { _ in
@@ -111,6 +132,7 @@ struct FriendReviewFeed: View {
                 viewModel.displayFollowRequests()
             }
         }
+        .background(Color.OKGNDarkGray)
         .navigationViewStyle(StackNavigationViewStyle()) // This is called so there is issues with constraints in console
         .alert(item: $viewModel.twoButtonAlertItem, content: { alertItem in
             Alert(title: alertItem.title, message: alertItem.message, primaryButton: alertItem.acceptButton, secondaryButton: alertItem.dismissButton)

@@ -13,7 +13,7 @@ final class FriendReviewFeedModel: ObservableObject {
     
     @ObservedObject var friendManager = FriendManager()
     
-    @Published var isShowingFriendsList = false
+//    @Published var isShowingFriendsList = false
         
     @Published var detailedReviewToShow: OKGNReview?
     @Published var isShowingDetailedModalView = false

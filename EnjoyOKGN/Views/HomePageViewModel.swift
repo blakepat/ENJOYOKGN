@@ -30,6 +30,7 @@ final class HomePageViewModel: ObservableObject {
     @Published var isShowingTopRatedFilterAlert = false
     @Published var isShowingDetailedModalView = false
     @Published var isShowingSaveAlert = false
+    @Published var showSettingsView = false
     
     @Published var detailedReviewToShow: OKGNReview?
     @Published var alertItem: AlertItem?
@@ -41,11 +42,14 @@ final class HomePageViewModel: ObservableObject {
     @Published var activityCount = 0
     @Published var userReviews: [OKGNReview]? {
         didSet {
-            wineryCount = userReviews?.filter({returnCategoryFromString($0.locationCategory) == .Winery}).count ?? 0
-            breweryCount = userReviews?.filter({returnCategoryFromString($0.locationCategory) == .Brewery}).count ?? 0
-            cafeCount = userReviews?.filter({returnCategoryFromString($0.locationCategory) == .Cafe}).count ?? 0
-            pizzeriaCount = userReviews?.filter({returnCategoryFromString($0.locationCategory) == .Pizzeria}).count ?? 0
-            activityCount = userReviews?.filter({returnCategoryFromString($0.locationCategory) == .Activity}).count ?? 0
+            withAnimation(.linear(duration: 3)) {
+                wineryCount = userReviews?.filter({returnCategoryFromString($0.locationCategory) == .Winery}).count ?? 0
+                breweryCount = userReviews?.filter({returnCategoryFromString($0.locationCategory) == .Brewery}).count ?? 0
+                cafeCount = userReviews?.filter({returnCategoryFromString($0.locationCategory) == .Cafe}).count ?? 0
+                pizzeriaCount = userReviews?.filter({returnCategoryFromString($0.locationCategory) == .Pizzeria}).count ?? 0
+                activityCount = userReviews?.filter({returnCategoryFromString($0.locationCategory) == .Activity}).count ?? 0
+            }
+            
         }
     }
 

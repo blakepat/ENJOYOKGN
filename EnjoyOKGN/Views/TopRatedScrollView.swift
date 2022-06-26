@@ -80,6 +80,7 @@ struct TopRatedScrollView: View {
                                     +
                                     Text(" Leader")
                                         .fontWeight(.semibold)
+                                        .foregroundColor(.white)
                                         
                                     Spacer()
                                 }
