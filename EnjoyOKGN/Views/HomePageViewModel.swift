@@ -24,6 +24,10 @@ final class HomePageViewModel: ObservableObject {
             print("✅ Existing profile set and context changed to .update!")
         }
     }
+    
+    @State var usernameIsValid = false
+    @State var usernameText = ""
+    
     @Published var profileContext: ProfileContext = .create
     
     @Published var isShowingVenuesVisitedSubCategories = false
@@ -163,21 +167,22 @@ final class HomePageViewModel: ObservableObject {
     
     
     func changeNameAlertView() {
-        let alert = UIAlertController(title: "Name Editor", message: "Create display name that is 20 characters or less", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Name Editor", message: "Create display name that is between 3 and 20 characters \n(no special characters)", preferredStyle: .alert)
         alert.addTextField { (nameForm) in
-            nameForm.placeholder = "name..."
+            nameForm.placeholder = "new username..."
             nameForm.autocorrectionType = .no
         }
         
         let save = UIAlertAction(title: "Save", style: .default) { [self] save in
-            
-            if alert.textFields![0].text?.count ?? 0 > 0 && alert.textFields![0].text?.count ?? 21 < 21 {
+            if alert.textFields![0].text?.count ?? 0 > 2 && alert.textFields![0].text?.count ?? 21 < 21 && ((alert.textFields![0].text?.rangeOfCharacter(from: .alphanumerics)) != nil) {
                 profileManager.name = alert.textFields![0].text!
                 existingProfileRecord == nil ? print("•Profile CREATED") : print("😍Profile UPDATED")
                 profileContext == .create ? createProfile() : updateProfile()
                 isShowingSaveAlert = false
                 cacheManager.addNameToCache(name: alert.textFields![0].text!)
                 
+            } else {
+                alertItem = AlertContext.InvalidUsername
             }
         }
         

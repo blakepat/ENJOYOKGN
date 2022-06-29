@@ -16,7 +16,7 @@ struct FriendReviewFeed: View {
     @StateObject var friendManager = FriendManager()
     @StateObject var viewModel = FriendReviewFeedModel()
     
-    @State var isShowingFriendsList = false
+    
     
     init() {
         UITableView.appearance().backgroundColor = UIColor(named: "OKGNDarkGray")
@@ -30,11 +30,7 @@ struct FriendReviewFeed: View {
                 
                 Color.OKGNDarkGray.ignoresSafeArea()
                 
-//                (colorScheme == .dark ? Color.OKGNDarkGray : Color.white)
-//                    .edgesIgnoringSafeArea(.all)
-                
-                
-                    if isShowingFriendsList {
+                if viewModel.isShowingFriendsList {
                         List {
                             ForEach(friendManager.friends) { friend in
                                 HStack {
@@ -55,9 +51,9 @@ struct FriendReviewFeed: View {
                     
                     }
                 
-                    if !isShowingFriendsList {
+                    if !viewModel.isShowingFriendsList {
                         List {
-                            ForEach(reviewManager.allFriendsReviews) { review in
+                            ForEach(reviewManager.allFriendsReviews.sorted { viewModel.reviewsSortedByRating ? $0.rating > $1.rating : $0.date > $1.date } ) { review in
                                 ReviewCell(review: review)
                                     .transition(.move(edge: .trailing))
                                     .onTapGesture {
@@ -91,24 +87,31 @@ struct FriendReviewFeed: View {
                     }
                 }
             }
-            .navigationTitle(isShowingFriendsList ? "Friends" : "Friend's Reviews")
+            .navigationTitle(viewModel.isShowingFriendsList ? "Friends" : "Friend's Reviews")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar(content: {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                        //Add friend
-                        viewModel.isShowingAddFriendAlert = true
-                        viewModel.showFriendSearchView()
+                        if viewModel.isShowingFriendsList {
+                            //Add friend
+                            viewModel.isShowingAddFriendAlert = true
+                            viewModel.showFriendSearchView()
+                        } else {
+                            //display top restaurants
+                            viewModel.reviewsSortedByRating.toggle()
+                        }
+                        
+                        
                     } label: {
-                        Image(systemName: "plus")
+                        Image(systemName: viewModel.isShowingFriendsList ? "plus" : viewModel.reviewsSortedByRating ? "calendar.badge.clock" : "list.number")
                             .foregroundColor(Color.OKGNDarkYellow)
                     }
                 }
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Image(systemName: isShowingFriendsList ? "list.bullet.rectangle.fill" : "person.3.fill")
+                    Image(systemName: viewModel.isShowingFriendsList ? "list.bullet.rectangle.fill" : "person.3.fill")
                         .onTapGesture {
                             withAnimation {
-                                isShowingFriendsList.toggle()
+                                viewModel.isShowingFriendsList.toggle()
                             }
                         }
                         .foregroundColor(Color.OKGNDarkYellow)

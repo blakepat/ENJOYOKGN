@@ -20,6 +20,9 @@ final class FriendReviewFeedModel: ObservableObject {
     @Published var isShowingAddFriendAlert = false
     @Published var isShowingFriendRequestAlert = false
     
+    @Published var reviewsSortedByRating = false
+    @Published var isShowingFriendsList = false
+    
     @Published var twoButtonAlertItem: TwoButtonAlertItem?
     @Published var friendReviews: [OKGNReview]?
     
