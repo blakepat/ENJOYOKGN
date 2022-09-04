@@ -10,6 +10,8 @@ import UIKit
 
 extension UIImage {
     
+    static let defaultProfileImage = UIImage(named: "default-profileAvatar")
+    
     func convertToCKAsset(path: String) -> CKAsset? {
         
         

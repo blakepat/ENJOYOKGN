@@ -44,6 +44,8 @@
 		34BEA4AA27BC6E9C006F91C1 /* LocationDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BEA4A927BC6E9C006F91C1 /* LocationDetailViewModel.swift */; };
 		34BEA4AC27BD6846006F91C1 /* ReviewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BEA4AB27BD6846006F91C1 /* ReviewManager.swift */; };
 		34BEA4B027BD9B53006F91C1 /* CreateReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BEA4AF27BD9B53006F91C1 /* CreateReviewView.swift */; };
+		34C165CF289B705E00179451 /* Image+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C165CE289B705E00179451 /* Image+Ext.swift */; };
+		34C165D1289B75BD00179451 /* DropDown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C165D0289B75BD00179451 /* DropDown.swift */; };
 		34D19692279BE4AE00C1CE19 /* EnjoyOKGNApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D19691279BE4AE00C1CE19 /* EnjoyOKGNApp.swift */; };
 		34D19694279BE4AE00C1CE19 /* HomePageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D19693279BE4AE00C1CE19 /* HomePageView.swift */; };
 		34D19696279BE4AF00C1CE19 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 34D19695279BE4AF00C1CE19 /* Assets.xcassets */; };
@@ -57,6 +59,7 @@
 		34F00502279CCD7B00899561 /* ReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F00501279CCD7B00899561 /* ReviewCell.swift */; };
 		34F00507279CD77100899561 /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F00506279CD77100899561 /* MockData.swift */; };
 		34F0050F279CDCA100899561 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F0050E279CDCA100899561 /* Constants.swift */; };
+		34F7F0BB28C50A3F00E72C0F /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F7F0BA28C50A3F00E72C0F /* LoadingView.swift */; };
 		34F9660A27E3DB0E006C0288 /* FriendProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F9660927E3DB0E006C0288 /* FriendProfileView.swift */; };
 		34F9660C27E3DDE3006C0288 /* TopRatedScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F9660B27E3DDE3006C0288 /* TopRatedScrollView.swift */; };
 		34F9660E27E3DE13006C0288 /* FriendProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F9660D27E3DE13006C0288 /* FriendProfileViewModel.swift */; };
@@ -120,6 +123,8 @@
 		34BEA4A927BC6E9C006F91C1 /* LocationDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDetailViewModel.swift; sourceTree = "<group>"; };
 		34BEA4AB27BD6846006F91C1 /* ReviewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewManager.swift; sourceTree = "<group>"; };
 		34BEA4AF27BD9B53006F91C1 /* CreateReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateReviewView.swift; sourceTree = "<group>"; };
+		34C165CE289B705E00179451 /* Image+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Image+Ext.swift"; sourceTree = "<group>"; };
+		34C165D0289B75BD00179451 /* DropDown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropDown.swift; sourceTree = "<group>"; };
 		34D1968E279BE4AE00C1CE19 /* EnjoyOKGN.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EnjoyOKGN.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		34D19691279BE4AE00C1CE19 /* EnjoyOKGNApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnjoyOKGNApp.swift; sourceTree = "<group>"; };
 		34D19693279BE4AE00C1CE19 /* HomePageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageView.swift; sourceTree = "<group>"; };
@@ -136,6 +141,7 @@
 		34F00501279CCD7B00899561 /* ReviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewCell.swift; sourceTree = "<group>"; };
 		34F00506279CD77100899561 /* MockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
 		34F0050E279CDCA100899561 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		34F7F0BA28C50A3F00E72C0F /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		34F9660927E3DB0E006C0288 /* FriendProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendProfileView.swift; sourceTree = "<group>"; };
 		34F9660B27E3DDE3006C0288 /* TopRatedScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopRatedScrollView.swift; sourceTree = "<group>"; };
 		34F9660D27E3DE13006C0288 /* FriendProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendProfileViewModel.swift; sourceTree = "<group>"; };
@@ -357,6 +363,7 @@
 				3421BE9B27B353C400921D70 /* CKRecord+Ext.swift */,
 				34BEA4A027B75873006F91C1 /* UIImage+Ext.swift */,
 				34F9661127E559B8006C0288 /* View+Ext.swift */,
+				34C165CE289B705E00179451 /* Image+Ext.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -421,6 +428,8 @@
 				3421BE8427AC7D8300921D70 /* XDismissButton.swift */,
 				34F9660B27E3DDE3006C0288 /* TopRatedScrollView.swift */,
 				34F9660F27E3E0FA006C0288 /* TrophyScrollView.swift */,
+				34C165D0289B75BD00179451 /* DropDown.swift */,
+				34F7F0BA28C50A3F00E72C0F /* LoadingView.swift */,
 			);
 			name = CustomViews;
 			sourceTree = "<group>";
@@ -595,6 +604,7 @@
 				3480A9FE27C590B20031BB09 /* FriendReviewFeed.swift in Sources */,
 				3421BE8F27B1FC2300921D70 /* CKAsset+Ext.swift in Sources */,
 				346883252866B1780056B09F /* LaunchView.swift in Sources */,
+				34C165D1289B75BD00179451 /* DropDown.swift in Sources */,
 				3421BE9727B34A1400921D70 /* LocationDetailView.swift in Sources */,
 				3421BEA527B7045A00921D70 /* OnboardView.swift in Sources */,
 				3421BE8327AC760500921D70 /* DetailedVisitView.swift in Sources */,
@@ -602,6 +612,7 @@
 				34F004FD279CB00F00899561 /* ProgressBar.swift in Sources */,
 				3480A9F627C470670031BB09 /* OKGNAnnotation.swift in Sources */,
 				3421BEA327B4935B00921D70 /* AlertItem.swift in Sources */,
+				34F7F0BB28C50A3F00E72C0F /* LoadingView.swift in Sources */,
 				3421BE9127B1FD6E00921D70 /* OKGNProfile.swift in Sources */,
 				34F00507279CD77100899561 /* MockData.swift in Sources */,
 				3421BE9327B347C100921D70 /* LocationListView.swift in Sources */,
@@ -611,6 +622,7 @@
 				3421BE8527AC7D8300921D70 /* XDismissButton.swift in Sources */,
 				3421BEA127B48BE400921D70 /* MapViewModel.swift in Sources */,
 				34BEA4A627BAF1D6006F91C1 /* HomePageViewModel.swift in Sources */,
+				34C165CF289B705E00179451 /* Image+Ext.swift in Sources */,
 				34F9661027E3E0FA006C0288 /* TrophyScrollView.swift in Sources */,
 				3480AA0127C5D11D0031BB09 /* ProfileManager.swift in Sources */,
 			);
@@ -795,7 +807,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -829,7 +841,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

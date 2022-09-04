@@ -32,14 +32,17 @@ struct TopRatedScrollView: View {
                     .fontWeight(.semibold)
                     
                 
-                Text("\(topRatedFilter == nil ? "Champions" : topRatedFilter!.description)")
-                    .font(.title2)
-                    .foregroundColor(topRatedFilter == nil ? .OKGNDarkYellow : topRatedFilter!.color)
+//                Text("\(topRatedFilter == nil ? "Champions" : topRatedFilter!.description)")
+//                    .font(.title2)
+//                    .foregroundColor(topRatedFilter == nil ? .OKGNDarkYellow : topRatedFilter!.color)
                 
-                Text("▼")
-                    .padding(.leading, 8)
-                    .font(.body)
-                    .foregroundColor(.gray)
+                DropDown(category: $topRatedFilter)
+                
+//
+//                Text("▼")
+//                    .padding(.leading, 8)
+//                    .font(.body)
+//                    .foregroundColor(.gray)
                     
             }
             .padding(.horizontal, 4)
@@ -104,3 +107,5 @@ struct TopRatedScrollView: View {
         .padding(.horizontal, 8)
     }
 }
+
+

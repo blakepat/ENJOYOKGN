@@ -21,6 +21,7 @@ struct CreateReviewView: View {
     @State var selectedImage: UIImage = PlaceholderImage.square
     @State var alertItem: AlertItem?
     @State var isShowingPhotoPicker = false
+    @State var showLoadingView = false
     
     init(date: Date, locations: [OKGNLocation]) {
         UITableView.appearance().backgroundColor = UIColor(white: 0.35, alpha: 0.3)
@@ -223,11 +224,31 @@ struct CreateReviewView: View {
             })
             .task {
                 do {
-                    locations = try await CloudKitManager.shared.getLocations()
+                    showLoadingView = true
+                    locations = try await CloudKitManager.shared.getLocations() { (returnedBool) in
+                        showLoadingView = returnedBool
+                    }
                 } catch {
                     print("❌ Error getting locations for create review screen")
                 }
             }
+            
+            if showLoadingView {
+                GeometryReader { _ in
+                    HStack {
+                        Spacer()
+                        VStack {
+                            Spacer()
+                            LoadingView()
+                            Spacer()
+                        }
+                        Spacer()
+                    }
+                }
+                .background(Color.black.opacity(0.45)).edgesIgnoringSafeArea(.all)
+                
+            }
+            
         }
         .onTapGesture {
             hideKeyboard()

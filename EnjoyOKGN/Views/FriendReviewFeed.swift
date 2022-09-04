@@ -17,7 +17,6 @@ struct FriendReviewFeed: View {
     @StateObject var viewModel = FriendReviewFeedModel()
     
     
-    
     init() {
         UITableView.appearance().backgroundColor = UIColor(named: "OKGNDarkGray")
         UINavigationBar.appearance().titleTextAttributes = [.foregroundColor : UIColor.white]

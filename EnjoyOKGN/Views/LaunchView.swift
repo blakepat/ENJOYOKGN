@@ -22,7 +22,7 @@ struct LaunchView: View {
             
             VStack {
                 HStack {
-                    ForEach(awardImages.indices) { index in
+                    ForEach(awardImages.indices, id: \.self) { index in
                         Image(uiImage: awardImages[index])
                             .resizable()
                             .scaledToFit()
