@@ -71,10 +71,11 @@ final class HomePageViewModel: ObservableObject {
         
         Task {
             do {
-                let records = try await CloudKitManager.shared.batchSave(records: [userRecord, profileRecord])
-                for record in records where record.recordType == RecordType.profile {
-                    self.existingProfileRecord = record
-                    CloudKitManager.shared.profileRecordID = record.recordID
+                if let records = try await CloudKitManager.shared.batchSave(records: [userRecord, profileRecord]) {
+                    for record in records where record.recordType == RecordType.profile {
+                        self.existingProfileRecord = record
+                        CloudKitManager.shared.profileRecordID = record.recordID
+                    }
                 }
             } catch {
                 self.alertItem = AlertContext.profileCreateFailure
@@ -84,18 +85,19 @@ final class HomePageViewModel: ObservableObject {
     
     
     func getProfile() {
-        guard let userRecord = CloudKitManager.shared.userRecord else {
-            // show an alert
-            print("❌ No user record found when calling getProfile()")
-            return
-        }
-        
-        guard let profileReference = userRecord["userProfile"] as? CKRecord.Reference else {
-            return
-        }
-        
+            
         Task {
             do {
+                
+                guard let userRecord = CloudKitManager.shared.userRecord else {
+                    // show an alert
+                    print("❌ No user record found when calling getProfile()")
+//                    alertItem = AlertContext.cannotRetrieveProfile
+                    return
+                }
+                
+                guard let profileReference = userRecord["userProfile"] as? CKRecord.Reference else { return }
+                
                 let profileRecordID = profileReference.recordID
                 let record = try await CloudKitManager.shared.fetchRecord(with: profileRecordID)
                 DispatchQueue.main.async { [self] in

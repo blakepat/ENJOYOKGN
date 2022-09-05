@@ -9,6 +9,11 @@ import SwiftUI
 
 struct SettingsView: View {
     
+    @Environment(\.openURL) var openURL
+    private var email = EmailAddLocation(toAddress: "blakepat@me.com",
+                                         subject: "EnjoyOKGN Location Request",
+                                         messageHeader: "Please include name, address, and recommened category. Thank you!")
+    
     let coffeeURL = URL(string: "https://www.buymeacoffee.com/blakepat")!
     let portfolioURL = URL(string: "https://blakepat.wixsite.com/portfolio")!
     @Environment(\.presentationMode) var presentationMode
@@ -26,6 +31,7 @@ struct SettingsView: View {
                 
                 List {
                     aboutSection
+                    emailSection
                 }
                 .navigationTitle("Settings")
                 .listStyle(.grouped)
@@ -67,16 +73,17 @@ extension SettingsView {
             .padding(.vertical)
             
             Link("Support coffee addiction ☕️", destination: coffeeURL)
-            Link("iOS Portfolio", destination: portfolioURL)
+            Link("iOS Portfolio 💼", destination: portfolioURL)
             
         } header: {
             Text("About")
+                .foregroundColor(.white)
         }
         .listRowBackground(Color(UIColor(named: "OKGNSecondaryDarkGray")!))
     }
     
     
-    private var otherSection: some View {
+    private var emailSection: some View {
         Section {
             VStack(alignment: .leading) {
                 Image("SilverTrophy")
@@ -84,19 +91,25 @@ extension SettingsView {
                     .scaledToFit()
                     .frame(width: 60, height: 60)
                     .clipShape(RoundedRectangle(cornerRadius: 20))
-                Text("This app was created by me, Blake Pat. I am an aspiring iOS Developer! If you enjoy using the app, want to support me in my journey, or just want to support my caffeine addiction use the link below.")
+                Text("If there is a location that is not yet listed, please contact me with the link below and I will add it asap if it is applicable! Thank you for your contribution to our growing catalog!")
                     .font(.callout)
                     .fontWeight(.medium)
-                    .foregroundColor(Color.secondary)
+                    .foregroundColor(Color.gray)
             }
             .padding(.vertical)
             
-            Link("Support ☕️", destination: coffeeURL)
+            Button {
+                email.send(openURL: openURL)
+            } label: {
+                Text("New Location 📧")
+            }
             
             
         } header: {
-            Text("About")
+            Text("New Location")
+                .foregroundColor(.white)
         }
+        .listRowBackground(Color(UIColor(named: "OKGNSecondaryDarkGray")!))
     }
     
     

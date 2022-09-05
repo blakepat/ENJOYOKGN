@@ -258,55 +258,69 @@ struct CreateReviewView: View {
     func createReview() {
         //retrieve the OKGN Profile
         
-        if checkReviewIsProperlySet() {
-            guard let profileRecordID = CloudKitManager.shared.profileRecordID else {
-                alertItem = AlertContext.notSignedIntoProfile
-                return
-                
-            }
-            
-            Task {
-                do {
-                    let _ = try await CloudKitManager.shared.fetchRecord(with: profileRecordID)
-                    let reviewRecord = CKRecord(recordType: RecordType.review)
-                    //Create a reference to the location
-                    if !locations.isEmpty {
+        CKContainer.default().accountStatus { (accountStatus, error) in
+            if accountStatus == .available {
+                if checkReviewIsProperlySet()  {
+                    guard let profileRecordID = CloudKitManager.shared.profileRecordID else {
+                        alertItem = AlertContext.notSignedIntoProfile
+                        return
                         
-                        print("trying to create record")
-                        
-                        reviewRecord[OKGNReview.kLocation] = CKRecord.Reference(recordID: locations.first(where: {$0.name == locationName})!.id, action: .none)
-                        //create a rereference to profile
-                        reviewRecord[OKGNReview.kReviewer] = CKRecord.Reference(recordID: profileRecordID, action: .none)
-                        reviewRecord[OKGNReview.kCaption] = caption
-                        reviewRecord[OKGNReview.kPhoto] = selectedImage.convertToCKAsset(path: "selectedPhoto")
-                        reviewRecord[OKGNReview.kRating] = "\(firstNumber).\(secondNumber)"
-                        reviewRecord[OKGNReview.kDate] = selectedDate
-                        reviewRecord[OKGNReview.klocationName] = locationName
-                        reviewRecord[OKGNReview.klocationCategory] = selectedLocation?.category.description
-                        reviewRecord[OKGNReview.kReviewerName] = cacheManager.getNameFromCache()
-                        reviewRecord[OKGNReview.kReviewerAvatar] = cacheManager.getAvatarFromCache()?.convertToCKAsset(path: "profileAvatar")
-
-                    } else {
-                        //To-do: show  alert that was unable to get locations
-                        print("unable to get locations")
                     }
                     
-                    //save review to cloudkit
-                    do {
-                        let _ = try await CloudKitManager.shared.batchSave(records: [reviewRecord])
-                        print("✅ created review successfully")
-                    } catch {
-                        print("❌ failed saving review")
-                    }
-                } catch {
-                    print("failure in fetching record review")
-                }
-                resetReviewPage()
-                alertItem = AlertContext.successfullyCreatedReview
-            }
+                    Task {
+                        do {
+                            let _ = try await CloudKitManager.shared.fetchRecord(with: profileRecordID)
+                            let reviewRecord = CKRecord(recordType: RecordType.review)
+                            //Create a reference to the location
+                            if !locations.isEmpty {
+                                
+                                print("trying to create record")
+                                
+                                reviewRecord[OKGNReview.kLocation] = CKRecord.Reference(recordID: locations.first(where: {$0.name == locationName})!.id, action: .none)
+                                //create a rereference to profile
+                                reviewRecord[OKGNReview.kReviewer] = CKRecord.Reference(recordID: profileRecordID, action: .none)
+                                reviewRecord[OKGNReview.kCaption] = caption
+                                reviewRecord[OKGNReview.kPhoto] = selectedImage.convertToCKAsset(path: "selectedPhoto")
+                                reviewRecord[OKGNReview.kRating] = "\(firstNumber).\(secondNumber)"
+                                reviewRecord[OKGNReview.kDate] = selectedDate
+                                reviewRecord[OKGNReview.klocationName] = locationName
+                                reviewRecord[OKGNReview.klocationCategory] = selectedLocation?.category.description
+                                reviewRecord[OKGNReview.kReviewerName] = cacheManager.getNameFromCache()
+                                reviewRecord[OKGNReview.kReviewerAvatar] = cacheManager.getAvatarFromCache()?.convertToCKAsset(path: "profileAvatar")
 
-            
+                            } else {
+                                //To-do: show  alert that was unable to get locations
+                                print("unable to get locations")
+                            }
+                            
+                            //save review to cloudkit
+                            do {
+                                
+                                
+                                if let _ = try await CloudKitManager.shared.batchSave(records: [reviewRecord]) {
+                                    print("✅ created review successfully")
+                                    resetReviewPage()
+                                    alertItem = AlertContext.successfullyCreatedReview
+                                } else {
+                                    alertItem = AlertContext.reviewCreationFailed
+                                }
+                                
+                            } catch {
+                                print("❌ failed saving review")
+                            }
+                        } catch {
+                            print("failure in fetching record review")
+                        }
+                        
+                    }
+                }
+            } else {
+                print("⚠️ Error creating review / checking icloud status")
+            }
         }
+        
+        
+         
     }
     
     func resetReviewPage() {

@@ -28,46 +28,43 @@ struct FriendReviewFeed: View {
             ZStack {
                 
                 Color.OKGNDarkGray.ignoresSafeArea()
-                
-                if viewModel.isShowingFriendsList {
-                        List {
-                            ForEach(friendManager.friends) { friend in
+    
+        
+                List {
+                    ForEach(friendManager.friends) { friend in
+                        HStack {
+                            NavigationLink(destination: FriendProfileView(friend: friend)) {
                                 HStack {
-                                    NavigationLink(destination: FriendProfileView(friend: friend)) {
-                                        HStack {
-                                            FriendCell(profile: friend, userReviews: viewModel.friendReviews?.filter({ $0.reviewerName == friend.name }) ?? [])
-                                        }
-                                    }
+                                    FriendCell(profile: friend, userReviews: viewModel.friendReviews?.filter({ $0.reviewerName == friend.name }) ?? [])
                                 }
                             }
-                            .onDelete { index in
-                                friendManager.deleteFriends(index: index)
-                            }
-                            .listRowBackground(Color.OKGNDarkGray)
                         }
-                        .listStyle(.plain)
-                        .transition(.move(edge: .leading))
-                    
                     }
+                    .onDelete { index in
+                        friendManager.deleteFriends(index: index)
+                    }
+                    .listRowBackground(Color.OKGNDarkGray)
+                }
+                .listStyle(.plain)
+                .offset(x: viewModel.isShowingFriendsList ? 0 : screen.width)
                 
-                    if !viewModel.isShowingFriendsList {
-                        List {
-                            ForEach(reviewManager.allFriendsReviews.sorted { viewModel.reviewsSortedByRating ? $0.rating > $1.rating : $0.date > $1.date } ) { review in
-                                ReviewCell(review: review)
-                                    .transition(.move(edge: .trailing))
-                                    .onTapGesture {
-                                        withAnimation {
-                                            viewModel.isShowingDetailedModalView = true
-                                            viewModel.detailedReviewToShow = review
-                                        }
-                                    }
+                
+                List {
+                    ForEach(reviewManager.allFriendsReviews.sorted { viewModel.reviewsSortedByRating ? $0.rating > $1.rating : $0.date > $1.date } ) { review in
+                        ReviewCell(review: review)
+                            .transition(.move(edge: .trailing))
+                            .onTapGesture {
+                                withAnimation {
+                                    viewModel.isShowingDetailedModalView = true
+                                    viewModel.detailedReviewToShow = review
+                                }
                             }
-                            .listRowBackground(Color.OKGNDarkGray)
-                        }
-                        .listStyle(.plain)
-                        .transition(.move(edge: .trailing))
-                        
                     }
+                    .listRowBackground(Color.OKGNDarkGray)
+                }
+                .listStyle(.plain)
+                .offset(x: viewModel.isShowingFriendsList ? -screen.width : 0)
+                    
                 
                 
                 if viewModel.isShowingDetailedModalView {

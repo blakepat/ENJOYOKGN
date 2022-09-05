@@ -60,6 +60,7 @@
 		34F00507279CD77100899561 /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F00506279CD77100899561 /* MockData.swift */; };
 		34F0050F279CDCA100899561 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F0050E279CDCA100899561 /* Constants.swift */; };
 		34F7F0BB28C50A3F00E72C0F /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F7F0BA28C50A3F00E72C0F /* LoadingView.swift */; };
+		34F7F0BD28C5237500E72C0F /* EmailAddLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F7F0BC28C5237500E72C0F /* EmailAddLocation.swift */; };
 		34F9660A27E3DB0E006C0288 /* FriendProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F9660927E3DB0E006C0288 /* FriendProfileView.swift */; };
 		34F9660C27E3DDE3006C0288 /* TopRatedScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F9660B27E3DDE3006C0288 /* TopRatedScrollView.swift */; };
 		34F9660E27E3DE13006C0288 /* FriendProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F9660D27E3DE13006C0288 /* FriendProfileViewModel.swift */; };
@@ -142,6 +143,7 @@
 		34F00506279CD77100899561 /* MockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
 		34F0050E279CDCA100899561 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		34F7F0BA28C50A3F00E72C0F /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
+		34F7F0BC28C5237500E72C0F /* EmailAddLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailAddLocation.swift; sourceTree = "<group>"; };
 		34F9660927E3DB0E006C0288 /* FriendProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendProfileView.swift; sourceTree = "<group>"; };
 		34F9660B27E3DDE3006C0288 /* TopRatedScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopRatedScrollView.swift; sourceTree = "<group>"; };
 		34F9660D27E3DE13006C0288 /* FriendProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendProfileViewModel.swift; sourceTree = "<group>"; };
@@ -196,6 +198,7 @@
 			isa = PBXGroup;
 			children = (
 				3468832728680EDE0056B09F /* SettingsView.swift */,
+				34F7F0BC28C5237500E72C0F /* EmailAddLocation.swift */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -605,6 +608,7 @@
 				3421BE8F27B1FC2300921D70 /* CKAsset+Ext.swift in Sources */,
 				346883252866B1780056B09F /* LaunchView.swift in Sources */,
 				34C165D1289B75BD00179451 /* DropDown.swift in Sources */,
+				34F7F0BD28C5237500E72C0F /* EmailAddLocation.swift in Sources */,
 				3421BE9727B34A1400921D70 /* LocationDetailView.swift in Sources */,
 				3421BEA527B7045A00921D70 /* OnboardView.swift in Sources */,
 				3421BE8327AC760500921D70 /* DetailedVisitView.swift in Sources */,
