@@ -22,89 +22,94 @@ struct TopRatedScrollView: View {
     let rows: [GridItem] = Array(repeating: .init(.flexible()), count: 1)
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            
-            
-            HStack(spacing: 0) {
-                Text("Top Rated Visits: ")
-                    .foregroundColor(.white)
-                    .font(.title2)
-                    .fontWeight(.semibold)
-                    
-                
-//                Text("\(topRatedFilter == nil ? "Champions" : topRatedFilter!.description)")
-//                    .font(.title2)
-//                    .foregroundColor(topRatedFilter == nil ? .OKGNDarkYellow : topRatedFilter!.color)
-                
-                DropDown(category: $topRatedFilter)
-                
-//
-//                Text("▼")
-//                    .padding(.leading, 8)
-//                    .font(.body)
-//                    .foregroundColor(.gray)
-                    
-            }
-            .padding(.horizontal, 4)
-            .onTapGesture {
-                isShowingTopRatedFilterAlert.toggle()
-            }
-            .alert("See Top Rated For:", isPresented: $isShowingTopRatedFilterAlert) {
-                ForEach(categories, id: \.self) { category in
-                    Button {
-                        topRatedFilter = category
-                    } label: {
-                        Text(category.description)
-                    }
-                }
-                Button("All") {
-                    topRatedFilter = nil
-                }
-                
-                Button("Cancel", role: .cancel) {
-                    isShowingTopRatedFilterAlert = false
-                }
-            }
-            
-            ScrollView(.vertical) {
-                LazyVGrid(columns: rows) {
-                    
-                    let reviews = isFriendReviews ? reviewManager.friendReviews : reviewManager.userReviews
-                    
-                    ForEach(reviews.filter({topRatedFilter == nil ? $0.ranking == .first : returnCategoryFromString($0.locationCategory) == topRatedFilter && ($0.ranking == .first || $0.ranking == .second || $0.ranking == .third) })) { review in
+        
+        ZStack {
+            VStack(alignment: .leading, spacing: 6) {
+                ScrollView(.vertical) {
+                    LazyVGrid(columns: rows) {
                         
-                        VStack(spacing: 0) {
+                        let reviews = isFriendReviews ? reviewManager.friendReviews : reviewManager.userReviews
+                        
+                        ForEach(reviews.filter({ topRatedFilter == nil ? $0.ranking == .first : returnCategoryFromString($0.locationCategory) == topRatedFilter && ($0.ranking == .first || $0.ranking == .second || $0.ranking == .third) })) { review in
                             
-                            if topRatedFilter == nil {
-                                HStack {
-                                    Text(review.locationCategory.description)
-                                        .foregroundColor(returnCategoryFromString(review.locationCategory.description).color)
-                                        .fontWeight(.semibold)
-                                    +
-                                    Text(" Leader")
-                                        .fontWeight(.semibold)
-                                        .foregroundColor(.white)
-                                        
-                                    Spacer()
-                                }
-                                .padding(.leading, 8)
+                            VStack(spacing: 0) {
                                 
-                            }
-                            
-                            ReviewCell(review: review)
-                                .padding(.horizontal, 4)
-                                .onTapGesture {
-                                    detailedReviewToShow = review
-                                    withAnimation {
-                                        isShowingDetailedModalView = true
+                                if topRatedFilter == nil {
+                                    HStack {
+                                        Text(review.locationCategory.description)
+                                            .foregroundColor(returnCategoryFromString(review.locationCategory.description).color)
+                                            .fontWeight(.semibold)
+                                        +
+                                        Text(" Leader")
+                                            .fontWeight(.semibold)
+                                            .foregroundColor(.white)
+                                            
+                                        Spacer()
                                     }
+                                    .padding(.leading, 8)
+                                    
                                 }
+                                
+                                ReviewCell(review: review)
+                                    .padding(.horizontal, 4)
+                                    .onTapGesture {
+                                        detailedReviewToShow = review
+                                        withAnimation {
+                                            isShowingDetailedModalView = true
+                                        }
+                                    }
+                            }
                         }
                     }
                 }
             }
+            .padding(.horizontal, 8)
+            .padding(.top, 46)
+            
+            
+            VStack(alignment: .leading) {
+                
+                HStack(alignment: .top) {
+                    Text("Top Rated Visits: ")
+                        .foregroundColor(.white)
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                        .padding(.top, 6)
+                        
+                    
+                    DropDown(category: $topRatedFilter)
+                    
+                    Spacer()
+                    
+                        
+                }
+                .padding(.horizontal, 12)
+                .onTapGesture {
+                    isShowingTopRatedFilterAlert.toggle()
+                }
+                .alert("See Top Rated For:", isPresented: $isShowingTopRatedFilterAlert) {
+                    ForEach(categories, id: \.self) { category in
+                        Button {
+                            topRatedFilter = category
+                        } label: {
+                            Text(category.description)
+                        }
+                    }
+                    Button("All") {
+                        topRatedFilter = nil
+                    }
+                    
+                    Button("Cancel", role: .cancel) {
+                        isShowingTopRatedFilterAlert = false
+                    }
+                }
+                
+                Spacer()
+                
+            }
+            
+            
         }
-        .padding(.horizontal, 8)
     }
 }
 

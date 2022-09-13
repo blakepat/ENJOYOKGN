@@ -23,6 +23,12 @@ struct OKGNAnnotation: View{
             Text(location.name)
                 .font(.caption)
                 .fontWeight(.semibold)
+                .foregroundColor(.black)
+                .padding(2)
+                .background(returnCategoryFromString(location.category).color.opacity(0.4))
+                .clipShape(RoundedRectangle(cornerRadius: 16))
+        
+    
             
         }
     }
