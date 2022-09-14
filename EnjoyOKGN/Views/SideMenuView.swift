@@ -32,6 +32,7 @@ struct SideMenuView: View {
                                     Circle().frame(width: 10).foregroundColor(category.color)
                                     
                                     Button {
+                                        categoryFilter = nil
                                         categoryFilter = category
                                         menuOpen = false
                                     } label: {

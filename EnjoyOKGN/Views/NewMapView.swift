@@ -12,7 +12,8 @@ import MapKit
 
 struct NewMapView: UIViewRepresentable {
     
-    @Binding var centerCoordinate: CLLocationCoordinate2D
+//    @Binding var centerCoordinate: CLLocationCoordinate2D
+    @Binding var centerCoordinate: MKCoordinateRegion
     @Binding var showDetailedView: Bool
     @Binding var selectedPlace: OKGNLocation?
     @Binding var okgnLocations: [OKGNLocation]
@@ -27,7 +28,7 @@ struct NewMapView: UIViewRepresentable {
         }
         
         func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
-            parent.centerCoordinate = mapView.centerCoordinate
+            parent.centerCoordinate.center = mapView.centerCoordinate
         }
         
         
@@ -39,9 +40,13 @@ struct NewMapView: UIViewRepresentable {
             var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
             
             if annotationView == nil {
-                annotationView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)
-                annotationView?.canShowCallout = true
-                annotationView?.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+                
+                annotationView = LocationMarkerView(annotation: annotation, reuseIdentifier: identifier)
+                
+//                annotationView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+//                annotationView?.canShowCallout = true
+//                annotationView?.tintColor = UIColor(returnCategoryFromString(((annotation.subtitle ?? "Brewery")!)).color)
+//                annotationView?.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
             } else {
                 annotationView?.annotation = annotation
             }
@@ -51,9 +56,9 @@ struct NewMapView: UIViewRepresentable {
         
         func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
             guard let placemark = view.annotation as? MKPointAnnotation else { return }
-//            parent.selectedPlace = placemark
             parent.selectedPlace = parent.okgnLocations.first {$0.name == placemark.title ?? "" }
             parent.showDetailedView = true
+            
         }
         
     }
@@ -65,18 +70,30 @@ struct NewMapView: UIViewRepresentable {
     }
     
     func makeUIView(context: Context) -> MKMapView {
+        
+        
         let mapView = MKMapView()
         mapView.pointOfInterestFilter = .excludingAll
+        mapView.region = centerCoordinate
         mapView.delegate = context.coordinator
+        mapView.showsUserLocation = true
+//        mapView.userTrackingMode = .followWithHeading
+//        mapView.setUserTrackingMode(.followWithHeading, animated: true)
         return mapView
     }
     
     func updateUIView(_ uiView: MKMapView, context: Context) {
-        if annotations.count != uiView.annotations.count {
+        if annotations.count != uiView.annotations.count || annotations.first?.subtitle != uiView.annotations.first?.subtitle {
             uiView.removeAnnotations(uiView.annotations)
             uiView.addAnnotations(annotations)
-            
         }
+        
+        uiView.region.center = self.centerCoordinate.center
+        
+        if uiView.region.span.latitudeDelta > 100 {
+            uiView.region.span = MKCoordinateSpan(latitudeDelta: 0.08, longitudeDelta: 0.08)
+        }
+        
     }
     
     
@@ -102,3 +119,21 @@ extension MKPointAnnotation {
 //        NewMapView(centerCoordinate: .constant(MKPointAnnotation.example.coordinate ), annotations: [MKPointAnnotation.example])
 //    }
 //}
+
+
+
+class LocationMarkerView: MKMarkerAnnotationView {
+  override var annotation: MKAnnotation? {
+    willSet {
+
+        guard let marker = newValue as? MKPointAnnotation else {
+            return
+        }
+        
+        tintColor = UIColor(returnCategoryFromString(marker.subtitle ?? "Brewery").color)
+        canShowCallout = true
+        rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+        markerTintColor = UIColor(returnCategoryFromString(marker.subtitle ?? "Brewery").color)
+    }
+  }
+}
