@@ -12,6 +12,8 @@ import CloudKit
 
 final class LocationDetailViewModel: ObservableObject {
     
+    @ObservedObject var reviewManager = ReviewManager()
+    
     @Published var isShowingDetailedModalView = false
     @Published var detailedReviewToShow: OKGNReview?
     
@@ -29,9 +31,28 @@ final class LocationDetailViewModel: ObservableObject {
     
     init(location: Binding<OKGNLocation?>, reviews: [OKGNReview],  friendsReviews: [OKGNReview]) {
         self._location = location
-        self.reviews = reviews
-        self.friendsReviews = friendsReviews
+//        self.reviews = reviews
+//        self.friendsReviews = friendsReviews
+        self.reviews = []
+        self.friendsReviews = []
     }
+    
+    func getUserReviewsForThisLocation() {
+        
+        guard let id = CloudKitManager.shared.profileRecordID else { return }
+        
+        Task {
+            if let locationName = location?.name {
+                    self.reviews = try await CloudKitManager.shared.getOneLocationUserReviews(for: id, location: locationName)
+                    reviewManager.getAllFriendsReviews(locationName)
+                    
+                }
+        }
+    }
+        
+    
+    
+    
     
     func getDirectionsToLocation() {
         

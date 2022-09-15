@@ -71,26 +71,36 @@ final class ReviewManager: ObservableObject {
     }
     
     
-    func getAllFriendsReviews() {
+    func getAllFriendsReviews(_ location: String? = nil) {
         guard let profile = CloudKitManager.shared.profile else {
             print("❌ could not get profileID")
             return
         }
         
         Task {
+            
             do {
                 let friends = try await CloudKitManager.shared.getFriends(for: CKRecord.Reference(recordID: profile.recordID, action: .none))
                 
                 if friends == [] { self.allFriendsReviews = [] }
                 
-                let receivedReviews = try await CloudKitManager.shared.getFriendsReviews(for: friends.map { CKRecord.Reference(recordID: $0.recordID, action: .none) })
+                var receivedReviews: [OKGNReview] = []
+                
+                if location != nil {
+                    receivedReviews = try await CloudKitManager.shared.getOneLocationFriendsReviews(for: friends.map { CKRecord.Reference(recordID: $0.recordID, action: .none) }, location: location!)
+                } else {
+                     receivedReviews = try await CloudKitManager.shared.getFriendsReviews(for: friends.map { CKRecord.Reference(recordID: $0.recordID, action: .none) })
+                }
+                
+                let rankedReviews = self.getRankingForFriendsReviews(reviews: receivedReviews, friends: friends.map { $0.convertToOKGNProfile() })
+                
                 DispatchQueue.main.async {
                     print("✅ FRIENDS REVIEWS SET")
                     
-                    let rankedReviews = self.getRankingForFriendsReviews(reviews: receivedReviews, friends: friends.map { $0.convertToOKGNProfile() })
+                    
                     
                     self.allFriendsReviews = []
-                    self.allFriendsReviews.append(contentsOf: rankedReviews )
+                    self.allFriendsReviews.append(contentsOf: rankedReviews)
                 }
                 
 //                CloudKitManager.shared.getFriendsReviews(for: friends.map { CKRecord.Reference(recordID: $0.recordID, action: .none) }) { result in
