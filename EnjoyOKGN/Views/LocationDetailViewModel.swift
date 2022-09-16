@@ -43,10 +43,9 @@ final class LocationDetailViewModel: ObservableObject {
         
         Task {
             if let locationName = location?.name {
-                    self.reviews = try await CloudKitManager.shared.getOneLocationUserReviews(for: id, location: locationName)
-                    reviewManager.getAllFriendsReviews(locationName)
-                    
-                }
+                self.reviews = try await CloudKitManager.shared.getOneLocationUserReviews(for: id, location: locationName)
+                reviewManager.getAllFriendsReviews(location: locationName)
+            }
         }
     }
         

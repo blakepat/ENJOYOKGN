@@ -14,6 +14,7 @@ final class ReviewManager: ObservableObject {
     @Published var userReviews: [OKGNReview] = []
     @Published var allFriendsReviews: [OKGNReview] = []
     @Published var friendReviews: [OKGNReview] = []
+    var cursor: CKQueryOperation.Cursor? = nil
     
     func getUserReviews() {
         guard let profileID = CloudKitManager.shared.profileRecordID else {
@@ -71,7 +72,7 @@ final class ReviewManager: ObservableObject {
     }
     
     
-    func getAllFriendsReviews(_ location: String? = nil) {
+    func getAllFriendsReviews(location: String? = nil) {
         guard let profile = CloudKitManager.shared.profile else {
             print("❌ could not get profileID")
             return
@@ -85,11 +86,12 @@ final class ReviewManager: ObservableObject {
                 if friends == [] { self.allFriendsReviews = [] }
                 
                 var receivedReviews: [OKGNReview] = []
+
                 
                 if location != nil {
-                    receivedReviews = try await CloudKitManager.shared.getOneLocationFriendsReviews(for: friends.map { CKRecord.Reference(recordID: $0.recordID, action: .none) }, location: location!)
+                    receivedReviews = try await CloudKitManager.shared.getOneLocationFriendsReviews(for: friends.map { CKRecord.Reference(recordID: $0.recordID, action: .none) }, location: location!) 
                 } else {
-                     receivedReviews = try await CloudKitManager.shared.getFriendsReviews(for: friends.map { CKRecord.Reference(recordID: $0.recordID, action: .none) })
+                    (receivedReviews, self.cursor) = try await CloudKitManager.shared.getFriendsReviews(for: friends.map { CKRecord.Reference(recordID: $0.recordID, action: .none) }, passedCursor: self.cursor)
                 }
                 
                 let rankedReviews = self.getRankingForFriendsReviews(reviews: receivedReviews, friends: friends.map { $0.convertToOKGNProfile() })
@@ -99,7 +101,7 @@ final class ReviewManager: ObservableObject {
                     
                     
                     
-                    self.allFriendsReviews = []
+//                    self.allFriendsReviews = []
                     self.allFriendsReviews.append(contentsOf: rankedReviews)
                 }
                 

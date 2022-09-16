@@ -16,6 +16,8 @@ struct FriendReviewFeed: View {
     @StateObject var friendManager = FriendManager()
     @StateObject var viewModel = FriendReviewFeedModel()
     
+    @State var nextIndex = 1
+    
     
     init() {
         UITableView.appearance().backgroundColor = UIColor(named: "OKGNDarkGray")
@@ -32,6 +34,9 @@ struct FriendReviewFeed: View {
         
                 List {
                     ForEach(friendManager.friends) { friend in
+                        
+                        
+                        
                         HStack {
                             NavigationLink(destination: FriendProfileView(friend: friend)) {
                                 HStack {
@@ -48,22 +53,33 @@ struct FriendReviewFeed: View {
                 .listStyle(.plain)
                 .offset(x: viewModel.isShowingFriendsList ? 0 : screen.width)
                 
-                
-                List {
-                    ForEach(reviewManager.allFriendsReviews.sorted { viewModel.reviewsSortedByRating ? $0.rating > $1.rating : $0.date > $1.date } ) { review in
-                        ReviewCell(review: review)
-                            .transition(.move(edge: .trailing))
-                            .onTapGesture {
-                                withAnimation {
-                                    viewModel.isShowingDetailedModalView = true
-                                    viewModel.detailedReviewToShow = review
+                //.sorted { viewModel.reviewsSortedByRating ? $0.rating > $1.rating : $0.date > $1.date }
+                ScrollView {
+                    LazyVStack {
+                        ForEach(reviewManager.allFriendsReviews.indices, id: \.self) { reviewIndex in
+                            
+                            let review = reviewManager.allFriendsReviews[reviewIndex]
+                            
+                            ReviewCell(review: review)
+                                .padding(.bottom, 500)
+                                .transition(.move(edge: .trailing))
+                                .onTapGesture {
+                                    withAnimation {
+                                        viewModel.isShowingDetailedModalView = true
+                                        viewModel.detailedReviewToShow = review
+                                    }
                                 }
-                            }
+                                .onAppear {
+                                    if reviewIndex == reviewManager.allFriendsReviews.count - 1{
+                                        reviewManager.getAllFriendsReviews()
+                                    }
+                                }
+                        }
+                        .listRowBackground(Color.OKGNDarkGray)
                     }
-                    .listRowBackground(Color.OKGNDarkGray)
-                }
-                .listStyle(.plain)
+                    .listStyle(.plain)
                 .offset(x: viewModel.isShowingFriendsList ? -screen.width : 0)
+                }
                     
                 
                 
