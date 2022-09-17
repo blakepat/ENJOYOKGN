@@ -17,6 +17,7 @@ struct NewMapView: UIViewRepresentable {
     @Binding var showDetailedView: Bool
     @Binding var selectedPlace: OKGNLocation?
     @Binding var okgnLocations: [OKGNLocation]
+    @Binding var centerOnUserLocation: MKUserTrackingMode?
     
     var annotations: [MKPointAnnotation]
     
@@ -34,21 +35,17 @@ struct NewMapView: UIViewRepresentable {
         
         
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-            
             let identifier = "Placemark"
-            
             var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
             
-            if annotationView == nil {
-                
-                annotationView = LocationMarkerView(annotation: annotation, reuseIdentifier: identifier)
-                
-//                annotationView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)
-//                annotationView?.canShowCallout = true
-//                annotationView?.tintColor = UIColor(returnCategoryFromString(((annotation.subtitle ?? "Brewery")!)).color)
-//                annotationView?.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+            if annotation.title == "My Location"  {
+                return nil
             } else {
-                annotationView?.annotation = annotation
+                if annotationView == nil {
+                    annotationView = LocationMarkerView(annotation: annotation, reuseIdentifier: identifier)
+                } else {
+                    annotationView?.annotation = annotation
+                }
             }
             
             return annotationView
@@ -58,11 +55,8 @@ struct NewMapView: UIViewRepresentable {
             guard let placemark = view.annotation as? MKPointAnnotation else { return }
             parent.selectedPlace = parent.okgnLocations.first {$0.name == placemark.title ?? "" }
             parent.showDetailedView = true
-            
         }
-        
     }
-    
     
     
     func makeCoordinator() -> Coordinator {
@@ -70,35 +64,32 @@ struct NewMapView: UIViewRepresentable {
     }
     
     func makeUIView(context: Context) -> MKMapView {
-        
-        
         let mapView = MKMapView()
         mapView.pointOfInterestFilter = .excludingAll
         mapView.region = centerCoordinate
         mapView.delegate = context.coordinator
         mapView.showsUserLocation = true
-//        mapView.userTrackingMode = .followWithHeading
-//        mapView.setUserTrackingMode(.followWithHeading, animated: true)
+        mapView.region.span = MKCoordinateSpan(latitudeDelta: 0.08, longitudeDelta: 0.08)
+
         return mapView
     }
     
     func updateUIView(_ uiView: MKMapView, context: Context) {
-        if annotations.count != uiView.annotations.count || annotations.first?.subtitle != uiView.annotations.first?.subtitle {
+        
+        if annotations.count + 1 != uiView.annotations.count || !(uiView.annotations.contains(where: {$0.subtitle == annotations.first?.subtitle })) {
+            
+//            print("⚠️ Annotations Redrawn - (\(annotations.count + 1), \(annotations.first?.subtitle ?? "")), (\(uiView.annotations.count), \(uiView.annotations.first?.subtitle ?? ""))")
+            
             uiView.removeAnnotations(uiView.annotations)
             uiView.addAnnotations(annotations)
         }
         
-        uiView.region.center = self.centerCoordinate.center
-        
-        if uiView.region.span.latitudeDelta > 100 {
-            uiView.region.span = MKCoordinateSpan(latitudeDelta: 0.08, longitudeDelta: 0.08)
+        if let centerOnUserLocation = centerOnUserLocation {
+            uiView.userTrackingMode = centerOnUserLocation
+            self.centerOnUserLocation = nil
+            uiView.userTrackingMode = .none
         }
-        
     }
-    
-    
-    
-    
 }
 
 extension MKPointAnnotation {

@@ -18,8 +18,8 @@ final class LocationDetailViewModel: ObservableObject {
     @Published var detailedReviewToShow: OKGNReview?
     
     let columns: [GridItem] = Array(repeating: .init(.flexible()), count: 1)
-    @Published var reviews: [OKGNReview]
-    @Published var friendsReviews: [OKGNReview]
+    @Published var reviews: [OKGNReview] = []
+    @Published var friendsReviews: [OKGNReview] = []
     
     @Binding var location: OKGNLocation?
     @Published var alertItem: AlertItem?
@@ -28,13 +28,13 @@ final class LocationDetailViewModel: ObservableObject {
     @Published var showFriendsReviews = false
     
     
-    
-    init(location: Binding<OKGNLocation?>, reviews: [OKGNReview],  friendsReviews: [OKGNReview]) {
+    //, reviews: [OKGNReview],  friendsReviews: [OKGNReview]
+    init(location: Binding<OKGNLocation?>) {
         self._location = location
 //        self.reviews = reviews
 //        self.friendsReviews = friendsReviews
-        self.reviews = []
-        self.friendsReviews = []
+//        self.reviews = []
+//        self.friendsReviews = []
     }
     
     func getUserReviewsForThisLocation() {
