@@ -30,16 +30,19 @@ final class ReviewManager: ObservableObject {
                     print("✅ REVIEWS SET")
                     
                     self.userReviews = []
-                    
+//                    self.userReviews = receivedReviews
+
+
                     for category in categories {
-                        var sortedReviews: [OKGNReview] = receivedReviews.filter({returnCategoryFromString($0.locationCategory) == category}).sorted { $0.rating > $1.rating }
+                        var sortedReviews: [OKGNReview] = receivedReviews.filter({returnCategoryFromString($0.locationCategory) == category})
                         for i in 0..<min(sortedReviews.count, 3) {
                             sortedReviews[i].ranking = rankings[i]
                         }
                         self.userReviews.append(contentsOf: sortedReviews)
                     }
                 }
-            } catch {
+            } catch let err {
+                print(err)
                 print("❌ Error fetching reviews!")
             }
         }
@@ -56,9 +59,10 @@ final class ReviewManager: ObservableObject {
                     print("✅ ONE FRIEND REVIEWS SET")
                     
                     self.friendReviews = []
+//                    self.friendReviews = receivedReviews
                     
                     for category in categories {
-                        var sortedReviews: [OKGNReview] = receivedReviews.filter({returnCategoryFromString($0.locationCategory) == category}).sorted { $0.rating > $1.rating }
+                        var sortedReviews: [OKGNReview] = receivedReviews.filter({returnCategoryFromString($0.locationCategory) == category})
                         for i in 0..<min(sortedReviews.count, 3) {
                             sortedReviews[i].ranking = rankings[i]
                         }
@@ -83,7 +87,10 @@ final class ReviewManager: ObservableObject {
             do {
                 let friends = try await CloudKitManager.shared.getFriends(for: CKRecord.Reference(recordID: profile.recordID, action: .none))
                 
-                if friends == [] { self.allFriendsReviews = [] }
+                DispatchQueue.main.async {
+                    if friends == [] { self.allFriendsReviews = [] }
+                }
+                
                 
                 var receivedReviews: [OKGNReview] = []
 
@@ -153,24 +160,27 @@ final class ReviewManager: ObservableObject {
 
     }
     
+
+    
+    
     
     func getRankingForFriendsReviews(reviews: [OKGNReview], friends: [OKGNProfile]) -> [OKGNReview] {
-        
+
         var rankedFriendReviews: [OKGNReview] = []
-        
+
         for friend in friends {
             for category in categories {
-                
+
                 var sortedReviews: [OKGNReview] = reviews.filter({ returnCategoryFromString($0.locationCategory) == category && $0.reviewerName == friend.name }).sorted { $0.rating > $1.rating }
                 for i in 0..<min(sortedReviews.count, 3) {
                     sortedReviews[i].ranking = rankings[i]
                 }
-                
+
                 rankedFriendReviews.append(contentsOf: sortedReviews)
 
             }
         }
-        
+
         return rankedFriendReviews.sorted(by: { $0.date > $1.date })
     }
 }

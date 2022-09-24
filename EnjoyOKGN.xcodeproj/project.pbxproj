@@ -28,6 +28,7 @@
 		3421BEA327B4935B00921D70 /* AlertItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BEA227B4935B00921D70 /* AlertItem.swift */; };
 		3421BEA527B7045A00921D70 /* OnboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BEA427B7045A00921D70 /* OnboardView.swift */; };
 		344D349D28C96CE9007C3F56 /* NewMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 344D349C28C96CE9007C3F56 /* NewMapView.swift */; };
+		345C50CE28DE4C3B00B75F2F /* AddFriendModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345C50CD28DE4C3B00B75F2F /* AddFriendModalView.swift */; };
 		346883232866ADEC0056B09F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 346883222866ADEC0056B09F /* LaunchScreen.storyboard */; };
 		346883252866B1780056B09F /* LaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346883242866B1780056B09F /* LaunchView.swift */; };
 		3468832828680EDE0056B09F /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3468832728680EDE0056B09F /* SettingsView.swift */; };
@@ -39,6 +40,7 @@
 		3480AA0327C9E8D80031BB09 /* FriendReviewFeedModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3480AA0227C9E8D80031BB09 /* FriendReviewFeedModel.swift */; };
 		3480AA0527C9EAAF0031BB09 /* FriendCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3480AA0427C9EAAF0031BB09 /* FriendCell.swift */; };
 		3480AA0727C9F2110031BB09 /* FriendManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3480AA0627C9F2110031BB09 /* FriendManager.swift */; };
+		34B0E91328D8B45000A775B3 /* Double+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34B0E91228D8B45000A775B3 /* Double+Ext.swift */; };
 		34BEA49F27B7502B006F91C1 /* PhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BEA49E27B7502B006F91C1 /* PhotoPicker.swift */; };
 		34BEA4A127B75873006F91C1 /* UIImage+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BEA4A027B75873006F91C1 /* UIImage+Ext.swift */; };
 		34BEA4A627BAF1D6006F91C1 /* HomePageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BEA4A527BAF1D6006F91C1 /* HomePageViewModel.swift */; };
@@ -109,6 +111,7 @@
 		3421BEA227B4935B00921D70 /* AlertItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertItem.swift; sourceTree = "<group>"; };
 		3421BEA427B7045A00921D70 /* OnboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardView.swift; sourceTree = "<group>"; };
 		344D349C28C96CE9007C3F56 /* NewMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMapView.swift; sourceTree = "<group>"; };
+		345C50CD28DE4C3B00B75F2F /* AddFriendModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendModalView.swift; sourceTree = "<group>"; };
 		346883222866ADEC0056B09F /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		346883242866B1780056B09F /* LaunchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchView.swift; sourceTree = "<group>"; };
 		3468832728680EDE0056B09F /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -120,6 +123,7 @@
 		3480AA0227C9E8D80031BB09 /* FriendReviewFeedModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendReviewFeedModel.swift; sourceTree = "<group>"; };
 		3480AA0427C9EAAF0031BB09 /* FriendCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendCell.swift; sourceTree = "<group>"; };
 		3480AA0627C9F2110031BB09 /* FriendManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendManager.swift; sourceTree = "<group>"; };
+		34B0E91228D8B45000A775B3 /* Double+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Ext.swift"; sourceTree = "<group>"; };
 		34BEA49E27B7502B006F91C1 /* PhotoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPicker.swift; sourceTree = "<group>"; };
 		34BEA4A027B75873006F91C1 /* UIImage+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Ext.swift"; sourceTree = "<group>"; };
 		34BEA4A527BAF1D6006F91C1 /* HomePageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageViewModel.swift; sourceTree = "<group>"; };
@@ -227,6 +231,7 @@
 			children = (
 				3480A9FD27C590B20031BB09 /* FriendReviewFeed.swift */,
 				3480AA0227C9E8D80031BB09 /* FriendReviewFeedModel.swift */,
+				345C50CD28DE4C3B00B75F2F /* AddFriendModalView.swift */,
 			);
 			name = FriendReviewFeed;
 			sourceTree = "<group>";
@@ -370,6 +375,7 @@
 				34BEA4A027B75873006F91C1 /* UIImage+Ext.swift */,
 				34F9661127E559B8006C0288 /* View+Ext.swift */,
 				34C165CE289B705E00179451 /* Image+Ext.swift */,
+				34B0E91228D8B45000A775B3 /* Double+Ext.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -595,6 +601,7 @@
 				3421BE7D27A1D1D100921D70 /* Date+Ext.swift in Sources */,
 				344D349D28C96CE9007C3F56 /* NewMapView.swift in Sources */,
 				34F9661227E559B8006C0288 /* View+Ext.swift in Sources */,
+				345C50CE28DE4C3B00B75F2F /* AddFriendModalView.swift in Sources */,
 				34F0050F279CDCA100899561 /* Constants.swift in Sources */,
 				3421BE9527B348B600921D70 /* LocationCell.swift in Sources */,
 				34F00502279CCD7B00899561 /* ReviewCell.swift in Sources */,
@@ -603,6 +610,7 @@
 				3421BE7B279F6AFE00921D70 /* OKGNReview.swift in Sources */,
 				34D19692279BE4AE00C1CE19 /* EnjoyOKGNApp.swift in Sources */,
 				3421BE9F27B48B2900921D70 /* LocationManager.swift in Sources */,
+				34B0E91328D8B45000A775B3 /* Double+Ext.swift in Sources */,
 				3421BE8727B1F06200921D70 /* MapView.swift in Sources */,
 				34F00500279CC2E800899561 /* Award.swift in Sources */,
 				3480AA0727C9F2110031BB09 /* FriendManager.swift in Sources */,

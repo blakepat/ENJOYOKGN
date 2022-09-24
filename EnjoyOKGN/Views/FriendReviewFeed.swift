@@ -16,9 +16,6 @@ struct FriendReviewFeed: View {
     @StateObject var friendManager = FriendManager()
     @StateObject var viewModel = FriendReviewFeedModel()
     
-    @State var nextIndex = 1
-    
-    
     init() {
         UITableView.appearance().backgroundColor = UIColor(named: "OKGNDarkGray")
         UINavigationBar.appearance().titleTextAttributes = [.foregroundColor : UIColor.white]
@@ -30,36 +27,13 @@ struct FriendReviewFeed: View {
             ZStack {
                 
                 Color.OKGNDarkGray.ignoresSafeArea()
-    
-        
-                List {
-                    ForEach(friendManager.friends) { friend in
-                        
-                        
-                        
-                        HStack {
-                            NavigationLink(destination: FriendProfileView(friend: friend)) {
-                                HStack {
-                                    FriendCell(profile: friend, userReviews: viewModel.friendReviews?.filter({ $0.reviewerName == friend.name }) ?? [])
-                                }
-                            }
-                        }
-                    }
-                    .onDelete { index in
-                        friendManager.deleteFriends(index: index)
-                    }
-                    .listRowBackground(Color.OKGNDarkGray)
-                }
-                .listStyle(.plain)
-                .offset(x: viewModel.isShowingFriendsList ? 0 : screen.width)
                 
-                //.sorted { viewModel.reviewsSortedByRating ? $0.rating > $1.rating : $0.date > $1.date }
                 ScrollView {
                     LazyVStack {
                         ForEach(reviewManager.allFriendsReviews.indices, id: \.self) { reviewIndex in
-                            
+
                             let review = reviewManager.allFriendsReviews[reviewIndex]
-                            
+
                             ReviewCell(review: review)
                                 .padding(.bottom, 500)
                                 .transition(.move(edge: .trailing))
@@ -78,8 +52,37 @@ struct FriendReviewFeed: View {
                         .listRowBackground(Color.OKGNDarkGray)
                     }
                     .listStyle(.plain)
-                .offset(x: viewModel.isShowingFriendsList ? -screen.width : 0)
+                    .offset(x: viewModel.isShowingFriendsList ? -screen.width : 0)
                 }
+                .alert(item: $friendManager.alertItem, content: { alertItem in
+                    Alert(title: alertItem.title, message: alertItem.message, dismissButton: alertItem.dismissButton)
+                })
+                
+                
+    
+                List {
+                    ForEach(friendManager.friends) { friend in
+                        NavigationLink(destination: FriendProfileView(friend: friend)) {
+                            HStack {
+                                FriendCell(profile: friend, userReviews: viewModel.friendReviews?.filter({ $0.reviewerName == friend.name }) ?? [])
+            
+                            }
+                        }
+                    }
+                    .onDelete { index in
+                        friendManager.deleteFriends(index: index)
+                    }
+                    .listRowBackground(Color.OKGNDarkGray)
+                }
+                .alert(item: $viewModel.twoButtonAlertItem, content: { alertItem in
+                    Alert(title: alertItem.title, message: alertItem.message, primaryButton: alertItem.acceptButton, secondaryButton: alertItem.dismissButton)
+                })
+
+                .listStyle(.plain)
+                .offset(x: viewModel.isShowingFriendsList ? 0 : screen.width)
+                
+                //.sorted { viewModel.reviewsSortedByRating ? $0.rating > $1.rating : $0.date > $1.date }
+
                     
                 
                 
@@ -107,7 +110,7 @@ struct FriendReviewFeed: View {
                         if viewModel.isShowingFriendsList {
                             //Add friend
                             viewModel.isShowingAddFriendAlert = true
-                            viewModel.showFriendSearchView()
+//                            viewModel.showFriendSearchView()
                         } else {
                             //display top restaurants
                             viewModel.reviewsSortedByRating.toggle()
@@ -149,9 +152,9 @@ struct FriendReviewFeed: View {
         }
         .background(Color.OKGNDarkGray)
         .navigationViewStyle(StackNavigationViewStyle()) // This is called so there is issues with constraints in console
-        .alert(item: $viewModel.twoButtonAlertItem, content: { alertItem in
-            Alert(title: alertItem.title, message: alertItem.message, primaryButton: alertItem.acceptButton, secondaryButton: alertItem.dismissButton)
-        })
+        .sheet(isPresented: $viewModel.isShowingAddFriendAlert) {
+            AddFriendModalView()
+        }
     }
 }
 

@@ -10,6 +10,8 @@ import CloudKit
 
 struct CreateReviewView: View {
     
+    @EnvironmentObject var reviewManager: ReviewManager
+    
     let cacheManager = CacheManager.instance
     @State var locationName: String = ""
     @State var caption: String = ""
@@ -287,7 +289,11 @@ struct CreateReviewView: View {
                                 reviewRecord[OKGNReview.klocationCategory] = selectedLocation?.category.description
                                 reviewRecord[OKGNReview.kReviewerName] = cacheManager.getNameFromCache()
                                 reviewRecord[OKGNReview.kReviewerAvatar] = cacheManager.getAvatarFromCache()?.convertToCKAsset(path: "profileAvatar")
-
+                                
+//                                reviewManager.userReviews.append(reviewRecord.convertToOKGNReview())
+//
+//                                reviewRecord[OKGNReview.kRanking] = await setRankingForReview(id: reviewRecord.recordID, categoryName: selectedLocation?.category.description ?? "")
+                                
                             } else {
                                 //To-do: show  alert that was unable to get locations
                                 print("unable to get locations")
@@ -295,7 +301,6 @@ struct CreateReviewView: View {
                             
                             //save review to cloudkit
                             do {
-                                
                                 
                                 if let _ = try await CloudKitManager.shared.batchSave(records: [reviewRecord]) {
                                     print("✅ created review successfully")
@@ -311,7 +316,6 @@ struct CreateReviewView: View {
                         } catch {
                             print("failure in fetching record review")
                         }
-                        
                     }
                 }
             } else {
@@ -341,6 +345,55 @@ struct CreateReviewView: View {
         }
     }
     
+    
+    
+    
+//    func setRankingForReview(id: CKRecord.ID, categoryName: String) async -> String {
+//        
+//        let reviews = reviewManager.userReviews.filter({ $0.locationCategory == categoryName }).sorted() { $0.rating > $1.rating }
+//        
+//        if id == reviews.first?.id {
+//            print("RANK = 1")
+//            let _ = await adjustRankingsForPlace(1, reviews: reviews)
+//            return "1"
+//            
+//        } else if id == reviews.dropFirst().first?.id {
+//            print("RANK = 2")
+//            return "2"
+//        } else if id == reviews.dropFirst(2).first?.id {
+//            print("RANK = 3")
+//            return "3"
+//        } else {
+//            print("RANK = 0")
+//            return "0"
+//        }
+//    }
+//    
+//    
+//    //create func to change other rankings when new one is created
+//    func adjustRankingsForPlace(_ rank: Int, reviews: [OKGNReview]) async {
+//        if rank == 1 {
+//            Task {
+//                print("💜 Adjust called!")
+//                if let id = reviewManager.userReviews.dropFirst().first?.id {
+//                    print("ID FOR RANKING TO CHANGE SET")
+//                    let reviewToChange = try await CloudKitManager.shared.fetchRecord(with: id)
+//                    reviewToChange[OKGNReview.kRanking] = "2"
+//                    print(reviewToChange)
+//                    //save review to cloudkit
+//                    do {
+//                        if let _ = try await CloudKitManager.shared.batchSave(records: [reviewToChange]) {
+//
+//                        } else {
+//                            alertItem = AlertContext.reviewCreationFailed
+//                        }
+//                    } catch {
+//                        print("❌ failed editing review ranking")
+//                    }
+//                }
+//            }
+//        }
+//    }
 }
 
 //struct CreateReviewView_Previews: PreviewProvider {

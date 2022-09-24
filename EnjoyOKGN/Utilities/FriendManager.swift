@@ -16,64 +16,67 @@ final class FriendManager: ObservableObject {
         }
     }
     
+    @Published var alertItem: AlertItem?
     
-    func acceptFollower(_ friend: CKRecord) {
-//        Task {
-//            do {
-//                print("✅ follower accepted!")
-//                try await CloudKitManager.shared.getFriendRecord(friendName: friend.convertToOKGNProfile().name)
-//
-                if let userProfile = CloudKitManager.shared.profile {
-                    
-                    var followers = userProfile.convertToOKGNProfile().followers
-                    followers.append(CKRecord.Reference(record: friend, action: .none))
-                    
-                    userProfile[OKGNProfile.kFollowers] = followers
-                    //To-do: erase request from request list after adding.
-                    userProfile[OKGNProfile.kRequests] = self.getRequestsMinusNewFollower(newFollower: CKRecord.Reference(record: friend, action: .none),
-                                                                                          profile: userProfile)
-                    
-                    Task {
-                        do {
-                            let _ = try await CloudKitManager.shared.save(record: userProfile)
-                            print("✅ follower accepted!")
-                        } catch {
-                            print("❌ failed saving friend")
-                            print(error)
-                        }
+    
+    func acceptFriend(_ friend: CKRecord) {
+
+        if let userProfile = CloudKitManager.shared.profile {
+            
+            var friends = userProfile.convertToOKGNProfile().friends
+            friends.append(CKRecord.Reference(record: friend, action: .none))
+            
+            userProfile[OKGNProfile.kFriends] = friends
+            //To-do: erase request from request list after adding.
+            userProfile[OKGNProfile.kRequests] = self.getRequestsMinusNewFollower(newFollower: CKRecord.Reference(record: friend, action: .none),
+                                                                                  profile: userProfile)
+            
+            Task {
+                do {
+                    await addSelfToFriendAndRemoveRequest(friend: friend)
+                    let _ = try await CloudKitManager.shared.save(record: userProfile)
+                    print("✅ follower accepted!")
+                } catch {
+                    DispatchQueue.main.async {
+                        self.alertItem = AlertContext.cannotRetrieveProfile
+                        print("⚠️ alert item set")
                     }
-//                }
-//            } catch {
-//                print("❌ failed adding friend")
-//            }
+                    print("❌ failed saving friend - accept follower")
+                    print(error)
+                }
+            }
+        }
+    }
+    
+    func addSelfToFriendAndRemoveRequest(friend: CKRecord) async {
+        guard let friendProfile = try? await CloudKitManager.shared.getFriendUserRecord(id: friend.recordID), let profileRecord = CloudKitManager.shared.profileRecordID else { return }
+        let friendOKGNProfile = friend.convertToOKGNProfile()
+        
+        Task {
+            friendProfile[OKGNProfile.kRequests] = friendOKGNProfile.requests.filter({ $0.recordID != profileRecord })
+            friendOKGNProfile.friends.append(CKRecord.Reference(recordID: profileRecord, action: .none))
+            
+            let selfReference = CKRecord.Reference(recordID: profileRecord, action: .none)
+            var friendsfriends = friendOKGNProfile.friends
+            friendsfriends.append(selfReference)
+            friendProfile[OKGNProfile.kFriends] = friendsfriends
+            
+            Task {
+                do {
+                    let _ = try await CloudKitManager.shared.save(record: friendProfile)
+                    print("✅💜 Success CHANGING FRIEND LIST!")
+                } catch {
+                    print("❌Failure CHANGING FRIEND LIST!")
+                    print("⚠️⚠️\(error)")
+                }
+            }
+            
         }
         
         
-//        CloudKitManager.shared.getFriendRecord(friendName: friend.convertToOKGNProfile().name) { result in
-//            switch result {
-//            case .success(_):
-//                if let userProfile = CloudKitManager.shared.profile {
-//                    userProfile[OKGNProfile.kFollowers] = [CKRecord.Reference(record: friend, action: .none)]
-//                    //To-do: erase request from request list after adding.
-//                    userProfile[OKGNProfile.kRequests] = self.getRequestsMinusNewFollower(newFollower: CKRecord.Reference(record: friend, action: .none),
-//                                                                                          profile: userProfile)
-//
-//                    CloudKitManager.shared.save(record: userProfile) { result in
-//                        switch result {
-//                        case .success(_):
-//                            print("✅ follower accepted!")
-//
-//                        case .failure(let error):
-//                            print("❌ failed adding friend")
-//                            print(error)
-//                        }
-//                    }
-//                }
-//            case .failure(_):
-//                print("")
-//            }
-//        }
+        
     }
+    
     
     
     func removeRequestAfterAccepting(follower: CKRecord) {
@@ -87,7 +90,7 @@ final class FriendManager: ObservableObject {
                         let _ = try await CloudKitManager.shared.save(record: userProfile)
                         print("✅ friend added!")
                     } catch {
-                        print("❌ failed adding friend")
+                        print("❌ failed adding friend - Remove Request")
                         print(error)
                     }
                 }
@@ -107,7 +110,10 @@ final class FriendManager: ObservableObject {
                         let _ = try await CloudKitManager.shared.save(record: userProfile)
                         print("✅ friend added!")
                     } catch {
-                        print("❌ failed adding friend")
+                        DispatchQueue.main.async {
+                            self.alertItem = AlertContext.cannotRetrieveProfile
+                        }
+                        print("❌ failed adding friend - removeDeleted")
                         print(error)
                     }
                 }
@@ -213,7 +219,7 @@ final class FriendManager: ObservableObject {
             return
         }
         
-        for friend in userProfile.convertToOKGNProfile().friends {
+        for friend in userProfile.convertToOKGNProfile().followers {
             if userProfile.convertToOKGNProfile().requests.contains(friend) {
                 userProfile[OKGNProfile.kRequests] = getRequestsMinusNewFollower(newFollower: friend, profile: userProfile)
                 
@@ -232,18 +238,95 @@ final class FriendManager: ObservableObject {
     
     func deleteFriends(index: IndexSet) {
         if let profile = CloudKitManager.shared.profile {
-            profile[OKGNProfile.kDeleteList] = [CKRecord.Reference(recordID: friends[index[index.startIndex]].id, action: .none)]
+            
+            let friendToDelete = CKRecord.Reference(recordID: friends[index[index.startIndex]].id, action: .none)
+            
+            let friendsWithout = profile.convertToOKGNProfile().friends.filter({ $0.recordID != friendToDelete.recordID })
+            
+            profile[OKGNProfile.kFriends] = friendsWithout
             friends.remove(atOffsets: index)
             
             Task {
                 do {
+                    await deleteSelfFromFriend(friend: friendToDelete.recordID)
                     let _ = try await CloudKitManager.shared.save(record: profile)
-                    print("✅💜 Success Removing friend!")
+                    print("✅💜 Success adding friend to delete list!")
                 } catch {
-                    print("❌💜Failure removing friend")
+                    print("❌💜Failure adding friend to delete list")
                     print(error)
                 }
             }
         }
     }
+    
+    func deleteSelfFromFriend(friend: CKRecord.ID) async {
+        guard let friendsProfile = try? await CloudKitManager.shared.getFriendUserRecord(id: friend) else { return }
+        let friendsfriendsWithout = friendsProfile.convertToOKGNProfile().friends.filter({ $0.recordID != CloudKitManager.shared.profileRecordID })
+        
+        friendsProfile[OKGNProfile.kFriends] = friendsfriendsWithout
+        
+        Task {
+            do {
+                let _ = try await CloudKitManager.shared.save(record: friendsProfile)
+                print("✅💜 Success deleting self from friends friend list!")
+            } catch {
+                print("❌💜Failure deleting self from friends friend list")
+                print(error)
+            }
+        }
+    }
+    
+    
+//    func removeFriendAfterDeletion() async {
+//        if let profile = CloudKitManager.shared.profile {
+//
+//            Task {
+//                do {
+//                    let usersToRemove = try await CloudKitManager.shared.getUsersToRemove(for: CKRecord.Reference(recordID: profile.recordID, action: .none))
+//                    let followers = profile.convertToOKGNProfile().followers
+//                    print("USERS TO REMOVE LIST: \(usersToRemove)")
+//
+//
+//                    let newFollowers = followers.filter({ !usersToRemove.contains(CKRecord(recordType: "OKGNProfile", recordID: $0.recordID)) })
+//                    print("NEW FOLLOWERS LIST: \(newFollowers)")
+//
+//                    profile[OKGNProfile.kFollowers] = newFollowers
+//
+//                    Task {
+//                        do {
+//                            await removeItemsFromDeleteList(forFriendID: usersToRemove[0].recordID)
+//                            let _ = try await CloudKitManager.shared.save(record: profile)
+//                            print("✅💜 Success Removing friend!")
+//                        } catch {
+//                            print("❌💜Failure removing friend")
+//                            print("⚠️⚠️\(error)")
+//                        }
+//                    }
+//
+//                } catch let err {
+//                    print("⚠️\(err)")
+//                }
+//            }
+//        }
+//    }
+    
+    
+//    func removeItemsFromDeleteList(forFriendID: CKRecord.ID) async {
+//        guard let profile = try? await CloudKitManager.shared.getFriendUserRecord(id: forFriendID) else { return }
+//        Task {
+//            profile[OKGNProfile.kDeleteList] = nil
+//            
+//            Task {
+//                do {
+//                    let _ = try await CloudKitManager.shared.save(record: profile)
+//                    print("✅💜 Success CHANGING DELETE LIST!")
+//                } catch {
+//                    print("❌Failure CHANGING DELETE LIST!")
+//                    print("⚠️⚠️\(error)")
+//                }
+//            }
+//            
+//        }
+//    }
+    
 }
