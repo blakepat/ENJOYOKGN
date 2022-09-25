@@ -14,6 +14,7 @@ struct AddFriendModalView: View {
     
     @State var users = [OKGNProfile]()
     @State var cursor: CKQueryOperation.Cursor?
+    @State var requests: [CKRecord.Reference]?
     
     var body: some View {
         ZStack {
@@ -21,6 +22,7 @@ struct AddFriendModalView: View {
                 ForEach(0..<users.count, id: \.self) { index in
                     
                     let user = users[index]
+                    let alreadyRequested = requests?.contains(CKRecord.Reference(recordID: user.id, action: .none)) ?? false
                     
                     HStack {
                         Image(uiImage: user.avatar.convertToUIImage(in: .square))
@@ -33,16 +35,24 @@ struct AddFriendModalView: View {
                         Spacer()
                         
                         Button {
-                            
-                            addFriend(record: CKRecord(recordType: "OKGNProfile", recordID: user.id))
-                            
+                            if alreadyRequested {
+                                cancelRequest(request: user.id)
+                            } else {
+                                addFriend(record: CKRecord(recordType: "OKGNProfile", recordID: user.id))
+                                requests?.append(CKRecord.Reference(recordID: user.id, action: .none))
+                            }
                         } label: {
-                            Text("Add Friend")
+                            Text(alreadyRequested ? "Cancel" : "Add Friend")
                                 .contentShape(Rectangle())
                                 .padding(8)
-                                .background(Color.blue.clipShape(RoundedRectangle(cornerRadius: 8)))
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .stroke(.blue)
+                                )
+                                .background(alreadyRequested ? Color.white : Color.blue)
+                                .clipShape(RoundedRectangle(cornerRadius: 8))
                                 .font(.caption)
-                                .foregroundColor(.white)
+                                .foregroundColor(alreadyRequested ? .blue : .white)
                             
                                 
                         }
@@ -64,9 +74,13 @@ struct AddFriendModalView: View {
             }
         }
         .onAppear {
+
+            
             Task {
                 do {
                     guard let profile = CloudKitManager.shared.profile else { return }
+                    
+                    requests = profile.convertToOKGNProfile().requests
                     
                     (users, cursor)  = try await CloudKitManager.shared.getUsers(for: profile, passedCursor: nil)
                 } catch let err {
@@ -88,6 +102,7 @@ struct AddFriendModalView: View {
         
         Task {
             do {
+                userProfile.convertToOKGNProfile().requests.append(CKRecord.Reference(recordID: record.recordID, action: .none))
                 userProfile[OKGNProfile.kRequests] = [CKRecord.Reference(record: record, action: .none)]
                 self.friendManager.removeDeletedBeforeReAdding(follower: record)
                 
@@ -103,8 +118,26 @@ struct AddFriendModalView: View {
         }
     }
     
-    
-    
+
+    func cancelRequest(request: CKRecord.ID) {
+        guard let userProfile = CloudKitManager.shared.profile else { return }
+
+        Task {
+            do {
+                let requestsWithoutCancelled = userProfile.convertToOKGNProfile().requests.filter({ $0.recordID != request })
+                userProfile[OKGNProfile.kRequests] = requestsWithoutCancelled
+                self.requests = requestsWithoutCancelled
+                do {
+                    let _ = try await CloudKitManager.shared.save(record: userProfile)
+                    print("✅✅ friend added!")
+                } catch {
+                    
+                    print("❌❌ failed adding friend")
+                    print(error)
+                }
+            }
+        }
+    }
 }
 
 struct AddFriendModalView_Previews: PreviewProvider {

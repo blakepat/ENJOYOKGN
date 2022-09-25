@@ -141,6 +141,10 @@ final class FriendReviewFeedModel: ObservableObject {
                                                                                   dismissButton: .cancel(Text("Decline"), action: {
                                     //🥶 TO-DO: Decline friend request
                                     print("🥶 Friend Request Declined")
+                                    Task {
+                                        await self.declineRequest(request: follower.recordID)
+                                    }
+                                    
 
                                 }))
                             } else {
@@ -152,33 +156,31 @@ final class FriendReviewFeedModel: ObservableObject {
                     print("❌ Error creating friend requests")
                 }
             }
-            
-//            CloudKitManager.shared.getFollowRequests(for: CKRecord.Reference(recordID: profileRecordID, action: .none)) { result in
-//                switch result {
-//                case .success(let followRequests):
-//                    print("✅ Success getting follow requests")
-//                    DispatchQueue.main.async { [self] in
-//                        for follower in followRequests {
-//
-//
-//                            twoButtonAlertItem = TwoButtonAlertItem(title: Text("Follow Request!"),
-//                                                                              message: Text("\(follower.convertToOKGNProfile().name) has requested to follow you!"),
-//                                                                    acceptButton: .default(Text("Accept"), action: { [self] in
-//                                friendManager.removeRequestAfterAccepting(follower: follower)
-//                                friendManager.acceptFollower(follower)
-//                            }),
-//                                                                              dismissButton: .cancel(Text("Decline"), action: {
-//                                //🥶 TO-DO: Decline friend request
-//                                print("🥶 Friend Request Declined")
-//
-//                            }))
-//                        }
-//                    }
-//
-//                case .failure(_):
-//                    print("❌ Error creating friend requests")
-//                }
-//            }
         }
     }
+    
+    
+    func declineRequest(request: CKRecord.ID) async {
+        
+        guard let friendProfile = try? await CloudKitManager.shared.getFriendUserRecord(id: request) else { return }
+        
+        Task {
+            do {
+                
+                let friendsRequestsWithout = friendProfile.convertToOKGNProfile().requests.filter({ $0.recordID != CloudKitManager.shared.profileRecordID })
+                friendProfile[OKGNProfile.kRequests] = friendsRequestsWithout
+            
+                do {
+                    let _ = try await CloudKitManager.shared.save(record: friendProfile)
+                    print("✅✅ request decline and removed!")
+                } catch {
+                    
+                    print("❌❌ failed request decline and removed")
+                    print(error)
+                }
+            }
+        }
+        
+    }
+    
 }
