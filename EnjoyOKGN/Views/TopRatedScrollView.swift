@@ -50,7 +50,9 @@ struct TopRatedScrollView: View {
                                     
                                 }
                                 
+                                
                                 ReviewCell(review: review)
+                                    .frame(width: 300)
                                     .padding(.horizontal, 4)
                                     .onTapGesture {
                                         detailedReviewToShow = review
@@ -65,52 +67,45 @@ struct TopRatedScrollView: View {
             }
             .padding(.horizontal, 8)
             .padding(.top, 46)
-            
-            
-            VStack(alignment: .leading) {
-                
-                HStack(alignment: .top) {
-                    Text("Top Rated Visits: ")
-                        .foregroundColor(.white)
-                        .font(.title2)
-                        .fontWeight(.semibold)
-                        .padding(.top, 6)
-                        
-                    
-                    DropDown(category: $topRatedFilter)
-                    
-                    Spacer()
-                    
-                        
-                }
-                .padding(.horizontal, 12)
-                .onTapGesture {
-                    isShowingTopRatedFilterAlert.toggle()
-                }
-                .alert("See Top Rated For:", isPresented: $isShowingTopRatedFilterAlert) {
-                    ForEach(categories, id: \.self) { category in
-                        Button {
-                            topRatedFilter = category
-                        } label: {
-                            Text(category.description)
-                        }
-                    }
-                    Button("All") {
-                        topRatedFilter = nil
-                    }
-                    
-                    Button("Cancel", role: .cancel) {
-                        isShowingTopRatedFilterAlert = false
-                    }
-                }
-                
-                Spacer()
-                
-            }
-            
-            
+
         }
     }
 }
 
-
+//
+//VStack(alignment: .leading) {
+//
+//    HStack(alignment: .top) {
+//        Text("Top Rated Visits: ")
+//            .foregroundColor(.white)
+//            .font(.title2)
+//            .fontWeight(.semibold)
+//            .padding(.top, 6)
+//
+//
+//        DropDown(category: $topRatedFilter)
+//
+//        Spacer()
+//
+//
+//    }
+//    .padding(.horizontal, 12)
+//    .onTapGesture {
+//        isShowingTopRatedFilterAlert.toggle()
+//    }
+//    .alert("See Top Rated For:", isPresented: $isShowingTopRatedFilterAlert) {
+//        ForEach(categories, id: \.self) { category in
+//            Button {
+//                topRatedFilter = category
+//            } label: {
+//                Text(category.description)
+//            }
+//        }
+//        Button("All") {
+//            topRatedFilter = nil
+//        }
+//
+//        Button("Cancel", role: .cancel) {
+//            isShowingTopRatedFilterAlert = false
+//        }
+//    }
