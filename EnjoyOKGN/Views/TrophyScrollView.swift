@@ -28,6 +28,6 @@ struct TrophyScrollView: View {
                 ProgressBar(progress: activityCount, award: AwardTypes.activityAward)
             }
         }
-        .frame(height: 200)
+        .frame(height: 140)
     }
 }

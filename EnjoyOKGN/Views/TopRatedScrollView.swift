@@ -46,8 +46,10 @@ struct TopRatedScrollView: View {
                                             
                                         Spacer()
                                     }
-                                    .padding(.leading, 8)
+                                    .padding(.leading, 32)
                                     
+                                } else {
+                                    Spacer(minLength: 20)
                                 }
                                 
                                 
@@ -66,7 +68,7 @@ struct TopRatedScrollView: View {
                 }
             }
             .padding(.horizontal, 8)
-            .padding(.top, 46)
+//            .padding(.top, 46)
 
         }
     }
