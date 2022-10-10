@@ -7,6 +7,7 @@
 
 import CloudKit
 import SwiftUI
+import MapKit
 
 enum ProfileContext { case create, update }
 
@@ -17,7 +18,14 @@ final class HomePageViewModel: ObservableObject {
     @ObservedObject var profileManager = ProfileManager()
     
     @Published var isShowingPhotoPicker = false
-    @Published var profile: OKGNProfile?
+    @Published var profile: OKGNProfile? {
+        willSet {
+            Task {
+                await subscribeToNotifications(profile: newValue!)
+            }
+            
+        }
+    }
     @Published var existingProfileRecord: CKRecord? {
         didSet {
             profileContext = .update
@@ -27,6 +35,10 @@ final class HomePageViewModel: ObservableObject {
     
     @State var usernameIsValid = false
     @State var usernameText = ""
+    
+    //carousel variables
+    @State var currentIndex: Int = 0
+    var category: Category?
     
     @Published var profileContext: ProfileContext = .create
     
@@ -57,6 +69,7 @@ final class HomePageViewModel: ObservableObject {
         }
     }
 
+    
     func createProfile() {
         //Create our CKRecord from the profile view
         let profileRecord = createProfileRecord()
@@ -90,9 +103,7 @@ final class HomePageViewModel: ObservableObject {
             do {
                 
                 guard let userRecord = CloudKitManager.shared.userRecord else {
-                    // show an alert
                     print("❌ No user record found when calling getProfile()")
-//                    alertItem = AlertContext.cannotRetrieveProfile
                     return
                 }
                 
@@ -120,7 +131,6 @@ final class HomePageViewModel: ObservableObject {
     
     func updateProfile() {
         guard let profileRecord = existingProfileRecord else {
-            //TO-DO: create alert for unable to get profile
             return
         }
         
@@ -155,7 +165,6 @@ final class HomePageViewModel: ObservableObject {
            let _ = try await CloudKitManager.shared.batchSave(records: reviewsToUpdate)
         }
     }
-    
     
     
     private func createProfileRecord() -> CKRecord {
@@ -203,6 +212,47 @@ final class HomePageViewModel: ObservableObject {
         
         keyWindow?.rootViewController?.present(alert, animated: true) {
             
+        }
+    }
+    
+    
+    func requestNotifcationPermission() {
+        
+        let options: UNAuthorizationOptions = [.alert, .sound, .badge]
+        UNUserNotificationCenter.current().requestAuthorization(options: options) { success, error in
+            if let error = error {
+                print("⚠️ \(error)")
+            } else if success {
+                print("✅💜 notification permission success!")
+                DispatchQueue.main.async {
+                    UIApplication.shared.registerForRemoteNotifications()
+                }
+            } else {
+                print("notification big failure")
+            }
+        }
+    }
+    
+    
+    func subscribeToNotifications(profile: OKGNProfile) async {
+        
+        let predicate = NSPredicate(format: "name == %@", profile.name)
+        let subscription = CKQuerySubscription(recordType: "OKGNProfile", predicate: predicate, subscriptionID: "friendRequestAddedToDatabase", options: .firesOnRecordUpdate)
+        
+        let notification = CKSubscription.NotificationInfo()
+        notification.title = "Friend Request"
+        notification.alertBody = "Open friend feed in app to see new friend request from \(profile.name)!"
+        notification.soundName = "default"
+            
+        subscription.notificationInfo = notification
+
+        
+        CKContainer.default().publicCloudDatabase.save(subscription) { returnedSub, returnedError in
+            if let error = returnedError {
+                print(error)
+            } else {
+                print("💜✅ sucessfully subscribed to notfications")
+            }
         }
     }
 }

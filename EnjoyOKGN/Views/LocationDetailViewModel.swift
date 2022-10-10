@@ -27,18 +27,12 @@ final class LocationDetailViewModel: ObservableObject {
     @Published var isFavourited = false
     @Published var showFriendsReviews = false
     
-    
-    //, reviews: [OKGNReview],  friendsReviews: [OKGNReview]
     init(location: Binding<OKGNLocation?>) {
         self._location = location
-//        self.reviews = reviews
-//        self.friendsReviews = friendsReviews
-//        self.reviews = []
-//        self.friendsReviews = []
     }
     
+    
     func getUserReviewsForThisLocation() {
-        
         guard let id = CloudKitManager.shared.profileRecordID else { return }
         
         Task {
@@ -48,9 +42,6 @@ final class LocationDetailViewModel: ObservableObject {
             }
         }
     }
-        
-    
-    
     
     
     func getDirectionsToLocation() {
@@ -80,9 +71,7 @@ final class LocationDetailViewModel: ObservableObject {
     }
     
     func checkIfLocationIsFavourited() {
-        
         guard let profileRecord = CloudKitManager.shared.profile else {
-            //TO-DO: create alert for unable to get profile
             return
         }
         
@@ -91,14 +80,11 @@ final class LocationDetailViewModel: ObservableObject {
         } else {
             isFavourited = false
         }
-        
     }
     
     
     @MainActor func favouriteLocation() {
-        
         guard let profileRecord = CloudKitManager.shared.profile else {
-            //TO-DO: create alert for unable to get profile
             return
         }
         
@@ -119,9 +105,7 @@ final class LocationDetailViewModel: ObservableObject {
     
     
     func unfavouriteLocation() {
-        
         guard let profileRecord = CloudKitManager.shared.profile else {
-            //TO-DO: create alert for unable to get profile
             return
         }
         

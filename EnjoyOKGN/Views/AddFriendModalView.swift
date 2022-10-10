@@ -41,7 +41,7 @@ struct AddFriendModalView: View {
                                 if alreadyRequested {
                                     cancelRequest(request: user.id)
                                 } else {
-                                    addFriend(record: CKRecord(recordType: "OKGNProfile", recordID: user.id))
+                                    addFriend(friendRecord: CKRecord(recordType: "OKGNProfile", recordID: user.id))
                                     requests?.append(CKRecord.Reference(recordID: user.id, action: .none))
                                 }
                             } label: {
@@ -98,6 +98,7 @@ struct AddFriendModalView: View {
         }
     }
     
+    
     var searchResults: [OKGNProfile] {
 
        if searchText.isEmpty {
@@ -108,24 +109,24 @@ struct AddFriendModalView: View {
        }
     }
     
-    func addFriend(record: CKRecord) {
-        
-        guard let userProfile = CloudKitManager.shared.profile else {
-            //TO-DO: create alert for unable to get profile
-            return
-        }
-        
+    
+    func addFriend(friendRecord: CKRecord) {
         Task {
             do {
-//                userProfile.convertToOKGNProfile().requests.append(CKRecord.Reference(recordID: record.recordID, action: .none))
-                userProfile[OKGNProfile.kRequests] = [CKRecord.Reference(record: record, action: .none)]
-                self.friendManager.removeDeletedBeforeReAdding(follower: record)
+                
+                guard let friendProfile = try? await CloudKitManager.shared.getFriendUserRecord(id: friendRecord.recordID), let profileRecord = CloudKitManager.shared.profileRecordID else { return }
+                let friendOKGNProfile = friendProfile.convertToOKGNProfile()
+
+                var friendsExistingRequests = friendOKGNProfile.requests
+                friendsExistingRequests.append(CKRecord.Reference(recordID: profileRecord, action: .none))
+                
+                friendProfile[OKGNProfile.kRequests] = friendsExistingRequests
                 
                 do {
-                    let _ = try await CloudKitManager.shared.save(record: userProfile)
+                    let _ = try await CloudKitManager.shared.save(record: friendProfile)
                     print("✅✅ friend added!")
                 } catch {
-                    cancelRequest(request: record.recordID)
+                    cancelRequest(request: friendRecord.recordID)
                     alertItem = AlertContext.cannotRetrieveProfile
                     print("❌❌ failed adding friend")
                     print(error)
@@ -136,15 +137,17 @@ struct AddFriendModalView: View {
     
 
     func cancelRequest(request: CKRecord.ID) {
-        guard let userProfile = CloudKitManager.shared.profile else { return }
-
         Task {
             do {
-                let requestsWithoutCancelled = userProfile.convertToOKGNProfile().requests.filter({ $0.recordID != request })
-                userProfile[OKGNProfile.kRequests] = requestsWithoutCancelled
-                self.requests = requestsWithoutCancelled
+                guard let friendProfile = try? await CloudKitManager.shared.getFriendUserRecord(id: request), let profileRecord = CloudKitManager.shared.profileRecordID else { return }
+                let friendOKGNProfile = friendProfile.convertToOKGNProfile()
+                
+                let friendsRequestsWithoutCancelled = friendOKGNProfile.requests.filter({ $0.recordID != profileRecord })
+                friendProfile[OKGNProfile.kRequests] = friendsRequestsWithoutCancelled
+                self.requests = self.requests?.filter({ $0.recordID != request })
+                
                 do {
-                    let _ = try await CloudKitManager.shared.save(record: userProfile)
+                    let _ = try await CloudKitManager.shared.save(record: friendProfile)
                     print("✅✅ friend added!")
                 } catch {
                     

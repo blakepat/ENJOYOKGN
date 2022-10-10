@@ -12,7 +12,6 @@ import MapKit
 
 struct NewMapView: UIViewRepresentable {
     
-//    @Binding var centerCoordinate: CLLocationCoordinate2D
     @Binding var centerCoordinate: MKCoordinateRegion
     @Binding var showDetailedView: Bool
     @Binding var selectedPlace: OKGNLocation?
@@ -28,10 +27,10 @@ struct NewMapView: UIViewRepresentable {
             self.parent = parent
         }
         
+        
         func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
             parent.centerCoordinate.center = mapView.centerCoordinate
         }
-        
         
         
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -51,6 +50,7 @@ struct NewMapView: UIViewRepresentable {
             return annotationView
         }
         
+        
         func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
             guard let placemark = view.annotation as? MKPointAnnotation else { return }
             parent.selectedPlace = parent.okgnLocations.first {$0.name == placemark.title ?? "" }
@@ -63,6 +63,7 @@ struct NewMapView: UIViewRepresentable {
         Coordinator(self)
     }
     
+    
     func makeUIView(context: Context) -> MKMapView {
         let mapView = MKMapView()
         mapView.pointOfInterestFilter = .excludingAll
@@ -73,6 +74,7 @@ struct NewMapView: UIViewRepresentable {
 
         return mapView
     }
+    
     
     func updateUIView(_ uiView: MKMapView, context: Context) {
         
@@ -92,8 +94,8 @@ struct NewMapView: UIViewRepresentable {
     }
 }
 
+
 extension MKPointAnnotation {
-    
     static var example: MKPointAnnotation {
         let annotation = MKPointAnnotation()
         annotation.title = "London"
@@ -104,19 +106,10 @@ extension MKPointAnnotation {
 }
 
 
-//
-//struct NewMapView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        NewMapView(centerCoordinate: .constant(MKPointAnnotation.example.coordinate ), annotations: [MKPointAnnotation.example])
-//    }
-//}
-
-
 
 class LocationMarkerView: MKMarkerAnnotationView {
   override var annotation: MKAnnotation? {
     willSet {
-
         guard let marker = newValue as? MKPointAnnotation else {
             return
         }

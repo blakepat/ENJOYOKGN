@@ -17,9 +17,12 @@ struct CreateReviewView: View {
     @State var caption: String = ""
     @State var selectedDate: Date = Date()
     @State var locations: [OKGNLocation]
+    @State var locationNamesIdsCategory = [(CKRecord.ID, String, String)]()
     @State var firstNumber = 0
     @State var secondNumber = 0
     @State var selectedLocation: OKGNLocation?
+    @State var selectedLocationId: CKRecord.ID?
+    @State var selectedLocationCategory: String?
     @State var selectedImage: UIImage = PlaceholderImage.square
     @State var alertItem: AlertItem?
     @State var isShowingPhotoPicker = false
@@ -70,31 +73,30 @@ struct CreateReviewView: View {
                             .font(.callout)
                             .lineLimit(1)
                             .minimumScaleFactor(0.75)
-                            .foregroundColor(returnCategoryFromString(selectedLocation?.category ?? "Activity").color)
+                            .foregroundColor(returnCategoryFromString(selectedLocationCategory ?? "Activity").color)
                         
                         Spacer()
                     }
                     .padding(.horizontal, 16)
                     
-                    List {
-                        ForEach(categories, id: \.self) { category in
-                            Section(header: Text(category.description).foregroundColor(.gray)) {
-                                ForEach(locations.filter({$0.category == category.description})) { location in
-                                    Button {
-                                        locationName = location.name
-                                        selectedLocation = location
-                                    } label: {
-                                        Text(location.name)
-                                            .foregroundColor(.white)
-                                            .onTapGesture {
-                                                locationName = location.name
-                                                selectedLocation = location
-                                            }
+                    List {                        
+                        ForEach(locationNamesIdsCategory, id: \.0) { location in
+                            Button {
+                                locationName = location.1
+                                selectedLocationId = location.0
+                                selectedLocationCategory = location.2
+                            } label: {
+                                Text(location.1)
+                                    .foregroundColor(.white)
+                                    .onTapGesture {
+                                        locationName = location.1
+                                        selectedLocationId = location.0
+                                        selectedLocationCategory = location.2
                                     }
-                                    .listRowBackground(VisualEffectView(effect: UIBlurEffect(style: .systemThinMaterialDark)))
-                                }
                             }
+                            .listRowBackground(VisualEffectView(effect: UIBlurEffect(style: .systemThinMaterialDark)))
                         }
+                        
                     }
                     .clipShape(RoundedRectangle(cornerRadius: 16))
                     .frame(height: 140)
@@ -123,6 +125,7 @@ struct CreateReviewView: View {
                     
                     TextEditor(text: $caption)
                         .frame(height: 50)
+                        .foregroundColor(.white)
                         .overlay { RoundedRectangle(cornerRadius: 8).stroke(Color.gray, lineWidth: 1) }
                         .accessibilityHint(Text("Summerize your experience in a fun and short way. (20 character maximum"))
                         .background(Color(white: 0.35, opacity: 0.3))
@@ -227,7 +230,7 @@ struct CreateReviewView: View {
             .task {
                 do {
                     showLoadingView = true
-                    locations = try await CloudKitManager.shared.getLocations() { (returnedBool) in
+                    locationNamesIdsCategory = try await CloudKitManager.shared.getLocationNames() { returnedBool in
                         showLoadingView = returnedBool
                     }
                 } catch {
@@ -248,9 +251,7 @@ struct CreateReviewView: View {
                     }
                 }
                 .background(Color.black.opacity(0.45)).edgesIgnoringSafeArea(.all)
-                
             }
-            
         }
         .onTapGesture {
             hideKeyboard()
@@ -258,48 +259,48 @@ struct CreateReviewView: View {
     }
     
     func createReview() {
-        //retrieve the OKGN Profile
-        
         CKContainer.default().accountStatus { (accountStatus, error) in
             if accountStatus == .available {
                 if checkReviewIsProperlySet()  {
                     guard let profileRecordID = CloudKitManager.shared.profileRecordID else {
                         alertItem = AlertContext.notSignedIntoProfile
                         return
-                        
                     }
                     
                     Task {
                         do {
-                            let _ = try await CloudKitManager.shared.fetchRecord(with: profileRecordID)
                             let reviewRecord = CKRecord(recordType: RecordType.review)
+                            
+                            let record = try await CloudKitManager.shared.fetchRecord(with: profileRecordID)
+                            DispatchQueue.main.async { [self] in
+                                print("✅ success getting profile")
+                                
+                                CloudKitManager.shared.profile = record
+                                let importedProfile = OKGNProfile(record: record)
+                                cacheManager.addAvatarToCache(avatar: importedProfile.createProfileImage())
+                                cacheManager.addNameToCache(name: importedProfile.name)
+                            }
                             //Create a reference to the location
-                            if !locations.isEmpty {
+                            if !locationNamesIdsCategory.isEmpty {
                                 
                                 print("trying to create record")
                                 
-                                reviewRecord[OKGNReview.kLocation] = CKRecord.Reference(recordID: locations.first(where: {$0.name == locationName})!.id, action: .none)
-                                //create a rereference to profile
-                                reviewRecord[OKGNReview.kReviewer] = CKRecord.Reference(recordID: profileRecordID, action: .none)
-                                reviewRecord[OKGNReview.kCaption] = caption
-                                reviewRecord[OKGNReview.kPhoto] = selectedImage.convertToCKAsset(path: "selectedPhoto")
-                                reviewRecord[OKGNReview.kRating] = "\(firstNumber).\(secondNumber)"
-                                reviewRecord[OKGNReview.kDate] = selectedDate
-                                reviewRecord[OKGNReview.klocationName] = locationName
-                                reviewRecord[OKGNReview.klocationCategory] = selectedLocation?.category.description
-                                reviewRecord[OKGNReview.kReviewerName] = cacheManager.getNameFromCache()
-                                reviewRecord[OKGNReview.kReviewerAvatar] = cacheManager.getAvatarFromCache()?.convertToCKAsset(path: "profileAvatar")
-                                
-//                                reviewManager.userReviews.append(reviewRecord.convertToOKGNReview())
-//
-//                                reviewRecord[OKGNReview.kRanking] = await setRankingForReview(id: reviewRecord.recordID, categoryName: selectedLocation?.category.description ?? "")
-                                
+                                if let selectedLocationId = selectedLocationId {
+                                    reviewRecord[OKGNReview.kLocation] = CKRecord.Reference(recordID: selectedLocationId, action: .none)
+                                    //create a rereference to profile
+                                    reviewRecord[OKGNReview.kReviewer] = CKRecord.Reference(recordID: profileRecordID, action: .none)
+                                    reviewRecord[OKGNReview.kCaption] = caption
+                                    reviewRecord[OKGNReview.kPhoto] = selectedImage.convertToCKAsset(path: "selectedPhoto")
+                                    reviewRecord[OKGNReview.kRating] = "\(firstNumber).\(secondNumber)"
+                                    reviewRecord[OKGNReview.kDate] = selectedDate
+                                    reviewRecord[OKGNReview.klocationName] = locationName
+                                    reviewRecord[OKGNReview.klocationCategory] = selectedLocation?.category.description
+                                    reviewRecord[OKGNReview.kReviewerName] = cacheManager.getNameFromCache()
+                                    reviewRecord[OKGNReview.kReviewerAvatar] = cacheManager.getAvatarFromCache()?.convertToCKAsset(path: "profileAvatar")
+                                }
                             } else {
-                                //To-do: show  alert that was unable to get locations
                                 print("unable to get locations")
                             }
-                            
-                            //save review to cloudkit
                             do {
                                 
                                 if let _ = try await CloudKitManager.shared.batchSave(records: [reviewRecord]) {
@@ -320,12 +321,11 @@ struct CreateReviewView: View {
                 }
             } else {
                 print("⚠️ Error creating review / checking icloud status")
+                alertItem = AlertContext.reviewCreationFailed
             }
         }
-        
-        
-         
     }
+    
     
     func resetReviewPage() {
         locationName = ""
@@ -344,9 +344,17 @@ struct CreateReviewView: View {
             return false
         }
     }
+}
     
     
-    
+
+
+
+
+
+
+
+//OLD CODE FOR ADDING RANKING ON REVIEW CREATION
     
 //    func setRankingForReview(id: CKRecord.ID, categoryName: String) async -> String {
 //        
@@ -394,7 +402,7 @@ struct CreateReviewView: View {
 //            }
 //        }
 //    }
-}
+
 
 //struct CreateReviewView_Previews: PreviewProvider {
 //    static var previews: some View {

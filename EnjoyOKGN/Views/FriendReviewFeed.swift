@@ -25,67 +25,12 @@ struct FriendReviewFeed: View {
     var body: some View {
         NavigationView {
             ZStack {
-                
                 Color.OKGNDarkGray.ignoresSafeArea()
                 
-                ScrollView {
-                    LazyVStack {
-                        ForEach(reviewManager.allFriendsReviews.indices, id: \.self) { reviewIndex in
-
-                            let review = reviewManager.allFriendsReviews[reviewIndex]
-
-                            ReviewCell(review: review)
-                                .padding(.bottom, 500)
-                                .transition(.move(edge: .trailing))
-                                .onTapGesture {
-                                    withAnimation {
-                                        viewModel.isShowingDetailedModalView = true
-                                        viewModel.detailedReviewToShow = review
-                                    }
-                                }
-                                .onAppear {
-                                    if reviewIndex == reviewManager.allFriendsReviews.count - 1{
-                                        reviewManager.getAllFriendsReviews()
-                                    }
-                                }
-                        }
-                        .listRowBackground(Color.OKGNDarkGray)
-                    }
-                    .listStyle(.plain)
-                    .offset(x: viewModel.isShowingFriendsList ? -screen.width : 0)
-                }
-                .alert(item: $friendManager.alertItem, content: { alertItem in
-                    Alert(title: alertItem.title, message: alertItem.message, dismissButton: alertItem.dismissButton)
-                })
-                
-                
+                reviewFeed
     
-                List {
-                    ForEach(friendManager.friends) { friend in
-                        NavigationLink(destination: FriendProfileView(friend: friend)) {
-                            HStack {
-                                FriendCell(profile: friend, userReviews: viewModel.friendReviews?.filter({ $0.reviewerName == friend.name }) ?? [])
-            
-                            }
-                        }
-                    }
-                    .onDelete { index in
-                        friendManager.deleteFriends(index: index)
-                    }
-                    .listRowBackground(Color.OKGNDarkGray)
-                }
-                .alert(item: $viewModel.twoButtonAlertItem, content: { alertItem in
-                    Alert(title: alertItem.title, message: alertItem.message, primaryButton: alertItem.acceptButton, secondaryButton: alertItem.dismissButton)
-                })
+                friendList
 
-                .listStyle(.plain)
-                .offset(x: viewModel.isShowingFriendsList ? 0 : screen.width)
-                
-                //.sorted { viewModel.reviewsSortedByRating ? $0.rating > $1.rating : $0.date > $1.date }
-
-                    
-                
-                
                 if viewModel.isShowingDetailedModalView {
                     Color(.systemBackground)
                         .ignoresSafeArea(.all)
@@ -108,15 +53,11 @@ struct FriendReviewFeed: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         if viewModel.isShowingFriendsList {
-                            //Add friend
                             viewModel.isShowingAddFriendAlert = true
-//                            viewModel.showFriendSearchView()
                         } else {
-                            //display top restaurants
+                            //TO:DO - fix sort by rating
                             viewModel.reviewsSortedByRating.toggle()
                         }
-                        
-                        
                     } label: {
                         Image(systemName: viewModel.isShowingFriendsList ? "plus" : viewModel.reviewsSortedByRating ? "calendar.badge.clock" : "list.number")
                             .foregroundColor(Color.OKGNDarkYellow)
@@ -151,15 +92,71 @@ struct FriendReviewFeed: View {
             }
         }
         .background(Color.OKGNDarkGray)
-        .navigationViewStyle(StackNavigationViewStyle()) // This is called so there is issues with constraints in console
+        .navigationViewStyle(StackNavigationViewStyle()) // This is called so there isnt issues with constraints in console
         .sheet(isPresented: $viewModel.isShowingAddFriendAlert) {
             AddFriendModalView()
         }
     }
 }
 
-//struct FriendReviewFeed_Previews: PreviewProvider {
-//    static var previews: some View {
-//        FriendReviewFeed(reviewManager: ReviewManager())
-//    }
-//}
+
+
+extension FriendReviewFeed {
+    
+    private var friendList: some View {
+        List {
+            ForEach(friendManager.friends) { friend in
+                NavigationLink(destination: FriendProfileView(friend: friend)) {
+                    HStack {
+                        FriendCell(profile: friend, userReviews: viewModel.friendReviews?.filter({ $0.reviewerName == friend.name }) ?? [])
+    
+                    }
+                }
+            }
+            .onDelete { index in
+                friendManager.deleteFriends(index: index)
+            }
+            .listRowBackground(Color.OKGNDarkGray)
+        }
+        .alert(item: $viewModel.twoButtonAlertItem, content: { alertItem in
+            Alert(title: alertItem.title, message: alertItem.message, primaryButton: alertItem.acceptButton, secondaryButton: alertItem.dismissButton)
+        })
+        .listStyle(.plain)
+        .offset(x: viewModel.isShowingFriendsList ? 0 : screen.width)
+    }
+    
+    
+    private var reviewFeed: some View {
+        ScrollView {
+            LazyVStack {
+                ForEach(reviewManager.allFriendsReviews.indices, id: \.self) { reviewIndex in
+
+                    let review = reviewManager.allFriendsReviews[reviewIndex]
+
+                    ReviewCell(review: review, showTrophy: false)
+                        .padding(.horizontal, 8)
+                        .transition(.move(edge: .trailing))
+                        .onTapGesture {
+                            withAnimation {
+                                viewModel.isShowingDetailedModalView = true
+                                viewModel.detailedReviewToShow = review
+                            }
+                        }
+                        .onAppear {
+                            if reviewIndex == reviewManager.allFriendsReviews.count - 1{
+                                reviewManager.getAllFriendsReviews()
+                            }
+                        }
+                }
+                .listRowBackground(Color.OKGNDarkGray)
+            }
+            .listStyle(.plain)
+            .offset(x: viewModel.isShowingFriendsList ? -screen.width : 0)
+        }
+        .alert(item: $friendManager.alertItem, content: { alertItem in
+            Alert(title: alertItem.title, message: alertItem.message, dismissButton: alertItem.dismissButton)
+        })
+    }
+    
+    
+}

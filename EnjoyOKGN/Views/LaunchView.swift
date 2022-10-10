@@ -10,7 +10,6 @@ import SwiftUI
 struct LaunchView: View {
     
     @Binding var showLaunchScreen: Bool
-//    @State var showLoadingText = false
     @State var counter = 0
     @State var loops = 0
     private let timer = Timer.publish(every: 0.2, on: .main, in: .common).autoconnect()

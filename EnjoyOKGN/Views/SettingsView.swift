@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CloudKit
 
 struct SettingsView: View {
     
@@ -23,6 +24,7 @@ struct SettingsView: View {
         UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor : UIColor.white]
         }
     
+    
     var body: some View {
 
         NavigationView {
@@ -32,6 +34,7 @@ struct SettingsView: View {
                 List {
                     aboutSection
                     emailSection
+                    notificationSection
                 }
                 .navigationTitle("Settings")
                 .listStyle(.grouped)
@@ -46,16 +49,9 @@ struct SettingsView: View {
     }
 }
 
-struct SettingsView_Previews: PreviewProvider {
-    static var previews: some View {
-        SettingsView()
-    }
-}
-
 
 
 extension SettingsView {
-    
     
     private var aboutSection: some View {
         Section {
@@ -113,7 +109,7 @@ extension SettingsView {
     }
     
     
-    private var anotherSection: some View {
+    private var notificationSection: some View {
         Section {
             VStack(alignment: .leading) {
                 Image("BronzeTrophy")
@@ -121,17 +117,82 @@ extension SettingsView {
                     .scaledToFit()
                     .frame(width: 60, height: 60)
                     .clipShape(RoundedRectangle(cornerRadius: 20))
-                Text("This app was created by me, Blake Pat. I am an aspiring iOS Developer! If you enjoy using the app, want to support me in my journey, or just want to support my caffeine addiction use the link below.")
+                Text("If you no longer wish to receive notifications from us (this includes friend requests) or if you wish to start receiving notifications:")
                     .font(.callout)
                     .fontWeight(.medium)
-                    .foregroundColor(Color.secondary)
+                    .foregroundColor(Color.gray)
             }
             .padding(.vertical)
             
-            Link("Support coffee addiction ☕️", destination: coffeeURL)
+            Button {
+                unsubscribeToNotfications()
+            } label: {
+                Text("Unsubscibe 🔕")
+            }
             
+            Button {
+                requestNotifcationPermission()
+                if let user = CloudKitManager.shared.userRecord {
+                    subscribeToNotifications(user: user)
+                }
+            } label: {
+                Text("Subscibe to notifications 🔔")
+            }
         } header: {
-            Text("About")
+            Text("Notifications")
+                .foregroundColor(.white)
+        }
+        .listRowBackground(Color(UIColor(named: "OKGNSecondaryDarkGray")!))
+    }
+    
+    func unsubscribeToNotfications() {
+        
+        CKContainer.default().publicCloudDatabase.delete(withSubscriptionID: "friendRequestAddedToDatabase") { returnedID, returnedError in
+            if let error = returnedError {
+                print(error)
+            } else {
+                print("✅ successfully unsubscibed!")
+            }
+        }
+    }
+    
+    func requestNotifcationPermission() {
+        
+        let options: UNAuthorizationOptions = [.alert, .sound, .badge]
+        UNUserNotificationCenter.current().requestAuthorization(options: options) { success, error in
+            if let error = error {
+                print("⚠️ \(error)")
+            } else if success {
+                print("✅💜 notification permission success!")
+                DispatchQueue.main.async {
+                    UIApplication.shared.registerForRemoteNotifications()
+                }
+            } else {
+                print("notification big failure")
+            }
+        }
+    }
+    
+    
+    func subscribeToNotifications(user: CKRecord) {
+        
+        let predicate = NSPredicate(value: true)
+        
+        let subscription = CKQuerySubscription(recordType: "OKGNProfile", predicate: predicate, subscriptionID: "friendRequestAddedToDatabase", options: .firesOnRecordUpdate)
+        
+        let notification = CKSubscription.NotificationInfo()
+        notification.title = "Friend Request"
+        notification.alertBody = "Open friend feed in app to see new friend request!"
+        notification.soundName = "default"
+        
+        subscription.notificationInfo = notification
+        
+        CKContainer.default().publicCloudDatabase.save(subscription) { returnedSub, returnedError in
+            if let error = returnedError {
+                print(error)
+            } else {
+                print("💜✅ sucessfully subscribed to notfications")
+            }
         }
     }
 }
