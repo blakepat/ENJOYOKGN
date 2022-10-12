@@ -98,20 +98,34 @@ final class ReviewManager: ObservableObject {
                 if location != nil {
                     (receivedReviews, self.cursor) = try await CloudKitManager.shared.getOneLocationFriendsReviews(for: friends.map { CKRecord.Reference(recordID: $0.recordID, action: .none) }, location: location!, passedCursor: cursor) 
                 } else {
+                    if cursor == nil && !self.allFriendsReviews.isEmpty { return }
                     (receivedReviews, self.cursor) = try await CloudKitManager.shared.getFriendsReviews(for: friends.map { CKRecord.Reference(recordID: $0.recordID, action: .none) }, passedCursor: self.cursor)
                 }
                 
-                let rankedReviews = self.getRankingForFriendsReviews(reviews: receivedReviews, friends: friends.map { $0.convertToOKGNProfile() })
-                
-                DispatchQueue.main.async {
-                    print("✅ FRIENDS REVIEWS SET")
-                    
-                    
-                    
-//                    self.allFriendsReviews = []
-                    self.allFriendsReviews.append(contentsOf: rankedReviews)
+                if self.cursor == nil && self.allFriendsReviews.isEmpty {
+                    let firstBatchFriendsReviewsReceived = receivedReviews
+                    DispatchQueue.main.async {
+                        self.allFriendsReviews = firstBatchFriendsReviewsReceived
+                    }
+                } else if self.cursor == nil {
+                    let allFriendsReviewsReceived = receivedReviews
+                    DispatchQueue.main.async {
+                        self.allFriendsReviews.append(contentsOf: allFriendsReviewsReceived)
+                    }
+                } else {
+                    let notAllFriendsReviews = receivedReviews
+                    DispatchQueue.main.async {
+                        self.allFriendsReviews.append(contentsOf: notAllFriendsReviews)
+                    }
                 }
                 
+//                let rankedReviews = self.getRankingForFriendsReviews(reviews: receivedReviews, friends: friends.map { $0.convertToOKGNProfile() })
+                
+//                DispatchQueue.main.async {
+//                    print("✅ FRIENDS REVIEWS SET")
+////                    self.allFriendsReviews = []
+//                    self.allFriendsReviews.append(contentsOf: receivedReviews)
+//                }
 //                CloudKitManager.shared.getFriendsReviews(for: friends.map { CKRecord.Reference(recordID: $0.recordID, action: .none) }) { result in
 //                    switch result {
 //                    case .success(let receivedReviews):

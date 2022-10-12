@@ -11,22 +11,13 @@ import CloudKit
 struct CreateReviewView: View {
     
     @EnvironmentObject var reviewManager: ReviewManager
+    @EnvironmentObject var locationManager: LocationManager
+    @ObservedObject var viewModel = CreateReviewViewModel()
     
     let cacheManager = CacheManager.instance
-    @State var locationName: String = ""
-    @State var caption: String = ""
+    
     @State var selectedDate: Date = Date()
     @State var locations: [OKGNLocation]
-    @State var locationNamesIdsCategory = [(CKRecord.ID, String, String)]()
-    @State var firstNumber = 0
-    @State var secondNumber = 0
-    @State var selectedLocation: OKGNLocation?
-    @State var selectedLocationId: CKRecord.ID?
-    @State var selectedLocationCategory: String?
-    @State var selectedImage: UIImage = PlaceholderImage.square
-    @State var alertItem: AlertItem?
-    @State var isShowingPhotoPicker = false
-    @State var showLoadingView = false
     
     init(date: Date, locations: [OKGNLocation]) {
         UITableView.appearance().backgroundColor = UIColor(white: 0.35, alpha: 0.3)
@@ -42,203 +33,51 @@ struct CreateReviewView: View {
             
             VStack {
                 
-                HStack {
-                    Text("Create Review")
-                        .bold()
-                        .font(.title)
-                        .foregroundColor(.white)
-                    
-                    Spacer()
-                }
-                .padding(.horizontal, 16)
+                createReviewTitle
                 
-                HStack {
-                    DatePicker("", selection: $selectedDate)
-                        .padding(.leading, 4)
-                        .datePickerStyle(CompactDatePickerStyle())
-                        .frame(width: screen.width / 2, height: 30, alignment: .leading)
-                        .colorScheme(.dark)
-                    
-                    Spacer()
-                }
+                reviewDateSelector
                 
-                VStack {
-                    HStack(spacing: 0) {
-                        Text("Location: ")
-                            .bold()
-                            .font(.callout)
-                            .foregroundColor(.white)
-                        
-                        Text(locationName)
-                            .font(.callout)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.75)
-                            .foregroundColor(returnCategoryFromString(selectedLocationCategory ?? "Activity").color)
-                        
-                        Spacer()
-                    }
-                    .padding(.horizontal, 16)
-                    
-                    List {                        
-                        ForEach(locationNamesIdsCategory, id: \.0) { location in
-                            Button {
-                                locationName = location.1
-                                selectedLocationId = location.0
-                                selectedLocationCategory = location.2
-                            } label: {
-                                Text(location.1)
-                                    .foregroundColor(.white)
-                                    .onTapGesture {
-                                        locationName = location.1
-                                        selectedLocationId = location.0
-                                        selectedLocationCategory = location.2
-                                    }
-                            }
-                            .listRowBackground(VisualEffectView(effect: UIBlurEffect(style: .systemThinMaterialDark)))
-                        }
-                        
-                    }
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
-                    .frame(height: 140)
-                    .padding(.horizontal, 16)
-                }
+                reviewLocationSelector
                 
-                VStack {
-                    HStack {
-                        Text("Caption: ")
-                            .bold()
-                            .font(.callout)
-                            .foregroundColor(.white)
-                            +
-                        Text("\(20 - caption.count)")
-                            .bold()
-                            .font(.callout)
-                            .foregroundColor(caption.count <= 20 ? .OKGNDarkYellow : Color(.systemPink))
-                            +
-                        Text(" Characters Remain")
-                            .font(.callout)
-                            .foregroundColor(.gray)
-                        
-                        Spacer()
-                        
-                    }
-                    
-                    TextEditor(text: $caption)
-                        .frame(height: 50)
-                        .foregroundColor(.white)
-                        .overlay { RoundedRectangle(cornerRadius: 8).stroke(Color.gray, lineWidth: 1) }
-                        .accessibilityHint(Text("Summerize your experience in a fun and short way. (20 character maximum"))
-                        .background(Color(white: 0.35, opacity: 0.3))
-                        
-                }
-                .padding(.horizontal, 16)
+                reviewCaption
                 
-                VStack {
-                    HStack {
-                        Text("Rating: ")
-                            .bold()
-                            .font(.callout)
-                            .foregroundColor(.white)
-                        Text((firstNumber > 0 || secondNumber > 0) && !(firstNumber == 10 && secondNumber > 0) ? "\(firstNumber).\(secondNumber)" : "Rate experience from 0.1 to 10.0")
-                            .font(.callout)
-                            .foregroundColor((firstNumber > 0 || secondNumber > 0) && !(firstNumber == 10 && secondNumber > 0) ? (firstNumber > 5 ? (firstNumber > 7 ? .OKGNLightGreen : .OKGNDarkYellow) : Color(.systemPink)) : .gray)
-                        
-                        Spacer()
-                    }
-                    
-                    GeometryReader { geometry in
-                        HStack {
-                            Picker(selection: self.$firstNumber, label: Text("")) {
-                                ForEach(0...10, id: \.self) { index in
-                                    Text("\(index)").tag(index)
-                                        .foregroundColor(.white)
-                                }
-                            }
-                            .pickerStyle(.wheel)
-                            .frame(width: geometry.size.width / 2, height: 80, alignment: .center)
-                            .compositingGroup()
-                            .clipped()
-                            
-                            Picker(selection: self.$secondNumber, label: Text("")) {
-                                ForEach(0...9, id: \.self) { index in
-                                    Text("\(index)").tag(index)
-                                        .foregroundColor(.white)
-                                }
-                            }
-                            .frame(width: geometry.size.width / 2, height: 80, alignment: .center)
-                            .pickerStyle(.wheel)
-                            .compositingGroup()
-                            .clipped()
-                        }
-                    }
-                    .frame(height: 100)
-                }
-                .padding(.horizontal, 16)
+                reviewRatingSelector
       
-                VStack {
-                    HStack {
-                        Text("Photo:")
-                            .bold()
-                            .font(.callout)
-                            .foregroundColor(.white)
-                        
-                        Text("Select a photo to remember your visit!")
-                            .font(.callout)
-                            .foregroundColor(.gray)
-                        
-                        Spacer()
-                    }
-                    
-                    HStack {
-                        Image(uiImage: selectedImage)
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 80 ,height: 80)
-                            .clipped()
-                            .clipShape(RoundedRectangle(cornerRadius: 16))
-                            .onTapGesture {
-                                isShowingPhotoPicker = true
-                            }
-                        
-                        Spacer()
-                    }
-                    
-                }
-                .padding(.horizontal, 16)
-                .padding(.bottom)
+                reviewPhotoPicker
                 
                 Spacer()
                 
-                Button {
-                    createReview()
-                } label: {
-                    Text("Create Review")
-                        .foregroundColor(.black)
-                        .frame(width: 260, height: 40)
-                        .background(Color.OKGNDarkYellow)
-                        .clipShape(RoundedRectangle(cornerRadius: 16))
-                }
+                createReviewButton
             }
             .padding(.bottom)
             .background(LinearGradient(gradient: Gradient(colors: [.OKGNDarkBlue, .black.opacity(0.5)]), startPoint: .top, endPoint: .bottom))
-            .alert(item: $alertItem, content: { alertItem in
+            .alert(item: $viewModel.alertItem, content: { alertItem in
                 Alert(title: alertItem.title, message: alertItem.message, dismissButton: alertItem.dismissButton)
             })
-            .sheet(isPresented: $isShowingPhotoPicker, content: {
-                PhotoPicker(image: $selectedImage)
+            .sheet(isPresented: $viewModel.isShowingPhotoPicker, content: {
+                PhotoPicker(image: $viewModel.selectedImage)
             })
-            .task {
-                do {
-                    showLoadingView = true
-                    locationNamesIdsCategory = try await CloudKitManager.shared.getLocationNames() { returnedBool in
-                        showLoadingView = returnedBool
+            .onReceive(locationManager.$locationNamesIdsCategory) { locationNamesIds in
+                viewModel.locationNamesIdsCategory = locationNamesIds
+            }
+            .onAppear {
+                Task {
+                    if locationManager.locationNamesIdsCategory.isEmpty {
+                        do {
+                            viewModel.showLoadingView = true
+                            locationManager.locationNamesIdsCategory = try await CloudKitManager.shared.getLocationNames() { returnedBool in
+                                DispatchQueue.main.async {
+                                    viewModel.locationNamesIdsCategory = locationManager.locationNamesIdsCategory
+                                    viewModel.showLoadingView = returnedBool
+                                }
+                            }
+                        } catch {
+                            print("❌ Error getting locations for create review screen")
+                        }
                     }
-                } catch {
-                    print("❌ Error getting locations for create review screen")
                 }
             }
-            
-            if showLoadingView {
+            if viewModel.showLoadingView {
                 GeometryReader { _ in
                     HStack {
                         Spacer()
@@ -263,7 +102,7 @@ struct CreateReviewView: View {
             if accountStatus == .available {
                 if checkReviewIsProperlySet()  {
                     guard let profileRecordID = CloudKitManager.shared.profileRecordID else {
-                        alertItem = AlertContext.notSignedIntoProfile
+                        viewModel.alertItem = AlertContext.notSignedIntoProfile
                         return
                     }
                     
@@ -281,20 +120,20 @@ struct CreateReviewView: View {
                                 cacheManager.addNameToCache(name: importedProfile.name)
                             }
                             //Create a reference to the location
-                            if !locationNamesIdsCategory.isEmpty {
+                            if !viewModel.locationNamesIdsCategory.isEmpty {
                                 
                                 print("trying to create record")
                                 
-                                if let selectedLocationId = selectedLocationId {
+                                if let selectedLocationId = viewModel.selectedLocationId {
                                     reviewRecord[OKGNReview.kLocation] = CKRecord.Reference(recordID: selectedLocationId, action: .none)
                                     //create a rereference to profile
                                     reviewRecord[OKGNReview.kReviewer] = CKRecord.Reference(recordID: profileRecordID, action: .none)
-                                    reviewRecord[OKGNReview.kCaption] = caption
-                                    reviewRecord[OKGNReview.kPhoto] = selectedImage.convertToCKAsset(path: "selectedPhoto")
-                                    reviewRecord[OKGNReview.kRating] = "\(firstNumber).\(secondNumber)"
+                                    reviewRecord[OKGNReview.kCaption] = viewModel.caption
+                                    reviewRecord[OKGNReview.kPhoto] = viewModel.selectedImage.convertToCKAsset(path: "selectedPhoto")
+                                    reviewRecord[OKGNReview.kRating] = "\(viewModel.firstNumber).\(viewModel.secondNumber)"
                                     reviewRecord[OKGNReview.kDate] = selectedDate
-                                    reviewRecord[OKGNReview.klocationName] = locationName
-                                    reviewRecord[OKGNReview.klocationCategory] = selectedLocation?.category.description
+                                    reviewRecord[OKGNReview.klocationName] = viewModel.locationName
+                                    reviewRecord[OKGNReview.klocationCategory] = viewModel.selectedLocationCategory
                                     reviewRecord[OKGNReview.kReviewerName] = cacheManager.getNameFromCache()
                                     reviewRecord[OKGNReview.kReviewerAvatar] = cacheManager.getAvatarFromCache()?.convertToCKAsset(path: "profileAvatar")
                                 }
@@ -306,9 +145,9 @@ struct CreateReviewView: View {
                                 if let _ = try await CloudKitManager.shared.batchSave(records: [reviewRecord]) {
                                     print("✅ created review successfully")
                                     resetReviewPage()
-                                    alertItem = AlertContext.successfullyCreatedReview
+                                    viewModel.alertItem = AlertContext.successfullyCreatedReview
                                 } else {
-                                    alertItem = AlertContext.reviewCreationFailed
+                                    viewModel.alertItem = AlertContext.reviewCreationFailed
                                 }
                                 
                             } catch {
@@ -321,26 +160,27 @@ struct CreateReviewView: View {
                 }
             } else {
                 print("⚠️ Error creating review / checking icloud status")
-                alertItem = AlertContext.reviewCreationFailed
+                viewModel.alertItem = AlertContext.reviewCreationFailed
             }
         }
     }
     
     
     func resetReviewPage() {
-        locationName = ""
-        caption = ""
-        firstNumber = 0
-        secondNumber = 0
-        selectedImage = PlaceholderImage.square
+        viewModel.locationName = ""
+        viewModel.caption = ""
+        viewModel.firstNumber = 0
+        viewModel.secondNumber = 0
+        viewModel.selectedImage = PlaceholderImage.square
         selectedDate = Date()
     }
     
+    
     func checkReviewIsProperlySet() -> Bool {
-        if (locationName != "" && caption != "" && firstNumber + secondNumber != 0) && !(firstNumber == 10 && secondNumber > 0) {
+        if (viewModel.locationName != "" && viewModel.caption != "" && viewModel.firstNumber + viewModel.secondNumber != 0) && !(viewModel.firstNumber == 10 && viewModel.secondNumber > 0) {
             return true
         } else {
-            alertItem = AlertContext.reviewImproperlyFilledOut
+            viewModel.alertItem = AlertContext.reviewImproperlyFilledOut
             return false
         }
     }
@@ -348,7 +188,207 @@ struct CreateReviewView: View {
     
     
 
-
+extension CreateReviewView {
+    
+    
+    private var createReviewTitle: some View {
+        HStack {
+            Text("Create Review")
+                .bold()
+                .font(.title)
+                .foregroundColor(.white)
+            
+            Spacer()
+        }
+        .padding(.horizontal, 16)
+    }
+    
+    
+    private var reviewDateSelector: some View {
+        HStack {
+            DatePicker("", selection: $selectedDate)
+                .padding(.leading, 4)
+                .datePickerStyle(CompactDatePickerStyle())
+                .frame(width: screen.width / 2, height: 30, alignment: .leading)
+                .colorScheme(.dark)
+            
+            Spacer()
+        }
+    }
+    
+    
+    private var reviewLocationSelector: some View {
+        VStack {
+            HStack(spacing: 0) {
+                Text("Location: ")
+                    .bold()
+                    .font(.callout)
+                    .foregroundColor(.white)
+                
+                Text(viewModel.locationName)
+                    .font(.callout)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.75)
+                    .foregroundColor(returnCategoryFromString(viewModel.selectedLocationCategory ?? "Activity").color)
+                
+                Spacer()
+            }
+            .padding(.horizontal, 16)
+            
+            List {
+                ForEach(locationManager.locationNamesIdsCategory, id: \.0) { location in
+                    Button {
+                        viewModel.locationName = location.1
+                        viewModel.selectedLocationId = location.0
+                        viewModel.selectedLocationCategory = location.2
+                    } label: {
+                        Text(location.1)
+                            .foregroundColor(.white)
+                            .onTapGesture {
+                                viewModel.locationName = location.1
+                                viewModel.selectedLocationId = location.0
+                                viewModel.selectedLocationCategory = location.2
+                            }
+                    }
+                    .listRowBackground(VisualEffectView(effect: UIBlurEffect(style: .systemThinMaterialDark)))
+                }
+                
+            }
+            .clipShape(RoundedRectangle(cornerRadius: 16))
+            .frame(height: 140)
+            .padding(.horizontal, 16)
+        }
+    }
+    
+    
+    private var reviewCaption: some View {
+        VStack {
+            HStack {
+                Text("Caption: ")
+                    .bold()
+                    .font(.callout)
+                    .foregroundColor(.white)
+                    +
+                Text("\(20 - viewModel.caption.count)")
+                    .bold()
+                    .font(.callout)
+                    .foregroundColor(viewModel.caption.count <= 20 ? .OKGNDarkYellow : Color(.systemPink))
+                    +
+                Text(" Characters Remain")
+                    .font(.callout)
+                    .foregroundColor(.gray)
+                
+                Spacer()
+                
+            }
+            
+            TextEditor(text: $viewModel.caption)
+                .frame(height: 50)
+                .foregroundColor(.white)
+                .overlay { RoundedRectangle(cornerRadius: 8).stroke(Color.gray, lineWidth: 1) }
+                .accessibilityHint(Text("Summerize your experience in a fun and short way. (20 character maximum"))
+                .background(Color(white: 0.35, opacity: 0.3))
+                
+        }
+        .padding(.horizontal, 16)
+    }
+    
+    
+    private var reviewRatingSelector: some View {
+        VStack {
+            HStack {
+                Text("Rating: ")
+                    .bold()
+                    .font(.callout)
+                    .foregroundColor(.white)
+                Text((viewModel.firstNumber > 0 || viewModel.secondNumber > 0) && !(viewModel.firstNumber == 10 && viewModel.secondNumber > 0) ? "\(viewModel.firstNumber).\(viewModel.secondNumber)" : "Rate experience from 0.1 to 10.0")
+                    .font(.callout)
+                    .foregroundColor((viewModel.firstNumber > 0 || viewModel.secondNumber > 0) && !(viewModel.firstNumber == 10 && viewModel.secondNumber > 0) ? (viewModel.firstNumber > 5 ? (viewModel.firstNumber > 7 ? .OKGNLightGreen : .OKGNDarkYellow) : Color(.systemPink)) : .gray)
+                
+                Spacer()
+            }
+            
+            GeometryReader { geometry in
+                HStack {
+                    Picker(selection: self.$viewModel.firstNumber, label: Text("")) {
+                        ForEach(0...10, id: \.self) { index in
+                            Text("\(index)").tag(index)
+                                .foregroundColor(.white)
+                        }
+                    }
+                    .pickerStyle(.wheel)
+                    .frame(width: geometry.size.width / 2, height: 80, alignment: .center)
+                    .compositingGroup()
+                    .clipped()
+                    
+                    Picker(selection: self.$viewModel.secondNumber, label: Text("")) {
+                        ForEach(0...9, id: \.self) { index in
+                            Text("\(index)").tag(index)
+                                .foregroundColor(.white)
+                        }
+                    }
+                    .frame(width: geometry.size.width / 2, height: 80, alignment: .center)
+                    .pickerStyle(.wheel)
+                    .compositingGroup()
+                    .clipped()
+                }
+            }
+            .frame(height: 100)
+        }
+        .padding(.horizontal, 16)
+    }
+    
+    
+    private var reviewPhotoPicker: some View {
+        VStack {
+            HStack {
+                Text("Photo:")
+                    .bold()
+                    .font(.callout)
+                    .foregroundColor(.white)
+                
+                Text("Select a photo to remember your visit!")
+                    .font(.callout)
+                    .foregroundColor(.gray)
+                
+                Spacer()
+            }
+            
+            HStack {
+                Image(uiImage: viewModel.selectedImage)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 80 ,height: 80)
+                    .clipped()
+                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                    .onTapGesture {
+                        viewModel.isShowingPhotoPicker = true
+                    }
+                
+                Spacer()
+            }
+            
+        }
+        .padding(.horizontal, 16)
+        .padding(.bottom)
+    }
+    
+    
+    
+    private var createReviewButton: some View {
+        Button {
+            createReview()
+        } label: {
+            Text("Create Review")
+                .foregroundColor(.black)
+                .frame(width: 260, height: 40)
+                .background(Color.OKGNDarkYellow)
+                .clipShape(RoundedRectangle(cornerRadius: 16))
+        }
+    }
+    
+    
+}
 
 
 

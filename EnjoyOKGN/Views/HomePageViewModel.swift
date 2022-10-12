@@ -37,8 +37,8 @@ final class HomePageViewModel: ObservableObject {
     @State var usernameText = ""
     
     //carousel variables
-    @State var currentIndex: Int = 0
-    var category: Category?
+    @Published var currentIndex: Int = 0
+    @Published var category: Category?
     
     @Published var profileContext: ProfileContext = .create
     
