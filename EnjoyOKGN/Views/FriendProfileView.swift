@@ -197,7 +197,7 @@ extension FriendProfileView {
                                                topRatedFilter: viewModel.topRatedFilter,
                                                reviews: reviewManager.friendReviews,
                                                isFriendReviews: true)
-                            .frame(height: 380)
+                            .frame(height: (screen.height / 2.4) - 40)
                             .rotation3DEffect(.degrees(minX / -10), axis: (x: 0, y: 1, z: 0))
       
                         }
@@ -219,7 +219,7 @@ extension FriendProfileView {
             }
         }
         .tabViewStyle(.page(indexDisplayMode: .never))
-        .frame(height: 430)
+        .frame(height: screen.height / 2.25)
         .onChange(of: currentIndex) { value in
             if value == 0 {
                 viewModel.topRatedFilter = nil

@@ -76,7 +76,7 @@ final class ReviewManager: ObservableObject {
     }
     
     
-    func getAllFriendsReviews(location: String? = nil) {
+    func getAllFriendsReviews(location: String? = nil, sortBy: String = "date") {
         guard let profile = CloudKitManager.shared.profile else {
             print("❌ could not get profileID")
             return
@@ -99,7 +99,7 @@ final class ReviewManager: ObservableObject {
                     (receivedReviews, self.cursor) = try await CloudKitManager.shared.getOneLocationFriendsReviews(for: friends.map { CKRecord.Reference(recordID: $0.recordID, action: .none) }, location: location!, passedCursor: cursor) 
                 } else {
                     if cursor == nil && !self.allFriendsReviews.isEmpty { return }
-                    (receivedReviews, self.cursor) = try await CloudKitManager.shared.getFriendsReviews(for: friends.map { CKRecord.Reference(recordID: $0.recordID, action: .none) }, passedCursor: self.cursor)
+                    (receivedReviews, self.cursor) = try await CloudKitManager.shared.getFriendsReviews(for: friends.map { CKRecord.Reference(recordID: $0.recordID, action: .none) }, passedCursor: self.cursor, sortBy: sortBy)
                 }
                 
                 if self.cursor == nil && self.allFriendsReviews.isEmpty {

@@ -56,7 +56,10 @@ struct FriendReviewFeed: View {
                             viewModel.isShowingAddFriendAlert = true
                         } else {
                             //TO:DO - fix sort by rating
+                            reviewManager.allFriendsReviews = []
+                            reviewManager.cursor = nil
                             viewModel.reviewsSortedByRating.toggle()
+                            reviewManager.getAllFriendsReviews(sortBy: viewModel.reviewsSortedByRating ? "rating" : "date")
                         }
                     } label: {
                         Image(systemName: viewModel.isShowingFriendsList ? "plus" : viewModel.reviewsSortedByRating ? "calendar.badge.clock" : "list.number")
