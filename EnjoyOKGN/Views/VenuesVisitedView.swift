@@ -12,16 +12,18 @@ struct VenuesVisitedView: View {
     
     @Binding var showVenuesVisitedSubCategories: Bool
     
-    var pizzeriaCount: Int
-    var wineryCount: Int
-    var breweryCount: Int
-    var cafeCount: Int
-    var activityCount: Int
+//    var pizzeriaCount: Int
+//    var wineryCount: Int
+//    var breweryCount: Int
+//    var cafeCount: Int
+//    var activityCount: Int
+    
+    var allCategoriesVisitCount: [Int]
     
     var body: some View {
         
         VStack(alignment: .trailing, spacing: 0) {
-            Text("Venues Visited: \(wineryCount + breweryCount + pizzeriaCount + cafeCount + activityCount)")
+            Text("Venues Visited: \(allCategoriesVisitCount.reduce(0, +))")
                 .fontWeight(.bold)
                 .padding(8)
                 .lineLimit(1)
@@ -39,11 +41,11 @@ struct VenuesVisitedView: View {
                 .zIndex(1)
 
             VStack(alignment: .trailing, spacing: 6) {
-                Text("Wineries: \(wineryCount)").fontWeight(.semibold)
-                Text("Breweies: \(breweryCount)").fontWeight(.semibold)
-                Text("Pizzarias: \(pizzeriaCount)").fontWeight(.semibold)
-                Text("Cafe's: \(cafeCount)").fontWeight(.semibold)
-                Text("Activities: \(activityCount)").fontWeight(.semibold)
+                Text("Wineries: \(allCategoriesVisitCount[0])").fontWeight(.semibold)
+                Text("Breweries: \(allCategoriesVisitCount[1])").fontWeight(.semibold)
+                Text("Cafe's: \(allCategoriesVisitCount[2])").fontWeight(.semibold)
+                Text("Pizzaria's: \(allCategoriesVisitCount[3])").fontWeight(.semibold)
+                Text("Activities: \(allCategoriesVisitCount[4])").fontWeight(.semibold)
             }
             .foregroundColor(.black)
             .frame(height: showVenuesVisitedSubCategories ? 120 : 0)

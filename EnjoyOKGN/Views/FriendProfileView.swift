@@ -25,11 +25,7 @@ struct FriendProfileView: View {
                 
                 friendNamePlate
                 
-                TrophyScrollView(pizzeriaCount: viewModel.pizzeriaCount,
-                                 wineryCount: viewModel.wineryCount,
-                                 breweryCount: viewModel.breweryCount,
-                                 cafeCount: viewModel.cafeCount,
-                                 activityCount: viewModel.activityCount)
+                TrophyScrollView(categoryVisitCounts: viewModel.categoryVisitCounts)
                 
                 categoryIconView
                 

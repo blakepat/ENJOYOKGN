@@ -16,6 +16,7 @@ final class HomePageViewModel: ObservableObject {
     let cacheManager = CacheManager.instance
     
     @ObservedObject var profileManager = ProfileManager()
+    @EnvironmentObject var reviewManager: ReviewManager
     
     @Published var isShowingPhotoPicker = false
     @Published var profile: OKGNProfile? {
@@ -51,24 +52,14 @@ final class HomePageViewModel: ObservableObject {
     @Published var detailedReviewToShow: OKGNReview?
     @Published var alertItem: AlertItem?
     @Published var topRatedFilter: Category?
-    @Published var wineryCount = 0
-    @Published var breweryCount = 0
-    @Published var cafeCount = 0
-    @Published var pizzeriaCount = 0
-    @Published var activityCount = 0
+//    @Published var categoryVisitCounts = [0,0,0,0,0]
     @Published var userReviews: [OKGNReview]? {
         didSet {
-            withAnimation(.linear(duration: 3)) {
-                wineryCount = userReviews?.filter({returnCategoryFromString($0.locationCategory) == .Winery}).count ?? 0
-                breweryCount = userReviews?.filter({returnCategoryFromString($0.locationCategory) == .Brewery}).count ?? 0
-                cafeCount = userReviews?.filter({returnCategoryFromString($0.locationCategory) == .Cafe}).count ?? 0
-                pizzeriaCount = userReviews?.filter({returnCategoryFromString($0.locationCategory) == .Pizzeria}).count ?? 0
-                activityCount = userReviews?.filter({returnCategoryFromString($0.locationCategory) == .Activity}).count ?? 0
-            }
-            
+//            setAwards(reviews: userReviews ?? [])
         }
     }
 
+    
     
     func createProfile() {
         //Create our CKRecord from the profile view

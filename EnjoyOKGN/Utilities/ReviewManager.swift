@@ -14,7 +14,10 @@ final class ReviewManager: ObservableObject {
     @Published var userReviews: [OKGNReview] = []
     @Published var allFriendsReviews: [OKGNReview] = []
     @Published var friendReviews: [OKGNReview] = []
+    @Published var eachCategoryVisitCount = [0,0,0,0,0]
     var cursor: CKQueryOperation.Cursor? = nil
+    
+    
     
     func getUserReviews() {
         guard let profileID = CloudKitManager.shared.profileRecordID else {

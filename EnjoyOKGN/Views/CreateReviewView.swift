@@ -45,8 +45,6 @@ struct CreateReviewView: View {
       
                 reviewPhotoPicker
                 
-//                Spacer()
-                
                 createReviewButton
             }
             .padding(.bottom)
@@ -110,17 +108,17 @@ struct CreateReviewView: View {
                         do {
                             let reviewRecord = CKRecord(recordType: RecordType.review)
                             
-                            let record = try await CloudKitManager.shared.fetchRecord(with: profileRecordID)
+                            let profileRecord = try await CloudKitManager.shared.fetchRecord(with: profileRecordID)
                             DispatchQueue.main.async { [self] in
                                 print("✅ success getting profile")
                                 
-                                CloudKitManager.shared.profile = record
-                                let importedProfile = OKGNProfile(record: record)
+                                CloudKitManager.shared.profile = profileRecord
+                                let importedProfile = OKGNProfile(record: profileRecord)
                                 cacheManager.addAvatarToCache(avatar: importedProfile.createProfileImage())
                                 cacheManager.addNameToCache(name: importedProfile.name)
                             }
                             //Create a reference to the location
-                            if !viewModel.locationNamesIdsCategory.isEmpty {
+                            if !locationManager.locationNamesIdsCategory.isEmpty {
                                 
                                 print("trying to create record")
                                 
@@ -134,18 +132,27 @@ struct CreateReviewView: View {
                                     reviewRecord[OKGNReview.kDate] = selectedDate
                                     reviewRecord[OKGNReview.klocationName] = viewModel.locationName
                                     reviewRecord[OKGNReview.klocationCategory] = viewModel.selectedLocationCategory
+                                    print("🐤\(viewModel.selectedLocationCategory ?? "")")
                                     reviewRecord[OKGNReview.kReviewerName] = cacheManager.getNameFromCache()
                                     reviewRecord[OKGNReview.kReviewerAvatar] = cacheManager.getAvatarFromCache()?.convertToCKAsset(path: "profileAvatar")
                                 }
                             } else {
-                                print("unable to get locations")
+                                print("❌❌ unable to get locations")
+                                viewModel.alertItem = AlertContext.reviewCreationFailed
+                                return
                             }
                             do {
                                 
                                 if let _ = try await CloudKitManager.shared.batchSave(records: [reviewRecord]) {
+                                    
+                                    addNewReviewToTotals(reviewCategory: returnCategoryFromString(viewModel.selectedLocationCategory ?? ""))
+                                    viewModel.alertItem = AlertContext.successfullyCreatedReview
                                     print("✅ created review successfully")
                                     resetReviewPage()
-                                    viewModel.alertItem = AlertContext.successfullyCreatedReview
+                                    
+                                    
+                                    
+                                    
                                 } else {
                                     viewModel.alertItem = AlertContext.reviewCreationFailed
                                 }
@@ -161,6 +168,65 @@ struct CreateReviewView: View {
             } else {
                 print("⚠️ Error creating review / checking icloud status")
                 viewModel.alertItem = AlertContext.reviewCreationFailed
+            }
+        }
+    }
+    
+    
+    func addNewReviewToTotals(reviewCategory: Category) {
+        print("🐤🐤 add review to total called for \(reviewCategory)")
+        switch reviewCategory {
+        case .Winery:
+            reviewManager.eachCategoryVisitCount[0] += 1
+            print(reviewManager.eachCategoryVisitCount[0])
+            if reviewManager.eachCategoryVisitCount[0] == 10 {
+                addAwardToCloudProfile(category: reviewCategory)
+            }
+        case .Brewery:
+            reviewManager.eachCategoryVisitCount[1] += 1
+            if reviewManager.eachCategoryVisitCount[1] == 10 {
+                addAwardToCloudProfile(category: reviewCategory)
+            }
+        case .Cafe:
+            reviewManager.eachCategoryVisitCount[2] += 1
+            if reviewManager.eachCategoryVisitCount[2] == 10 {
+                addAwardToCloudProfile(category: reviewCategory)
+            }
+        case .Pizzeria:
+            reviewManager.eachCategoryVisitCount[3] += 1
+            if reviewManager.eachCategoryVisitCount[3] == 10 {
+                addAwardToCloudProfile(category: reviewCategory)
+            }
+        case .Activity:
+            reviewManager.eachCategoryVisitCount[4] += 1
+            if reviewManager.eachCategoryVisitCount[4] == 10 {
+                addAwardToCloudProfile(category: reviewCategory)
+            }
+        }
+    }
+    
+    func addAwardToCloudProfile(category: Category) {
+        print("⚠️⚠️⚠️ VISITS HIT 10 FOR \(category.description) ADDING AWARD TO ICLOUD")
+        Task {
+            guard let userRecord = CloudKitManager.shared.userRecord else {
+                print("❌ No user record found when calling getProfile()")
+                return
+            }
+            
+            guard let profileReference = userRecord["userProfile"] as? CKRecord.Reference else { return }
+            
+            let profileRecordID = profileReference.recordID
+            let profileRecord = try await CloudKitManager.shared.fetchRecord(with: profileRecordID)
+            
+            profileRecord[OKGNProfile.kAwards] = [category.description]
+            
+            Task {
+                do {
+                    let _ = try await CloudKitManager.shared.save(record: profileRecord)
+                    print("✅✅ Success saving profile for AWARDLIST")
+                } catch let err {
+                    print("❌❌ Failure saving profile for AWARDLIST: \(err)")
+                }
             }
         }
     }
