@@ -18,6 +18,9 @@ struct NewMapView: UIViewRepresentable {
     @Binding var okgnLocations: [OKGNLocation]
     @Binding var centerOnUserLocation: MKUserTrackingMode?
     
+    var startingRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 49.8853, longitude: -119.4947),
+                                        span: MKCoordinateSpan(latitudeDelta: 0.08, longitudeDelta: 0.08))
+    
     var annotations: [MKPointAnnotation]
     
     class Coordinator: NSObject, MKMapViewDelegate {
@@ -72,6 +75,8 @@ struct NewMapView: UIViewRepresentable {
         mapView.showsUserLocation = true
         mapView.region.span = MKCoordinateSpan(latitudeDelta: 0.08, longitudeDelta: 0.08)
 
+        mapView.setRegion(startingRegion, animated: false)
+        
         return mapView
     }
     

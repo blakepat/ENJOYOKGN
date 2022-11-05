@@ -42,6 +42,10 @@
 		3480AA0327C9E8D80031BB09 /* FriendReviewFeedModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3480AA0227C9E8D80031BB09 /* FriendReviewFeedModel.swift */; };
 		3480AA0527C9EAAF0031BB09 /* FriendCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3480AA0427C9EAAF0031BB09 /* FriendCell.swift */; };
 		3480AA0727C9F2110031BB09 /* FriendManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3480AA0627C9F2110031BB09 /* FriendManager.swift */; };
+		3490220A29155B14007774C6 /* CustomTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3490220929155B14007774C6 /* CustomTabBarView.swift */; };
+		3490220C29155B4F007774C6 /* TabBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3490220B29155B4E007774C6 /* TabBarItem.swift */; };
+		3490220E29155D34007774C6 /* CustomTabBarContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3490220D29155D34007774C6 /* CustomTabBarContainerView.swift */; };
+		3490221029155E97007774C6 /* TabBarItemsPreferenceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3490220F29155E97007774C6 /* TabBarItemsPreferenceKey.swift */; };
 		34A78B8028F48CC6003CEA9C /* VenuesVisitedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A78B7F28F48CC6003CEA9C /* VenuesVisitedView.swift */; };
 		34A78B8228F49223003CEA9C /* CreateReviewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A78B8128F49223003CEA9C /* CreateReviewViewModel.swift */; };
 		34B0E91328D8B45000A775B3 /* Double+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34B0E91228D8B45000A775B3 /* Double+Ext.swift */; };
@@ -129,6 +133,10 @@
 		3480AA0227C9E8D80031BB09 /* FriendReviewFeedModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendReviewFeedModel.swift; sourceTree = "<group>"; };
 		3480AA0427C9EAAF0031BB09 /* FriendCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendCell.swift; sourceTree = "<group>"; };
 		3480AA0627C9F2110031BB09 /* FriendManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendManager.swift; sourceTree = "<group>"; };
+		3490220929155B14007774C6 /* CustomTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarView.swift; sourceTree = "<group>"; };
+		3490220B29155B4E007774C6 /* TabBarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarItem.swift; sourceTree = "<group>"; };
+		3490220D29155D34007774C6 /* CustomTabBarContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarContainerView.swift; sourceTree = "<group>"; };
+		3490220F29155E97007774C6 /* TabBarItemsPreferenceKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarItemsPreferenceKey.swift; sourceTree = "<group>"; };
 		34A78B7F28F48CC6003CEA9C /* VenuesVisitedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenuesVisitedView.swift; sourceTree = "<group>"; };
 		34A78B8128F49223003CEA9C /* CreateReviewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateReviewViewModel.swift; sourceTree = "<group>"; };
 		34B0E91228D8B45000A775B3 /* Double+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Ext.swift"; sourceTree = "<group>"; };
@@ -243,6 +251,17 @@
 				345C50CD28DE4C3B00B75F2F /* AddFriendModalView.swift */,
 			);
 			name = FriendReviewFeed;
+			sourceTree = "<group>";
+		};
+		3490220829155AFA007774C6 /* CustomTabBarView */ = {
+			isa = PBXGroup;
+			children = (
+				3490220929155B14007774C6 /* CustomTabBarView.swift */,
+				3490220D29155D34007774C6 /* CustomTabBarContainerView.swift */,
+				3490220F29155E97007774C6 /* TabBarItemsPreferenceKey.swift */,
+				3490220B29155B4E007774C6 /* TabBarItem.swift */,
+			);
+			name = CustomTabBarView;
 			sourceTree = "<group>";
 		};
 		34BEA49D27B75006006F91C1 /* UIKit Components */ = {
@@ -406,6 +425,7 @@
 			isa = PBXGroup;
 			children = (
 				346883212866ADDD0056B09F /* LaunchScreen */,
+				3490220829155AFA007774C6 /* CustomTabBarView */,
 				3480A9F727C477180031BB09 /* TabBarView */,
 				34BEA4A427BAF1C4006F91C1 /* HomePageView */,
 				3480A9FC27C5908C0031BB09 /* FriendReviewFeed */,
@@ -601,6 +621,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				34BEA4B027BD9B53006F91C1 /* CreateReviewView.swift in Sources */,
+				3490220C29155B4F007774C6 /* TabBarItem.swift in Sources */,
 				34BEA4AA27BC6E9C006F91C1 /* LocationDetailViewModel.swift in Sources */,
 				34F9660A27E3DB0E006C0288 /* FriendProfileView.swift in Sources */,
 				3421BE79279F693600921D70 /* OLD-TrophyCell.swift in Sources */,
@@ -614,6 +635,7 @@
 				3480A9FB27C4D6020031BB09 /* SideMenuView.swift in Sources */,
 				3421BE8D27B1FB8A00921D70 /* OKGNLocation.swift in Sources */,
 				3421BE7D27A1D1D100921D70 /* Date+Ext.swift in Sources */,
+				3490220E29155D34007774C6 /* CustomTabBarContainerView.swift in Sources */,
 				344D349D28C96CE9007C3F56 /* NewMapView.swift in Sources */,
 				34F9661227E559B8006C0288 /* View+Ext.swift in Sources */,
 				345C50CE28DE4C3B00B75F2F /* AddFriendModalView.swift in Sources */,
@@ -640,6 +662,7 @@
 				3421BEA527B7045A00921D70 /* OnboardView.swift in Sources */,
 				3421BE8327AC760500921D70 /* DetailedVisitView.swift in Sources */,
 				3480AA0327C9E8D80031BB09 /* FriendReviewFeedModel.swift in Sources */,
+				3490221029155E97007774C6 /* TabBarItemsPreferenceKey.swift in Sources */,
 				34F004FD279CB00F00899561 /* ProgressBar.swift in Sources */,
 				3480A9F627C470670031BB09 /* OKGNAnnotation.swift in Sources */,
 				3421BEA327B4935B00921D70 /* AlertItem.swift in Sources */,
@@ -651,6 +674,7 @@
 				345C50D028E0F65500B75F2F /* CarouselView.swift in Sources */,
 				34D196BC279C976500C1CE19 /* Color+Ext.swift in Sources */,
 				34BEA4A127B75873006F91C1 /* UIImage+Ext.swift in Sources */,
+				3490220A29155B14007774C6 /* CustomTabBarView.swift in Sources */,
 				34BEA4AC27BD6846006F91C1 /* ReviewManager.swift in Sources */,
 				34A78B8228F49223003CEA9C /* CreateReviewViewModel.swift in Sources */,
 				3421BE8527AC7D8300921D70 /* XDismissButton.swift in Sources */,

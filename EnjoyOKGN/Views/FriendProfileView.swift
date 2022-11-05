@@ -109,9 +109,9 @@ extension FriendProfileView {
             
             Image("GoldTrophy")
                 .resizable()
-                .frame(width: 26, height: 26)
-                .scaledToFill()
-                .padding(8)
+                .frame(width: 20, height: 24)
+                .scaledToFit()
+                .padding(10)
                 .offset(y: withAnimation(.linear(duration: 1)) { viewModel.topRatedFilter == nil ? -8 : 0 } )
                 .shadow(color: .black.opacity(0.3), radius: 2, x: 2, y: 2)
                 .background(

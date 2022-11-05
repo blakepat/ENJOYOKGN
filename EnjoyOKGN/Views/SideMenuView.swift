@@ -77,7 +77,7 @@ struct SideMenuView: View {
                     .frame(width: 200)
                     .offset(x: menuOpen ? 0 : -400, y: -geo.safeAreaInsets.bottom / 200)
                     .animation(.easeInOut, value: menuOpen)
-                    .edgesIgnoringSafeArea(.top)
+                    .edgesIgnoringSafeArea(.vertical)
                     
                     Spacer()
                 }

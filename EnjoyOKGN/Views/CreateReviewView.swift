@@ -27,7 +27,7 @@ struct CreateReviewView: View {
     }
     
     var body: some View {
-        ZStack {
+        ZStack(alignment: .top) {
             
             Color.OKGNDarkBlue.edgesIgnoringSafeArea(.all)
             
@@ -45,7 +45,7 @@ struct CreateReviewView: View {
       
                 reviewPhotoPicker
                 
-                Spacer()
+//                Spacer()
                 
                 createReviewButton
             }
