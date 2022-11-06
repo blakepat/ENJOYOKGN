@@ -16,6 +16,11 @@ final class LocationDetailViewModel: ObservableObject {
     
     @Published var isShowingDetailedModalView = false
     @Published var detailedReviewToShow: OKGNReview?
+    @Published var reviewToDeleteId: CKRecord.ID? {
+        didSet {
+            reviews.removeAll(where: { $0.id == reviewToDeleteId })
+        }
+    }
     
     let columns: [GridItem] = Array(repeating: .init(.flexible()), count: 1)
     @Published var reviews: [OKGNReview] = []

@@ -111,8 +111,7 @@ extension FriendReviewFeed {
             ForEach(friendManager.friends) { friend in
                 NavigationLink(destination: FriendProfileView(friend: friend)) {
                     HStack {
-                        FriendCell(profile: friend, userReviews: viewModel.friendReviews?.filter({ $0.reviewerName == friend.name }) ?? [])
-    
+                        FriendCell(profile: friend)
                     }
                 }
             }

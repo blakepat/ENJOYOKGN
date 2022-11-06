@@ -11,14 +11,6 @@ struct FriendCell: View {
     
     var profile: OKGNProfile
     
-    @State var wineryCount: Int = 0
-    @State var breweryCount: Int = 0
-    @State var cafeCount: Int = 0
-    @State var pizzeriaCount: Int = 0
-    @State var activityCount: Int = 0
-    
-    @State var userReviews: [OKGNReview]
-    
     var body: some View {
         
         ZStack {
@@ -46,37 +38,28 @@ struct FriendCell: View {
                         .foregroundColor(.black)
                     
                     HStack {
-                        if wineryCount >= 10 {
-                            Image(uiImage: AwardTypes.wineryAward.trophy)
-                                .resizable()
-                                .frame(width: 40, height: 40)
-                                .scaledToFill()
-                        }
-                        if breweryCount >= 10 {
-                            Image(uiImage: AwardTypes.breweryAward.trophy)
-                                .resizable()
-                                .frame(width: 40, height: 40)
-                                .scaledToFill()
-                        }
-                        if cafeCount >= 10 {
-                            Image(uiImage: AwardTypes.cafeAward.trophy)
-                                .resizable()
-                                .frame(width: 40, height: 40)
-                                .scaledToFill()
-                        }
-                        if pizzeriaCount >= 10 {
-                            Image(uiImage: AwardTypes.pizzeriaAward.trophy)
-                                .resizable()
-                                .frame(width: 40, height: 40)
-                                .scaledToFill()
-                        }
-                        if activityCount >= 10 {
-                            Image(uiImage: AwardTypes.activityAward.trophy)
-                                .resizable()
-                                .frame(width: 40, height: 40)
-                                .scaledToFill()
+                        ForEach(profile.awards, id: \.self) { categoryString in
+                            ZStack {
+                                
+                                let category = returnCategoryFromString(categoryString)
+                                
+                                Circle()
+                                    .stroke(category.color, lineWidth: 4)
+                                    .frame(width: 40, height: 40)
+                                    .background(
+                                        Circle()
+                                            .foregroundColor(category.color.opacity(0.4))
+                                    )
+                                
+                                category.trophyImage
+                                    .resizable()
+                                    .frame(width: 24, height: 24)
+                            }
+                            
+                        
                         }
                     }
+                    .padding(4)
                 }
   
                 Spacer()
@@ -85,13 +68,6 @@ struct FriendCell: View {
         }
         .frame(height: 100)
         .clipShape(RoundedRectangle(cornerRadius: 16))
-        .onAppear {
-            wineryCount = userReviews.filter({returnCategoryFromString($0.locationCategory) == .Winery}).count
-            breweryCount = userReviews.filter({returnCategoryFromString($0.locationCategory) == .Brewery}).count
-            cafeCount = userReviews.filter({returnCategoryFromString($0.locationCategory) == .Cafe}).count
-            pizzeriaCount = userReviews.filter({returnCategoryFromString($0.locationCategory) == .Pizzeria}).count
-            activityCount = userReviews.filter({returnCategoryFromString($0.locationCategory) == .Activity}).count
-        }
     }
 }
 

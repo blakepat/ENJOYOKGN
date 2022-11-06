@@ -52,14 +52,7 @@ final class HomePageViewModel: ObservableObject {
     @Published var detailedReviewToShow: OKGNReview?
     @Published var alertItem: AlertItem?
     @Published var topRatedFilter: Category?
-//    @Published var categoryVisitCounts = [0,0,0,0,0]
-    @Published var userReviews: [OKGNReview]? {
-        didSet {
-//            setAwards(reviews: userReviews ?? [])
-        }
-    }
-
-    
+    @Published var userReviews: [OKGNReview]?
     
     func createProfile() {
         //Create our CKRecord from the profile view

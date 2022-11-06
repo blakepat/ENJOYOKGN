@@ -218,7 +218,10 @@ struct CreateReviewView: View {
             let profileRecordID = profileReference.recordID
             let profileRecord = try await CloudKitManager.shared.fetchRecord(with: profileRecordID)
             
-            profileRecord[OKGNProfile.kAwards] = [category.description]
+            var currentAwards = CloudKitManager.shared.profile?.convertToOKGNProfile().awards ?? []
+            currentAwards += [category.description]
+            
+            profileRecord[OKGNProfile.kAwards] = currentAwards
             
             Task {
                 do {
