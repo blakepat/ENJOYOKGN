@@ -109,6 +109,6 @@ struct CarouselView<Content: View, Item, ID>: View where Item: RandomAccessColle
 
 struct CarouselView_Previews: PreviewProvider {
     static var previews: some View {
-        HomePageView()
+        HomePageView(tabSelection: .constant(.home))
     }
 }

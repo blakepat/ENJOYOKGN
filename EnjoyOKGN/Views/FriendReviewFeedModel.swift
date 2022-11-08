@@ -27,6 +27,15 @@ final class FriendReviewFeedModel: ObservableObject {
     @Published var friend: OKGNProfile?
     
     @Published var alertItem: AlertItem?
+    @Published var showAlertView = false
+    @Published var friendRequest: CKRecord.Reference?
+    @Published var friendName: String = "" {
+        didSet {
+            twoButtonAlertItem = TwoButtonAlertItem(title: Text("Follow Request"), message: Text("\(friendName) has requested to Follow you!"), acceptButton: .cancel(), dismissButton: .cancel())
+            
+            showAlertView = true
+        }
+    }
 
     
     func displayFollowRequests() {
@@ -42,20 +51,32 @@ final class FriendReviewFeedModel: ObservableObject {
                         guard let friends = CloudKitManager.shared.profile?.convertToOKGNProfile().followers else { return }
                         
                         if !friends.contains(CKRecord.Reference(recordID: request.recordID, action: .none)) {
-                            twoButtonAlertItem = TwoButtonAlertItem(title: Text("Follow Request!"),
-                                                                    message: Text(" has requested to follow you!"),
-                                                                    acceptButton: .default(Text("Accept"), action: { [self] in
-                                friendManager.removeRequestAfterAccepting(follower: request)
-                                friendManager.acceptFriend(request)
-                            }),
-                                                                    dismissButton: .cancel(Text("Decline"), action: {
-                                print("🥶 Friend Request Declined")
-                                Task {
-                                    await self.declineRequest(request: request.recordID)
+  
+                            friendRequest = request
+                            
+                            Task {
+                                if let name = try await CloudKitManager.shared.getFriendUserRecord(id: request.recordID, completed: {})?.convertToOKGNProfile().name {
+                                    friendName = name
                                 }
-                                
-                                
-                            }))
+                            }
+                            
+
+                            
+                            
+//                            twoButtonAlertItem = TwoButtonAlertItem(title: Text("Follow Request!"),
+//                                                                    message: Text(" has requested to follow you!"),
+//                                                                    acceptButton: .default(Text("Accept"), action: { [self] in
+//                                friendManager.removeRequestAfterAccepting(follower: request)
+//                                friendManager.acceptFriend(request)
+//                            }),
+//                                                                    dismissButton: .cancel(Text("Decline"), action: {
+//                                print("🥶 Friend Request Declined")
+//                                Task {
+//                                    await self.declineRequest(request: request.recordID)
+//                                }
+//
+//
+//                            }))
                         } else {
                             print("request is already a follower")
                         }
@@ -68,7 +89,7 @@ final class FriendReviewFeedModel: ObservableObject {
     
     func declineRequest(request: CKRecord.ID) async {
         
-        guard let friendProfile = try? await CloudKitManager.shared.getFriendUserRecord(id: request) else { return }
+        guard let friendProfile = try? await CloudKitManager.shared.getFriendUserRecord(id: request, completed: {}) else { return }
         
         Task {
             do {

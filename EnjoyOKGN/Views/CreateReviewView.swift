@@ -18,12 +18,14 @@ struct CreateReviewView: View {
     
     @State var selectedDate: Date = Date()
     @State var locations: [OKGNLocation]
+    @Binding var tabSelection: TabBarItem
     
-    init(date: Date, locations: [OKGNLocation]) {
+    init(date: Date, locations: [OKGNLocation], tabSelection: Binding<TabBarItem>) {
         UITableView.appearance().backgroundColor = UIColor(white: 0.35, alpha: 0.3)
         UITextView.appearance().backgroundColor = .clear
         self._selectedDate = State(initialValue: date)
         self._locations = State(initialValue: locations)
+        self._tabSelection = tabSelection
     }
     
     var body: some View {
@@ -46,31 +48,39 @@ struct CreateReviewView: View {
                 reviewPhotoPicker
                 
                 createReviewButton
+                
+                Spacer()
             }
+            .alert(viewModel.alertItem?.title ?? Text(""), isPresented: $viewModel.showAlertView, actions: {
+                // actions
+            }, message: {
+                viewModel.alertItem?.message ?? Text("")
+            })
+            .frame(maxHeight: .infinity)
             .padding(.bottom)
             .background(LinearGradient(gradient: Gradient(colors: [.OKGNDarkBlue, .black.opacity(0.5)]), startPoint: .top, endPoint: .bottom))
-            .alert(item: $viewModel.alertItem, content: { alertItem in
-                Alert(title: alertItem.title, message: alertItem.message, dismissButton: alertItem.dismissButton)
-            })
             .sheet(isPresented: $viewModel.isShowingPhotoPicker, content: {
                 PhotoPicker(image: $viewModel.selectedImage)
             })
             .onReceive(locationManager.$locationNamesIdsCategory) { locationNamesIds in
                 viewModel.locationNamesIdsCategory = locationNamesIds
             }
-            .onAppear {
-                Task {
-                    if locationManager.locationNamesIdsCategory.isEmpty {
-                        do {
-                            viewModel.showLoadingView = true
-                            locationManager.locationNamesIdsCategory = try await CloudKitManager.shared.getLocationNames() { returnedBool in
-                                DispatchQueue.main.async {
-                                    viewModel.locationNamesIdsCategory = locationManager.locationNamesIdsCategory
-                                    viewModel.showLoadingView = returnedBool
+            .onChange(of: tabSelection) { newValue in
+                
+                if newValue == .create {
+                    Task {
+                        if locationManager.locationNamesIdsCategory.isEmpty {
+                            do {
+                                viewModel.showLoadingView = true
+                                locationManager.locationNamesIdsCategory = try await CloudKitManager.shared.getLocationNames() { returnedBool in
+                                    DispatchQueue.main.async {
+                                        viewModel.locationNamesIdsCategory = locationManager.locationNamesIdsCategory
+                                        viewModel.showLoadingView = returnedBool
+                                    }
                                 }
+                            } catch {
+                                print("❌ Error getting locations for create review screen")
                             }
-                        } catch {
-                            print("❌ Error getting locations for create review screen")
                         }
                     }
                 }
@@ -95,12 +105,17 @@ struct CreateReviewView: View {
         }
     }
     
+    
     func createReview() {
         CKContainer.default().accountStatus { (accountStatus, error) in
             if accountStatus == .available {
                 if checkReviewIsProperlySet()  {
                     guard let profileRecordID = CloudKitManager.shared.profileRecordID else {
-                        viewModel.alertItem = AlertContext.notSignedIntoProfile
+                        DispatchQueue.main.async {
+                            viewModel.alertItem = AlertContext.notSignedIntoProfile
+                            viewModel.showAlertView = true
+                        }
+                        
                         return
                     }
                     
@@ -138,7 +153,11 @@ struct CreateReviewView: View {
                                 }
                             } else {
                                 print("❌❌ unable to get locations")
-                                viewModel.alertItem = AlertContext.reviewCreationFailed
+                                DispatchQueue.main.async {
+                                    viewModel.alertItem = AlertContext.reviewCreationFailed
+                                    viewModel.showAlertView = true
+                                }
+                                
                                 return
                             }
                             do {
@@ -146,7 +165,11 @@ struct CreateReviewView: View {
                                 if let _ = try await CloudKitManager.shared.batchSave(records: [reviewRecord]) {
                                     
                                     addNewReviewToTotals(reviewCategory: returnCategoryFromString(viewModel.selectedLocationCategory ?? ""))
-                                    viewModel.alertItem = AlertContext.successfullyCreatedReview
+                                    DispatchQueue.main.async {
+                                        viewModel.alertItem = AlertContext.successfullyCreatedReview
+                                        viewModel.showAlertView = true
+                                    }
+                                    
                                     print("✅ created review successfully")
                                     resetReviewPage()
                                     
@@ -155,6 +178,7 @@ struct CreateReviewView: View {
                                     
                                 } else {
                                     viewModel.alertItem = AlertContext.reviewCreationFailed
+                                    viewModel.showAlertView = true
                                 }
                                 
                             } catch {
@@ -167,7 +191,10 @@ struct CreateReviewView: View {
                 }
             } else {
                 print("⚠️ Error creating review / checking icloud status")
-                viewModel.alertItem = AlertContext.reviewCreationFailed
+                DispatchQueue.main.async {
+                    viewModel.alertItem = AlertContext.reviewCreationFailed
+                    viewModel.showAlertView = true
+                }
             }
         }
     }
@@ -249,7 +276,10 @@ struct CreateReviewView: View {
         if (viewModel.locationName != "" && viewModel.caption != "" && viewModel.firstNumber + viewModel.secondNumber != 0) && !(viewModel.firstNumber == 10 && viewModel.secondNumber > 0) {
             return true
         } else {
-            viewModel.alertItem = AlertContext.reviewImproperlyFilledOut
+            DispatchQueue.main.async {
+                viewModel.alertItem = AlertContext.reviewImproperlyFilledOut
+                viewModel.showAlertView = true
+            }
             return false
         }
     }
@@ -321,10 +351,9 @@ extension CreateReviewView {
                     }
                     .listRowBackground(VisualEffectView(effect: UIBlurEffect(style: .systemThinMaterialDark)))
                 }
-                
             }
             .clipShape(RoundedRectangle(cornerRadius: 16))
-            .frame(height: 140)
+            .frame(height: screen.height / 3 - 100)
             .padding(.horizontal, 16)
         }
     }

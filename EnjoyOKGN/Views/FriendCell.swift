@@ -55,15 +55,12 @@ struct FriendCell: View {
                                     .resizable()
                                     .frame(width: 24, height: 24)
                             }
-                            
-                        
                         }
                     }
                     .padding(4)
                 }
   
                 Spacer()
-       
             }
         }
         .frame(height: 100)

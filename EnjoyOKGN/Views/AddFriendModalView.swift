@@ -114,7 +114,7 @@ struct AddFriendModalView: View {
         Task {
             do {
                 
-                guard let friendProfile = try? await CloudKitManager.shared.getFriendUserRecord(id: friendRecord.recordID), let profileRecord = CloudKitManager.shared.profileRecordID else { return }
+                guard let friendProfile = try? await CloudKitManager.shared.getFriendUserRecord(id: friendRecord.recordID, completed: {}), let profileRecord = CloudKitManager.shared.profileRecordID else { return }
                 let friendOKGNProfile = friendProfile.convertToOKGNProfile()
 
                 var friendsExistingRequests = friendOKGNProfile.requests
@@ -139,7 +139,7 @@ struct AddFriendModalView: View {
     func cancelRequest(request: CKRecord.ID) {
         Task {
             do {
-                guard let friendProfile = try? await CloudKitManager.shared.getFriendUserRecord(id: request), let profileRecord = CloudKitManager.shared.profileRecordID else { return }
+                guard let friendProfile = try? await CloudKitManager.shared.getFriendUserRecord(id: request, completed: {}), let profileRecord = CloudKitManager.shared.profileRecordID else { return }
                 let friendOKGNProfile = friendProfile.convertToOKGNProfile()
                 
                 let friendsRequestsWithoutCancelled = friendOKGNProfile.requests.filter({ $0.recordID != profileRecord })

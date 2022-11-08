@@ -11,9 +11,21 @@ import CloudKit
 
 final class ReviewManager: ObservableObject {
     
-    @Published var userReviews: [OKGNReview] = []
-    @Published var allFriendsReviews: [OKGNReview] = []
-    @Published var friendReviews: [OKGNReview] = []
+    @Published var userReviews: [OKGNReview] = [] {
+        didSet {
+            print("1️⃣ user reviews set")
+        }
+    }
+    @Published var allFriendsReviews: [OKGNReview] = [] {
+        didSet {
+            print("2️⃣ ALL FRIENDS REVIEWS SET")
+        }
+    }
+    @Published var friendReviews: [OKGNReview] = [] {
+        didSet {
+            print("4️⃣ single friend reviews set")
+        }
+    }
     @Published var eachCategoryVisitCount = [0,0,0,0,0]
     var cursor: CKQueryOperation.Cursor? = nil
     

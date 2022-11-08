@@ -23,8 +23,6 @@ final class CreateReviewViewModel: ObservableObject {
     @Published var alertItem: AlertItem?
     @Published var isShowingPhotoPicker = false
     @Published var showLoadingView = false
-    
- 
-    
+    @Published var showAlertView = false
     
 }

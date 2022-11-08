@@ -16,9 +16,12 @@ struct FriendReviewFeed: View {
     @StateObject var friendManager = FriendManager()
     @StateObject var viewModel = FriendReviewFeedModel()
     
-    init() {
+    @Binding var tabSelection: TabBarItem
+    
+    init(tabSelection: Binding<TabBarItem>) {
         UITableView.appearance().backgroundColor = UIColor(named: "OKGNDarkGray")
         UINavigationBar.appearance().titleTextAttributes = [.foregroundColor : UIColor.white]
+        self._tabSelection = tabSelection
     }
     
     
@@ -88,10 +91,13 @@ struct FriendReviewFeed: View {
                     viewModel.friendReviews = reviewManager.allFriendsReviews
                 }
             }
-            .onAppear {
-                reviewManager.getAllFriendsReviews()
-                friendManager.compareRequestsAndFriends()
-                viewModel.displayFollowRequests()
+            .onChange(of: tabSelection) { newValue in
+                if newValue == .feed {
+                    print("FEED ON APPEAR CALLED!")
+                    reviewManager.getAllFriendsReviews()
+                    friendManager.compareRequestsAndFriends()
+                    viewModel.displayFollowRequests()
+                }
             }
         }
         .background(Color.OKGNDarkGray)
@@ -120,8 +126,36 @@ extension FriendReviewFeed {
             }
             .listRowBackground(Color.OKGNDarkGray)
         }
-        .alert(item: $viewModel.twoButtonAlertItem, content: { alertItem in
-            Alert(title: alertItem.title, message: alertItem.message, primaryButton: alertItem.acceptButton, secondaryButton: alertItem.dismissButton)
+//        .alert(item: $viewModel.twoButtonAlertItem, content: { alertItem in
+//            Alert(title: alertItem.title, message: alertItem.message, primaryButton: alertItem.acceptButton, secondaryButton: alertItem.dismissButton)
+//        })
+        .alert(viewModel.twoButtonAlertItem?.title ?? Text(""), isPresented: $viewModel.showAlertView, actions: {
+            // actions
+            
+            HStack {
+                Button {
+                    friendManager.removeRequestAfterAccepting(follower: viewModel.friendRequest!)
+                    friendManager.acceptFriend(viewModel.friendRequest!)
+                } label: {
+                    Text("Accept")
+                }
+                
+                Button {
+                    //decline
+                    Task {
+                        await viewModel.declineRequest(request: viewModel.friendRequest!.recordID)
+                    }
+                    
+                } label: {
+                    Text("Decline")
+                }
+
+            }
+
+
+
+        }, message: {
+            viewModel.twoButtonAlertItem?.message ?? Text("")
         })
         .listStyle(.plain)
         .offset(x: viewModel.isShowingFriendsList ? 0 : screen.width)
@@ -135,7 +169,7 @@ extension FriendReviewFeed {
 
                     let review = reviewManager.allFriendsReviews[reviewIndex]
 
-                    ReviewCell(review: review, showTrophy: false)
+                    ReviewCell(review: review, showTrophy: false, height: 130)
                         .padding(.horizontal, 8)
                         .transition(.move(edge: .trailing))
                         .onTapGesture {

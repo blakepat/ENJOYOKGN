@@ -51,6 +51,7 @@ final class HomePageViewModel: ObservableObject {
     
     @Published var detailedReviewToShow: OKGNReview?
     @Published var alertItem: AlertItem?
+    @Published var showAlertView = false
     @Published var topRatedFilter: Category?
     @Published var userReviews: [OKGNReview]?
     

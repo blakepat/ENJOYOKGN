@@ -15,10 +15,11 @@ struct TrophyScrollView: View {
     
     var body: some View {
         ScrollView(.horizontal) {
-            LazyHGrid(rows: rows) {
+            LazyHGrid(rows: rows, alignment: .center) {
                 
                 ForEach(0..<5) { i in
                     ProgressBar(progress: categoryVisitCounts[i], award: AwardTypes.allAwards[i])
+                        .frame(width: 150)
                 }
             }
         }
