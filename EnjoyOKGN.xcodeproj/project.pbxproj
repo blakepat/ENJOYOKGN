@@ -26,7 +26,7 @@
 		3421BE9F27B48B2900921D70 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BE9E27B48B2900921D70 /* LocationManager.swift */; };
 		3421BEA127B48BE400921D70 /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BEA027B48BE400921D70 /* MapViewModel.swift */; };
 		3421BEA327B4935B00921D70 /* AlertItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BEA227B4935B00921D70 /* AlertItem.swift */; };
-		3421BEA527B7045A00921D70 /* OnboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BEA427B7045A00921D70 /* OnboardView.swift */; };
+		3421BEA527B7045A00921D70 /* OldOnboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BEA427B7045A00921D70 /* OldOnboardView.swift */; };
 		344D349D28C96CE9007C3F56 /* NewMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 344D349C28C96CE9007C3F56 /* NewMapView.swift */; };
 		345C50CE28DE4C3B00B75F2F /* AddFriendModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345C50CD28DE4C3B00B75F2F /* AddFriendModalView.swift */; };
 		345C50D028E0F65500B75F2F /* CarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345C50CF28E0F65500B75F2F /* CarouselView.swift */; };
@@ -45,6 +45,7 @@
 		3490220C29155B4F007774C6 /* TabBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3490220B29155B4E007774C6 /* TabBarItem.swift */; };
 		3490220E29155D34007774C6 /* CustomTabBarContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3490220D29155D34007774C6 /* CustomTabBarContainerView.swift */; };
 		3490221029155E97007774C6 /* TabBarItemsPreferenceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3490220F29155E97007774C6 /* TabBarItemsPreferenceKey.swift */; };
+		34902222291A9AA7007774C6 /* OnboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34902221291A9AA7007774C6 /* OnboardView.swift */; };
 		34A78B8028F48CC6003CEA9C /* VenuesVisitedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A78B7F28F48CC6003CEA9C /* VenuesVisitedView.swift */; };
 		34A78B8228F49223003CEA9C /* CreateReviewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34A78B8128F49223003CEA9C /* CreateReviewViewModel.swift */; };
 		34B0E91328D8B45000A775B3 /* Double+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34B0E91228D8B45000A775B3 /* Double+Ext.swift */; };
@@ -116,7 +117,7 @@
 		3421BE9E27B48B2900921D70 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		3421BEA027B48BE400921D70 /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
 		3421BEA227B4935B00921D70 /* AlertItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertItem.swift; sourceTree = "<group>"; };
-		3421BEA427B7045A00921D70 /* OnboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardView.swift; sourceTree = "<group>"; };
+		3421BEA427B7045A00921D70 /* OldOnboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OldOnboardView.swift; sourceTree = "<group>"; };
 		344D349C28C96CE9007C3F56 /* NewMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMapView.swift; sourceTree = "<group>"; };
 		345C50CD28DE4C3B00B75F2F /* AddFriendModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendModalView.swift; sourceTree = "<group>"; };
 		345C50CF28E0F65500B75F2F /* CarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselView.swift; sourceTree = "<group>"; };
@@ -135,6 +136,7 @@
 		3490220B29155B4E007774C6 /* TabBarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarItem.swift; sourceTree = "<group>"; };
 		3490220D29155D34007774C6 /* CustomTabBarContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarContainerView.swift; sourceTree = "<group>"; };
 		3490220F29155E97007774C6 /* TabBarItemsPreferenceKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarItemsPreferenceKey.swift; sourceTree = "<group>"; };
+		34902221291A9AA7007774C6 /* OnboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardView.swift; sourceTree = "<group>"; };
 		34A78B7F28F48CC6003CEA9C /* VenuesVisitedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenuesVisitedView.swift; sourceTree = "<group>"; };
 		34A78B8128F49223003CEA9C /* CreateReviewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateReviewViewModel.swift; sourceTree = "<group>"; };
 		34B0E91228D8B45000A775B3 /* Double+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Ext.swift"; sourceTree = "<group>"; };
@@ -262,6 +264,15 @@
 			name = CustomTabBarView;
 			sourceTree = "<group>";
 		};
+		34902220291A9A85007774C6 /* OnboardingView */ = {
+			isa = PBXGroup;
+			children = (
+				3421BEA427B7045A00921D70 /* OldOnboardView.swift */,
+				34902221291A9AA7007774C6 /* OnboardView.swift */,
+			);
+			name = OnboardingView;
+			sourceTree = "<group>";
+		};
 		34BEA49D27B75006006F91C1 /* UIKit Components */ = {
 			isa = PBXGroup;
 			children = (
@@ -273,7 +284,6 @@
 		34BEA4A427BAF1C4006F91C1 /* HomePageView */ = {
 			isa = PBXGroup;
 			children = (
-				3421BEA427B7045A00921D70 /* OnboardView.swift */,
 				34D19693279BE4AE00C1CE19 /* HomePageView.swift */,
 				34BEA4A527BAF1D6006F91C1 /* HomePageViewModel.swift */,
 				34A78B7F28F48CC6003CEA9C /* VenuesVisitedView.swift */,
@@ -423,6 +433,7 @@
 			isa = PBXGroup;
 			children = (
 				346883212866ADDD0056B09F /* LaunchScreen */,
+				34902220291A9A85007774C6 /* OnboardingView */,
 				3490220829155AFA007774C6 /* CustomTabBarView */,
 				3480A9F727C477180031BB09 /* TabBarView */,
 				34BEA4A427BAF1C4006F91C1 /* HomePageView */,
@@ -655,7 +666,7 @@
 				34C165D1289B75BD00179451 /* DropDown.swift in Sources */,
 				34F7F0BD28C5237500E72C0F /* EmailAddLocation.swift in Sources */,
 				3421BE9727B34A1400921D70 /* LocationDetailView.swift in Sources */,
-				3421BEA527B7045A00921D70 /* OnboardView.swift in Sources */,
+				3421BEA527B7045A00921D70 /* OldOnboardView.swift in Sources */,
 				3421BE8327AC760500921D70 /* DetailedVisitView.swift in Sources */,
 				3480AA0327C9E8D80031BB09 /* FriendReviewFeedModel.swift in Sources */,
 				3490221029155E97007774C6 /* TabBarItemsPreferenceKey.swift in Sources */,
@@ -665,6 +676,7 @@
 				34F7F0BB28C50A3F00E72C0F /* LoadingView.swift in Sources */,
 				3421BE9127B1FD6E00921D70 /* OKGNProfile.swift in Sources */,
 				34F00507279CD77100899561 /* MockData.swift in Sources */,
+				34902222291A9AA7007774C6 /* OnboardView.swift in Sources */,
 				3421BE9327B347C100921D70 /* LocationListView.swift in Sources */,
 				34A78B8028F48CC6003CEA9C /* VenuesVisitedView.swift in Sources */,
 				345C50D028E0F65500B75F2F /* CarouselView.swift in Sources */,

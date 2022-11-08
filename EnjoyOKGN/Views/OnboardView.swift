@@ -1,0 +1,189 @@
+//
+//  OnboardingView.swift
+//  EnjoyOKGN
+//
+//  Created by Blake Patenaude on 2022-11-08.
+//
+
+import SwiftUI
+
+struct OnboardView: View {
+    
+    @State var selection = 0
+    
+    var body: some View {
+        ZStack {
+            
+            LinearGradient(colors: [Color.OKGNDarkYellow, Color.OKGNDarkBlue],
+                           startPoint: .top,
+                           endPoint: .bottom).ignoresSafeArea()
+                .overlay(
+                    ZStack {
+                        
+                        backgroundWave2()
+                            .fill(
+                                LinearGradient(colors: [.OKGNLightGreen, .OKGNDarkYellow],
+                                               startPoint: .topLeading,
+                                               endPoint: .bottom)
+                            )
+                        
+                        backgroundWave()
+                            .fill(
+                                LinearGradient(colors: [.OKGNLightGreen, .OKGNPeach],
+                                               startPoint: .topLeading,
+                                               endPoint: .bottomTrailing)
+                            )
+                            .ignoresSafeArea(edges: .bottom)
+                    }
+                )
+            
+            TabView(selection: $selection) {
+                OnboardInfoView(imageName: "building.2.crop.circle",
+                                title: "See Points of Interest",
+                                description: "Find cool places to eat, drink, or play in the Okanagan!"
+                                ,selection: $selection).tag(0)
+                
+                OnboardInfoView(imageName: "newspaper.circle",
+                                title: "Review and Share",
+                                description: "Review locations by sharing a photo and rating with friends!",
+                                selection: $selection).tag(1)
+                
+                OnboardInfoView(imageName: "star.circle",
+                                title: "Awarded Locations",
+                                description: "Your top rated locations will get awards, see these top locations for you and your friends so you know where to visit next!",
+                                selection: $selection).tag(2)
+            }
+            .tabViewStyle(PageTabViewStyle())
+        }
+    }
+}
+
+struct OnboardingView_Previews: PreviewProvider {
+    static var previews: some View {
+        OnboardView()
+    }
+}
+
+
+
+struct backgroundWave: Shape {
+    
+    func path(in rect: CGRect) -> Path {
+        Path { path in
+            path.move(to: CGPoint(x: rect.minX, y: rect.midY))
+            
+            path.addQuadCurve(to: CGPoint(x: rect.midX, y: rect.midY * 1.25), control: CGPoint(x: rect.width * 0.25, y: rect.height * 0.60))
+            
+            path.addQuadCurve(to: CGPoint(x: rect.maxX, y: rect.midY * 1.8), control: CGPoint(x: rect.width * 0.65, y: rect.height * 0.80))
+            
+            path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
+            path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY))
+            
+        }
+    }
+}
+
+struct backgroundWave2: Shape {
+    
+    func path(in rect: CGRect) -> Path {
+        Path { path in
+            path.move(to: CGPoint(x: rect.minX, y: rect.midY))
+            path.addQuadCurve(to: CGPoint(x: rect.maxX, y: rect.midY * 1.25), control: CGPoint(x: rect.midX, y: rect.midY))
+            
+            path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
+            path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY))
+        }
+    }
+}
+
+
+struct OnboardInfoView: View {
+    
+    var imageName: String
+    var title: String
+    var description: String
+    @Binding var selection: Int
+    @Environment(\.dismiss) private var dismiss
+    
+    var body: some View {
+        VStack(alignment: .center, spacing: 4)  {
+                HStack {
+                    Image(systemName: imageName)
+                        .resizable()
+                        .frame(width: 50, height: 50)
+                        .foregroundColor(.OKGNDarkYellow)
+                    
+                    LinearGradient(colors: [.OKGNLightGreen, .OKGNDarkYellow],
+                                   startPoint: .topLeading,
+                                   endPoint: .bottomTrailing)
+                    .frame(height: 100)
+                    .mask {
+                        Text(title)
+                            .font(.largeTitle)
+                            .bold()
+                    }
+                }
+                .padding()
+                
+
+                Text(description)
+                    .foregroundColor(.white.opacity(0.8))
+                    .lineLimit(3)
+                    .minimumScaleFactor(0.75)
+                    .padding(.bottom)
+
+            
+            //button here
+            Button {
+                if selection == 2 {
+                    dismiss()
+                } else {
+                    withAnimation(.linear) {
+                        selection += 1
+                    }
+                }
+            } label: {
+                Text(selection == 2 ? "Get Started!" : "Next")
+                    .font(.subheadline)
+                    .foregroundColor(.white)
+                    .frame(width: 120, height: 30, alignment: .center)
+                    .background(Color.OKGNDarkYellow.opacity(0.5))
+                    .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+                    
+            }
+
+        }
+        .padding()
+        .background(
+            LinearGradient(colors: [.OKGNDarkBlue, .clear],
+                           startPoint: .top,
+                           endPoint: .bottom)
+        
+        )
+        .mask(RoundedRectangle(cornerRadius: 30, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 30, style: .continuous)
+                .stroke(
+                    LinearGradient(colors: [.white, .clear],
+                                   startPoint: .top,
+                                   endPoint: .bottom)
+                    , lineWidth: 1)
+                .blendMode(.overlay)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 30, style: .continuous)
+                        .stroke(
+                            LinearGradient(colors: [.white, .clear],
+                                           startPoint: .top,
+                                           endPoint: .bottom)
+                            , lineWidth: 2)
+                        .blur(radius: 5)
+                )
+        )
+        .background(
+            VisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterialDark))
+                .mask(RoundedRectangle(cornerRadius: 30, style: .continuous))
+        )
+            
+        .padding()
+    }
+}
