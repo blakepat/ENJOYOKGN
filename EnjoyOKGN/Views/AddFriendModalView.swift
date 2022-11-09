@@ -18,6 +18,16 @@ struct AddFriendModalView: View {
     @State private var searchText = ""
     @State private var alertItem: AlertItem?
     
+    var searchResults: [OKGNProfile] {
+
+       if searchText.isEmpty {
+           return users
+       } else {
+           return users.filter({ $0.name.contains(searchText)
+           })
+       }
+    }
+    
     var body: some View {
         NavigationView {
             ZStack {
@@ -99,15 +109,7 @@ struct AddFriendModalView: View {
     }
     
     
-    var searchResults: [OKGNProfile] {
 
-       if searchText.isEmpty {
-           return users
-       } else {
-           return users.filter({ $0.name.contains(searchText)
-           })
-       }
-    }
     
     
     func addFriend(friendRecord: CKRecord) {

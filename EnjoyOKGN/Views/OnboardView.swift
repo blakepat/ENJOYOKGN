@@ -149,9 +149,12 @@ struct OnboardInfoView: View {
                     .frame(width: 120, height: 30, alignment: .center)
                     .background(Color.OKGNDarkYellow.opacity(0.5))
                     .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-                    
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 30, style: .continuous)
+                            .stroke(Color.white.opacity(0.3), lineWidth: 2)
+                            .blur(radius: 1)
+                    )
             }
-
         }
         .padding()
         .background(
