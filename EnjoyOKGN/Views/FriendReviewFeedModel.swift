@@ -28,12 +28,13 @@ final class FriendReviewFeedModel: ObservableObject {
     
     @Published var alertItem: AlertItem?
     @Published var showAlertView = false
+    @Published var showFriendAlertView = false
     @Published var friendRequest: CKRecord.Reference?
     @Published var friendName: String = "" {
         didSet {
             twoButtonAlertItem = TwoButtonAlertItem(title: Text("Follow Request"), message: Text("\(friendName) has requested to Follow you!"), acceptButton: .cancel(), dismissButton: .cancel())
             
-            showAlertView = true
+            showFriendAlertView = true
         }
     }
 

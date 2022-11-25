@@ -28,47 +28,31 @@ struct SideMenuView: View {
                         List {
                             ForEach(categories, id: \.self) { category in
                                 HStack {
-                                    
                                     Circle().frame(width: 10).foregroundColor(category.color)
-                                    
-                                    Button {
-                                        categoryFilter = nil
-                                        categoryFilter = category
-                                        menuOpen = false
-                                    } label: {
-                                        Text(category.description)
-                                            .foregroundColor(.white)
-                                            .font(.headline)
-                                            .fontWeight(.semibold)
-                                            .frame(width: 200, alignment: .leading)
-                                    }
-                                    .frame(width: 200)
-                                    .listRowInsets(EdgeInsets())
-                                    
-                                    Spacer()
-                                }
-                            }
-                            .frame(width: 200, alignment: .leading)
-                            .listRowInsets(EdgeInsets())
-                            
-                            HStack {
-                                
-                                Circle().frame(width: 10).foregroundColor(.OKGNDarkYellow)
-                                
-                                Button {
-                                    categoryFilter = nil
-                                    menuOpen = false
-                                } label: {
-                                    Text("Clear filter")
-                                        .bold()
+                                    Text(category.description)
                                         .foregroundColor(.white)
+                                        .font(.headline)
+                                        .fontWeight(.semibold)
                                 }
-                                
-                                Spacer()
+                                .onTapGesture {
+                                    categoryFilter = nil
+                                    categoryFilter = category
+                                    menuOpen = false
+                                }
                             }
-                            .frame(width: 200, alignment: .leading)
-                            .listRowInsets(EdgeInsets())
-
+                            .listRowBackground(Color.clear)
+                            HStack {
+                                Circle().frame(width: 10).foregroundColor(.OKGNDarkYellow)
+                                Text("Clear filter")
+                                    .foregroundColor(.white)
+                                    .bold()
+                            }
+                            .listRowBackground(Color.clear)
+                            .onTapGesture {
+                                categoryFilter = nil
+                                menuOpen = false
+                                
+                            }
                         }
                         .padding(.top)
                         .listStyle(.sidebar)

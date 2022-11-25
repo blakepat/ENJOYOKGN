@@ -104,19 +104,7 @@ extension FriendProfileView {
         HStack(spacing: 20) {
             
             Image("GoldTrophy")
-                .resizable()
-                .frame(width: 20, height: 24)
-                .scaledToFit()
-                .padding(10)
-                .offset(y: withAnimation(.linear(duration: 1)) { viewModel.topRatedFilter == nil ? -8 : 0 } )
-                .shadow(color: .black.opacity(0.3), radius: 2, x: 2, y: 2)
-                .background(
-                    Color.white.clipShape(Circle()).opacity(withAnimation(.linear(duration: 1)) { viewModel.topRatedFilter == nil ? 0.8 : 0.3 }).offset(y: withAnimation(.linear(duration: 1)) { viewModel.topRatedFilter == nil ? -8 : 0 } )
-                        
-                )
-                .shadow(color: .black.opacity(0.3), radius: 5, x: 5, y: 5)
-                .animation(.linear, value: viewModel.topRatedFilter)
-                .scaleEffect(viewModel.topRatedFilter == nil ? 1.15 : 1)
+                .createIconView(isActive: viewModel.topRatedFilter == nil)
                 .onTapGesture {
                     withAnimation {
                         viewModel.topRatedFilter = nil
@@ -129,17 +117,7 @@ extension FriendProfileView {
                 let category = categories[index]
                 
                 category.trophyImage
-                    .resizable()
-                    .frame(width: 26, height: 26)
-                    .scaledToFit()
-                    .padding(8)
-                    .offset(y: withAnimation(.linear(duration: 1)) { viewModel.topRatedFilter == category ? -8 : 0 })
-                    .background(
-                        Color.white.clipShape(Circle()).opacity(withAnimation(.linear(duration: 1)) { viewModel.topRatedFilter == category ? 0.8 : 0.3 }).offset(y: withAnimation(.linear(duration: 1)) { viewModel.topRatedFilter == category ? -8 : 0 })
-                    )
-                    .shadow(color: .black.opacity(0.3), radius: 5, x: 5, y: 5)
-                    .scaleEffect(viewModel.topRatedFilter == category ? 1.15 : 1)
-                    .animation(.linear, value: viewModel.topRatedFilter)
+                    .createIconView(isActive: viewModel.topRatedFilter == category)
                     .onTapGesture {
                         withAnimation {
                             viewModel.topRatedFilter = category
@@ -173,14 +151,7 @@ extension FriendProfileView {
                                 
                                 Spacer()
                                     Text("You haven't visited any \(categories[index-1].description) locations yet!")
-                                        .multilineTextAlignment(.center)
-                                        .padding(8)
-                                        .font(.title2)
-                                        .foregroundColor(.black)
-                                        .background(categories[index-1].color.clipShape(RoundedRectangle(cornerRadius: 16)))
-                                        .frame(width: 300, height: 100)
-                                        .offset(y: 40)
-                                        .rotation3DEffect(.degrees(minX / -10), axis: (x: 0, y: 1, z: 0))
+                                        .createNoVisitsBanner(minX: minX, category: categories[index - 1])
 
                                 Spacer()
                             }

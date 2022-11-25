@@ -10,6 +10,7 @@ import Foundation
 final class TabBarViewModel: ObservableObject {
     
     @Published var alertItem: AlertItem?
+    @Published var showAlertView = false
     
     @Published var isShowingOnboardView = false
     var hasSeenOnboardView: Bool {

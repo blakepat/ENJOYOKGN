@@ -50,6 +50,11 @@ struct FriendReviewFeed: View {
                     }
                 }
             }
+            .alert(viewModel.alertItem?.title ?? Text(""), isPresented: $viewModel.showAlertView, actions: {
+                // actions
+            }, message: {
+                viewModel.alertItem?.message ?? Text("")
+            })
             .navigationTitle(viewModel.isShowingFriendsList ? "Friends" : "Friend's Reviews")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar(content: {
@@ -97,6 +102,12 @@ struct FriendReviewFeed: View {
                     reviewManager.getAllFriendsReviews()
                     friendManager.compareRequestsAndFriends()
                     viewModel.displayFollowRequests()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                        if CloudKitManager.shared.userRecord == nil {
+                            viewModel.alertItem = AlertContext.cannotRetrieveProfile
+                            viewModel.showAlertView = true
+                        }
+                    }
                 }
             }
         }
@@ -126,10 +137,7 @@ extension FriendReviewFeed {
             }
             .listRowBackground(Color.OKGNDarkGray)
         }
-//        .alert(item: $viewModel.twoButtonAlertItem, content: { alertItem in
-//            Alert(title: alertItem.title, message: alertItem.message, primaryButton: alertItem.acceptButton, secondaryButton: alertItem.dismissButton)
-//        })
-        .alert(viewModel.twoButtonAlertItem?.title ?? Text(""), isPresented: $viewModel.showAlertView, actions: {
+        .alert(viewModel.twoButtonAlertItem?.title ?? Text(""), isPresented: $viewModel.showFriendAlertView, actions: {
             // actions
             
             HStack {
@@ -189,8 +197,14 @@ extension FriendReviewFeed {
             .listStyle(.plain)
             .offset(x: viewModel.isShowingFriendsList ? -screen.width : 0)
         }
-        .alert(item: $friendManager.alertItem, content: { alertItem in
-            Alert(title: alertItem.title, message: alertItem.message, dismissButton: alertItem.dismissButton)
+        .refreshable { await reviewManager.refreshReviewFeed() }
+//        .alert(item: $friendManager.alertItem, content: { alertItem in
+//            Alert(title: alertItem.title, message: alertItem.message, dismissButton: alertItem.dismissButton)
+//        })
+        .alert(viewModel.alertItem?.title ?? Text(""), isPresented: $viewModel.showFriendAlertView, actions: {
+            // actions
+        }, message: {
+            viewModel.alertItem?.message ?? Text("")
         })
     }
     

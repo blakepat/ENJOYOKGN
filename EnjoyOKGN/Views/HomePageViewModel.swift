@@ -62,6 +62,7 @@ final class HomePageViewModel: ObservableObject {
         guard let userRecord = CloudKitManager.shared.userRecord else {
             // show an alert
             self.alertItem = AlertContext.profileCreateFailure
+            showAlertView = true
             return
         }
         
@@ -77,6 +78,7 @@ final class HomePageViewModel: ObservableObject {
                 }
             } catch {
                 self.alertItem = AlertContext.profileCreateFailure
+                showAlertView = true
             }
         }
     }
@@ -130,8 +132,10 @@ final class HomePageViewModel: ObservableObject {
             do {
                 let _ = try await CloudKitManager.shared.save(record: profileRecord)
                 alertItem = AlertContext.profileUpdateSuccess
+                showAlertView = true
             } catch {
                 alertItem = AlertContext.profileUpdateFailure
+                showAlertView = true
             }
         }
     }
@@ -179,6 +183,7 @@ final class HomePageViewModel: ObservableObject {
                 
             } else {
                 alertItem = AlertContext.InvalidUsername
+                showAlertView = true
             }
         }
         

@@ -13,7 +13,7 @@ struct SettingsView: View {
     @Environment(\.openURL) var openURL
     private var email = EmailAddLocation(toAddress: "blakepat@me.com",
                                          subject: "EnjoyOKGN Location Request",
-                                         messageHeader: "Please include name, address, and recommened category. Thank you!")
+                                         messageHeader: "Please include name, address, and recommended category. Thank you!")
     
     let coffeeURL = URL(string: "https://www.buymeacoffee.com/blakepat")!
     let portfolioURL = URL(string: "https://blakepat.wixsite.com/portfolio")!

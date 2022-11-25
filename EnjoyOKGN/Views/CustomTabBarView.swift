@@ -13,9 +13,12 @@ struct CustomTabBarView: View {
     @Binding var selection: TabBarItem
     @Namespace private var namespace
     
+    @State var alertItem: AlertItem?
+    
     var body: some View {
         tabBar
     }
+
 }
 
 struct CustomTabBarView_Previews: PreviewProvider {
@@ -35,7 +38,6 @@ extension CustomTabBarView {
         withAnimation {
             selection = tab
         }
-        
     }
     
     
@@ -78,5 +80,6 @@ extension CustomTabBarView {
         .cornerRadius(10)
         .shadow(color: Color.black.opacity(0.3), radius: 10, x: 0, y: 5)
         .padding(.horizontal)
+        
     }
 }

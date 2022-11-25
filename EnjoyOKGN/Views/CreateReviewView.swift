@@ -18,6 +18,7 @@ struct CreateReviewView: View {
     
     @State var selectedDate: Date = Date()
     @State var locations: [OKGNLocation]
+    @State var searchText = ""
     @Binding var tabSelection: TabBarItem
     
     init(date: Date, locations: [OKGNLocation], tabSelection: Binding<TabBarItem>) {
@@ -80,6 +81,9 @@ struct CreateReviewView: View {
                                 }
                             } catch {
                                 print("❌ Error getting locations for create review screen")
+                                viewModel.alertItem = AlertContext.cannotRetrieveLocations
+                                viewModel.showAlertView = true
+                                viewModel.showLoadingView = false
                             }
                         }
                     }

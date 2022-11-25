@@ -32,7 +32,10 @@ struct NewMapView: UIViewRepresentable {
         
         
         func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
-            parent.centerCoordinate.center = mapView.centerCoordinate
+            DispatchQueue.main.async {
+                self.parent.centerCoordinate.center = mapView.centerCoordinate
+            }
+            
         }
         
         
@@ -84,8 +87,6 @@ struct NewMapView: UIViewRepresentable {
     func updateUIView(_ uiView: MKMapView, context: Context) {
         
         if annotations.count + 1 != uiView.annotations.count || !(uiView.annotations.contains(where: {$0.subtitle == annotations.first?.subtitle })) {
-            
-//            print("⚠️ Annotations Redrawn - (\(annotations.count + 1), \(annotations.first?.subtitle ?? "")), (\(uiView.annotations.count), \(uiView.annotations.first?.subtitle ?? ""))")
             
             uiView.removeAnnotations(uiView.annotations)
             uiView.addAnnotations(annotations)

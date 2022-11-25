@@ -15,6 +15,7 @@ final class LocationDetailViewModel: ObservableObject {
     @ObservedObject var reviewManager = ReviewManager()
     
     @Published var isShowingDetailedModalView = false
+    @Published var showAlertView = false
     @Published var detailedReviewToShow: OKGNReview?
     @Published var reviewToDeleteId: CKRecord.ID? {
         didSet {
@@ -65,12 +66,14 @@ final class LocationDetailViewModel: ObservableObject {
 //        guard let url = URL(string: "tel://\(location.phoneNumber)")
         guard let testURL = URL(string: "tel://905-407-1413") else {
             alertItem = AlertContext.invalidPhoneNumber
+            showAlertView = true
             return
         }
         if UIApplication.shared.canOpenURL(testURL) {
             UIApplication.shared.open(testURL)
         } else {
             alertItem = AlertContext.unableToCallWithDevice
+            showAlertView = true
         }
         
     }
@@ -102,8 +105,10 @@ final class LocationDetailViewModel: ObservableObject {
             do {
                 let _ = try await CloudKitManager.shared.save(record: profileRecord)
                 alertItem = AlertContext.locationFavouritedSuccess
+                showAlertView = true
             } catch {
                 alertItem = AlertContext.locationFavouritedFailed
+                showAlertView = true
             }
         }
     }
@@ -126,8 +131,10 @@ final class LocationDetailViewModel: ObservableObject {
             do {
                 let _ = try await CloudKitManager.shared.save(record: profileRecord)
                 alertItem = AlertContext.locationUnfavouritedSuccess
+                showAlertView = true
             } catch {
                 alertItem = AlertContext.locationUnfavouritedFailed
+                showAlertView = true
             }
         }
     }
