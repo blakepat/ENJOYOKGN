@@ -63,7 +63,6 @@ struct FriendReviewFeed: View {
                         if viewModel.isShowingFriendsList {
                             viewModel.isShowingAddFriendAlert = true
                         } else {
-                            //TO:DO - fix sort by rating
                             reviewManager.allFriendsReviews = []
                             reviewManager.cursor = nil
                             viewModel.reviewsSortedByRating.toggle()
@@ -138,8 +137,6 @@ extension FriendReviewFeed {
             .listRowBackground(Color.OKGNDarkGray)
         }
         .alert(viewModel.twoButtonAlertItem?.title ?? Text(""), isPresented: $viewModel.showFriendAlertView, actions: {
-            // actions
-            
             HStack {
                 Button {
                     friendManager.removeRequestAfterAccepting(follower: viewModel.friendRequest!)
@@ -147,21 +144,14 @@ extension FriendReviewFeed {
                 } label: {
                     Text("Accept")
                 }
-                
                 Button {
-                    //decline
                     Task {
                         await viewModel.declineRequest(request: viewModel.friendRequest!.recordID)
                     }
-                    
                 } label: {
                     Text("Decline")
                 }
-
             }
-
-
-
         }, message: {
             viewModel.twoButtonAlertItem?.message ?? Text("")
         })

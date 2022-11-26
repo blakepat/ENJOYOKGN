@@ -12,13 +12,13 @@ struct CreateReviewView: View {
     
     @EnvironmentObject var reviewManager: ReviewManager
     @EnvironmentObject var locationManager: LocationManager
-    @ObservedObject var viewModel = CreateReviewViewModel()
+    @StateObject var viewModel = CreateReviewViewModel()
     
     let cacheManager = CacheManager.instance
     
     @State var selectedDate: Date = Date()
     @State var locations: [OKGNLocation]
-    @State var searchText = ""
+
     @Binding var tabSelection: TabBarItem
     
     init(date: Date, locations: [OKGNLocation], tabSelection: Binding<TabBarItem>) {
@@ -29,12 +29,14 @@ struct CreateReviewView: View {
         self._tabSelection = tabSelection
     }
     
+    
+    
     var body: some View {
         ZStack(alignment: .top) {
             
             Color.OKGNDarkBlue.edgesIgnoringSafeArea(.all)
             
-            VStack {
+            ScrollView {
                 
                 createReviewTitle
                 
@@ -67,7 +69,6 @@ struct CreateReviewView: View {
                 viewModel.locationNamesIdsCategory = locationNamesIds
             }
             .onChange(of: tabSelection) { newValue in
-                
                 if newValue == .create {
                     Task {
                         if locationManager.locationNamesIdsCategory.isEmpty {
@@ -106,6 +107,9 @@ struct CreateReviewView: View {
         }
         .onTapGesture {
             hideKeyboard()
+        }
+        .onAppear {
+            UITextView.appearance().backgroundColor = .clear
         }
     }
     
@@ -321,45 +325,89 @@ extension CreateReviewView {
     
     
     private var reviewLocationSelector: some View {
-        VStack {
-            HStack(spacing: 0) {
-                Text("Location: ")
-                    .bold()
-                    .font(.callout)
-                    .foregroundColor(.white)
-                
-                Text(viewModel.locationName)
-                    .font(.callout)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.75)
-                    .foregroundColor(returnCategoryFromString(viewModel.selectedLocationCategory ?? "Activity").color)
+        
+        ZStack {
+            
+            VStack {
+                HStack(spacing: 0) {
+                    Text("Location: ")
+                        .bold()
+                        .font(.callout)
+                        .foregroundColor(.white)
+                    
+                    Text(viewModel.locationName)
+                        .font(.callout)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.75)
+                        .foregroundColor(returnCategoryFromString(viewModel.selectedLocationCategory ?? "Activity").color)
+                    
+                    Spacer()
+                }
+                .padding(.horizontal, 16)
+                List {
+                    ForEach(0..<viewModel.searchResults.count, id: \.self) { index in
+                        let location = viewModel.searchResults[index]
+                        Button {
+                            viewModel.locationName = location.1
+                            viewModel.selectedLocationId = location.0
+                            viewModel.selectedLocationCategory = location.2
+                        } label: {
+                            Text(location.1)
+                                .foregroundColor(.white)
+                                .onTapGesture {
+                                    viewModel.locationName = location.1
+                                    viewModel.selectedLocationId = location.0
+                                    viewModel.selectedLocationCategory = location.2
+                                }
+                        }
+                        .listRowBackground(VisualEffectView(effect: UIBlurEffect(style: .systemThinMaterialDark)))
+                    }
+                }
+                .searchable(text: $viewModel.searchText)
+                .clipShape(RoundedRectangle(cornerRadius: 16))
+                .frame(height: viewModel.showingExpandedList ? screen.height / 2 : screen.height / 3 - 100)
+            }
+            
+            VStack {
+                HStack {
+                    Image(systemName: "magnifyingglass.circle")
+                    
+                    if #available(iOS 16.0, *) {
+                        TextEditor(text: $viewModel.searchText)
+                            .multilineTextAlignment(.leading)
+                            .scrollContentBackground(.hidden)    // new technique for iOS 16
+                    } else {
+                        TextEditor(text: $viewModel.searchText)
+                    }
+                }
+                .frame(height: 36)
+                .foregroundColor(.white)
+                .padding(.horizontal, 8)
+                .background(VisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterialDark)).cornerRadius(8))
+                .overlay { RoundedRectangle(cornerRadius: 8).stroke(Color.gray, lineWidth: 1) }
+                .padding(.horizontal, 20)
+                .offset(y: 30)
+
                 
                 Spacer()
-            }
-            .padding(.horizontal, 16)
-            
-            List {
-                ForEach(locationManager.locationNamesIdsCategory, id: \.0) { location in
-                    Button {
-                        viewModel.locationName = location.1
-                        viewModel.selectedLocationId = location.0
-                        viewModel.selectedLocationCategory = location.2
-                    } label: {
-                        Text(location.1)
-                            .foregroundColor(.white)
-                            .onTapGesture {
-                                viewModel.locationName = location.1
-                                viewModel.selectedLocationId = location.0
-                                viewModel.selectedLocationCategory = location.2
-                            }
+                HStack {
+                    Spacer()
+                    Image(systemName: viewModel.showingExpandedList ? "chevron.up" : "chevron.down")
+                        .frame(width: 20, height: 20)
+                        .foregroundColor(.white)
+                    Spacer()
+                }
+                .contentShape(Rectangle())
+                .background(Color.OKGNDarkGray)
+                .cornerRadius(16)
+                .onTapGesture {
+                    withAnimation {
+                        viewModel.showingExpandedList.toggle()
                     }
-                    .listRowBackground(VisualEffectView(effect: UIBlurEffect(style: .systemThinMaterialDark)))
                 }
             }
-            .clipShape(RoundedRectangle(cornerRadius: 16))
-            .frame(height: screen.height / 3 - 100)
-            .padding(.horizontal, 16)
         }
+        .padding(.horizontal, 16)
     }
     
     
@@ -381,16 +429,27 @@ extension CreateReviewView {
                     .foregroundColor(.gray)
                 
                 Spacer()
-                
             }
             
-            TextEditor(text: $viewModel.caption)
-                .frame(height: 50)
-                .foregroundColor(.white)
-                .overlay { RoundedRectangle(cornerRadius: 8).stroke(Color.gray, lineWidth: 1) }
-                .accessibilityHint(Text("Summerize your experience in a fun and short way. (20 character maximum"))
-                .background(Color(white: 0.35, opacity: 0.3))
-                
+            if #available(iOS 16.0, *) {
+                TextEditor(text: $viewModel.caption)
+                    .multilineTextAlignment(.leading)
+                    .foregroundColor(.white)
+                    .background(Color(white: 0.35).opacity(0.35))
+                    .overlay { RoundedRectangle(cornerRadius: 8).stroke(Color.gray, lineWidth: 1) }
+                    .scrollContentBackground(.hidden)    // new technique for iOS 16
+                    .frame(height: 44)
+                    .accessibilityHint(Text("Summarize your experience in a fun and short way. (20 character maximum"))
+            } else {
+                // Fallback on earlier versions
+                TextEditor(text: $viewModel.caption)
+                    .frame(height: 44)
+                    .background(Color(white: 0.35).opacity(0.35))
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
+                    .overlay { RoundedRectangle(cornerRadius: 8).stroke(Color.gray, lineWidth: 1) }
+                    .accessibilityHint(Text("Summarize your experience in a fun and short way. (20 character maximum"))
+            }
         }
         .padding(.horizontal, 16)
     }
@@ -472,7 +531,7 @@ extension CreateReviewView {
             
         }
         .padding(.horizontal, 16)
-        .padding(.bottom)
+        .padding(.bottom, 4)
     }
     
     
@@ -488,8 +547,6 @@ extension CreateReviewView {
                 .clipShape(RoundedRectangle(cornerRadius: 16))
         }
     }
-    
-    
 }
 
 
