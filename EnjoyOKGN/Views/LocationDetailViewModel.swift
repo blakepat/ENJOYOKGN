@@ -17,6 +17,7 @@ final class LocationDetailViewModel: ObservableObject {
     @Published var isShowingDetailedModalView = false
     @Published var showAlertView = false
     @Published var detailedReviewToShow: OKGNReview?
+    @Published var locationBannerImage = UIImage(named: "MockLocationPhoto")
     @Published var reviewToDeleteId: CKRecord.ID? {
         didSet {
             reviews.removeAll(where: { $0.id == reviewToDeleteId })
@@ -27,14 +28,14 @@ final class LocationDetailViewModel: ObservableObject {
     @Published var reviews: [OKGNReview] = []
     @Published var friendsReviews: [OKGNReview] = []
     
-    @Binding var location: OKGNLocation?
+    @Published var location: OKGNLocation?
     @Published var alertItem: AlertItem?
     
     @Published var isFavourited = false
     @Published var showFriendsReviews = false
     
-    init(location: Binding<OKGNLocation?>) {
-        self._location = location
+    init(location: OKGNLocation?) {
+        self.location = location
     }
     
     
@@ -138,6 +139,9 @@ final class LocationDetailViewModel: ObservableObject {
             }
         }
     }
+    
+    
+
 }
 
 

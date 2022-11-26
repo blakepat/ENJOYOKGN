@@ -13,6 +13,7 @@ struct CreateReviewView: View {
     @EnvironmentObject var reviewManager: ReviewManager
     @EnvironmentObject var locationManager: LocationManager
     @StateObject var viewModel = CreateReviewViewModel()
+    @Environment(\.dynamicTypeSize) var typeSize
     
     let cacheManager = CacheManager.instance
     
@@ -52,7 +53,7 @@ struct CreateReviewView: View {
                 
                 createReviewButton
                 
-                Spacer()
+                Spacer().frame(minHeight: 50)
             }
             .alert(viewModel.alertItem?.title ?? Text(""), isPresented: $viewModel.showAlertView, actions: {
                 // actions
@@ -315,6 +316,7 @@ extension CreateReviewView {
         HStack {
             DatePicker("", selection: $selectedDate)
                 .padding(.leading, 4)
+                .minimumScaleFactor(0.7)
                 .datePickerStyle(CompactDatePickerStyle())
                 .frame(width: screen.width / 2, height: 30, alignment: .leading)
                 .colorScheme(.dark)
@@ -334,11 +336,12 @@ extension CreateReviewView {
                         .bold()
                         .font(.callout)
                         .foregroundColor(.white)
+                        .minimumScaleFactor(0.7)
                     
                     Text(viewModel.locationName)
                         .font(.callout)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.75)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.60)
                         .foregroundColor(returnCategoryFromString(viewModel.selectedLocationCategory ?? "Activity").color)
                     
                     Spacer()
@@ -380,13 +383,13 @@ extension CreateReviewView {
                         TextEditor(text: $viewModel.searchText)
                     }
                 }
-                .frame(height: 36)
+                .frame(height: typeSize >= .accessibility2 ? 50 : 36)
                 .foregroundColor(.white)
                 .padding(.horizontal, 8)
                 .background(VisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterialDark)).cornerRadius(8))
                 .overlay { RoundedRectangle(cornerRadius: 8).stroke(Color.gray, lineWidth: 1) }
                 .padding(.horizontal, 20)
-                .offset(y: 30)
+                .offset(y: typeSize >= .accessibility2 ? 50 : 36)
 
                 
                 Spacer()
@@ -438,12 +441,12 @@ extension CreateReviewView {
                     .background(Color(white: 0.35).opacity(0.35))
                     .overlay { RoundedRectangle(cornerRadius: 8).stroke(Color.gray, lineWidth: 1) }
                     .scrollContentBackground(.hidden)    // new technique for iOS 16
-                    .frame(height: 44)
+                    .frame(height: typeSize >= .accessibility2 ? 54 : 44)
                     .accessibilityHint(Text("Summarize your experience in a fun and short way. (20 character maximum"))
             } else {
                 // Fallback on earlier versions
                 TextEditor(text: $viewModel.caption)
-                    .frame(height: 44)
+                    .frame(height: typeSize >= .accessibility2 ? 54 : 44)
                     .background(Color(white: 0.35).opacity(0.35))
                     .foregroundColor(.white)
                     .cornerRadius(8)
@@ -542,6 +545,7 @@ extension CreateReviewView {
         } label: {
             Text("Create Review")
                 .foregroundColor(.black)
+                .minimumScaleFactor(0.7)
                 .frame(width: 260, height: 40)
                 .background(Color.OKGNDarkYellow)
                 .clipShape(RoundedRectangle(cornerRadius: 16))

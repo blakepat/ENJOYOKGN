@@ -36,13 +36,10 @@ struct TopRatedScrollView: View {
                                 
                                 if topRatedFilter == nil {
                                     HStack {
-                                        Text(review.locationCategory.description)
-                                            .foregroundColor(returnCategoryFromString(review.locationCategory.description).color)
-                                            .fontWeight(.semibold)
-                                        +
-                                        Text(" Leader")
+                                        Text("\(review.locationCategory.description) Leader")
                                             .fontWeight(.semibold)
                                             .foregroundColor(.white)
+                                            .minimumScaleFactor(0.6)
                                             
                                         Spacer()
                                     }
@@ -65,6 +62,7 @@ struct TopRatedScrollView: View {
                             }
                         }
                     }
+                    Spacer().frame(height: 60)
                 }
             }
             .padding(.horizontal, 8)

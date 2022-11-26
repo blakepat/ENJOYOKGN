@@ -27,7 +27,7 @@ struct VenuesVisitedView: View {
                 .fontWeight(.bold)
                 .padding(8)
                 .lineLimit(1)
-                .minimumScaleFactor(0.75)
+                .minimumScaleFactor(0.5)
                 .background(showVenuesVisitedSubCategories ? .OKGNDarkYellow : Color.OKGNDarkBlue)
                 .foregroundColor(showVenuesVisitedSubCategories ? .black : .white)
                 .clipShape(Capsule())
@@ -48,15 +48,17 @@ struct VenuesVisitedView: View {
                 Text("Activities: \(allCategoriesVisitCount[4])").fontWeight(.semibold)
             }
             .foregroundColor(.black)
-            .frame(height: showVenuesVisitedSubCategories ? 120 : 0)
+            .frame(height: showVenuesVisitedSubCategories ? nil : 0)
             .padding(.top, showVenuesVisitedSubCategories ? 28 : 0)
             .padding(4)
+            .lineLimit(1)
             .padding(.bottom, 4)
             .padding(.trailing, 6)
             .background(Color.OKGNDarkYellow)
             .clipShape(RoundedRectangle(cornerRadius: 16))
             .offset(y: -22)
             .zIndex(0)
+            .minimumScaleFactor(0.5)
         }
     }
 }

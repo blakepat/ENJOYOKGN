@@ -19,10 +19,9 @@ struct TrophyScrollView: View {
                 
                 ForEach(0..<5) { i in
                     ProgressBar(progress: categoryVisitCounts[i], award: AwardTypes.allAwards[i])
-                        .frame(width: 150)
+                        .frame(maxWidth: 300)
                 }
             }
         }
-        .frame(height: 140)
     }
 }

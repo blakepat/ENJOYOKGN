@@ -34,7 +34,7 @@ struct SettingsView: View {
                 List {
                     aboutSection
                     emailSection
-                    notificationSection
+//                    notificationSection
                 }
                 .navigationTitle("Settings")
                 .listStyle(.grouped)
