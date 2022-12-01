@@ -61,9 +61,10 @@ struct TopRatedScrollView: View {
                                     }
                             }
                         }
+                        Spacer().frame(height: 100)
                     }
-                    Spacer().frame(height: 60)
                 }
+                
             }
             .padding(.horizontal, 8)
 //            .padding(.top, 46)

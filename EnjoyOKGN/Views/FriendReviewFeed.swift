@@ -33,6 +33,12 @@ struct FriendReviewFeed: View {
                 reviewFeed
     
                 friendList
+                
+                if friendManager.friends.isEmpty {
+                    emptyReviewsView(text: "It seems like you don't have any friends 😬 \n\nAdd some to see their reviews here!")
+                } else if reviewManager.allFriendsReviews.isEmpty {
+                    emptyReviewsView(text: "It seems like your friends haven't posted any reviews yet! \n\nInvite them to your favourite spot and see what they think!")
+                }
 
                 if viewModel.isShowingDetailedModalView {
                     Color(.systemBackground)
@@ -188,15 +194,38 @@ extension FriendReviewFeed {
             .offset(x: viewModel.isShowingFriendsList ? -screen.width : 0)
         }
         .refreshable { await reviewManager.refreshReviewFeed() }
-//        .alert(item: $friendManager.alertItem, content: { alertItem in
-//            Alert(title: alertItem.title, message: alertItem.message, dismissButton: alertItem.dismissButton)
-//        })
         .alert(viewModel.alertItem?.title ?? Text(""), isPresented: $viewModel.showFriendAlertView, actions: {
             // actions
         }, message: {
             viewModel.alertItem?.message ?? Text("")
         })
     }
+}
+
+
+
+struct emptyReviewsView: View {
     
+    var text: String
     
+    var body: some View {
+        
+        VStack {
+            Spacer()
+            
+            Text(text)
+                .multilineTextAlignment(.center)
+                .font(.title)
+                .foregroundColor(.white)
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 16)
+                        .opacity(0.4)
+                        .foregroundColor(.OKGNDarkYellow)
+                )
+                .padding(.horizontal)
+            
+            Spacer()
+        }
+    }
 }

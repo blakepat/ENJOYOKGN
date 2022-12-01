@@ -91,6 +91,7 @@ final class HomePageViewModel: ObservableObject {
                 
                 guard let userRecord = CloudKitManager.shared.userRecord else {
                     print("❌ No user record found when calling getProfile()")
+                    try await CloudKitManager.shared.getUserRecord()
                     return
                 }
                 
