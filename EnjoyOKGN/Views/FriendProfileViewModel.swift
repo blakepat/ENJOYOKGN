@@ -6,15 +6,19 @@
 //
 
 import SwiftUI
+import CloudKit
 
 
 final class FriendProfileViewModel: ObservableObject {
+    
+    @ObservedObject var friendManager = FriendManager()
     
     @Published var isShowingTopRatedFilterAlert = false
     @Published var isShowingDetailedModalView = false
     @Published var topRatedFilter: Category?
     @Published var detailedReviewToShow: OKGNReview?
     @Published var categoryVisitCounts = [0,0,0,0,0]
+    @Published var userIsBlocked = false
     
     @Published var friendReviews: [OKGNReview]? {
         didSet {
@@ -31,6 +35,16 @@ final class FriendProfileViewModel: ObservableObject {
         }
     }
     
+    
+    func blockUser(_ user: CKRecord.Reference) {
+        friendManager.blockUser(user)
+        userIsBlocked = true
+    }
+    
+    func unBlockUser(_ user: CKRecord.Reference) {
+        friendManager.unBlockUser(user)
+        userIsBlocked = false
+    }
 }
 
 

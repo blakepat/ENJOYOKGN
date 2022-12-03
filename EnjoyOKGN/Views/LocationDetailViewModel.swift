@@ -62,21 +62,17 @@ final class LocationDetailViewModel: ObservableObject {
     
     
     func callLocation() {
-        //TO-DO: uncomment code and remove other guard let
-        
-//        guard let url = URL(string: "tel://\(location.phoneNumber)")
-        guard let testURL = URL(string: "tel://905-407-1413") else {
+        guard let phoneNumberURL = URL(string: "tel://\(location?.phoneNumber ?? "0")") else {
             alertItem = AlertContext.invalidPhoneNumber
             showAlertView = true
             return
         }
-        if UIApplication.shared.canOpenURL(testURL) {
-            UIApplication.shared.open(testURL)
+        if UIApplication.shared.canOpenURL(phoneNumberURL) {
+            UIApplication.shared.open(phoneNumberURL)
         } else {
             alertItem = AlertContext.unableToCallWithDevice
             showAlertView = true
         }
-        
     }
     
     func checkIfLocationIsFavourited() {

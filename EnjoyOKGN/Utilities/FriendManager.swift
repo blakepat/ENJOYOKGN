@@ -47,6 +47,56 @@ final class FriendManager: ObservableObject {
         }
     }
     
+    
+    func blockUser(_ userToBlock: CKRecord.Reference) {
+        if let userProfile = CloudKitManager.shared.profile {
+            var blockedUsers = userProfile.convertToOKGNProfile().blockList
+            blockedUsers.append(userToBlock)
+            
+            userProfile[OKGNProfile.kBlockList] = blockedUsers
+            
+            Task {
+                do {
+                    let _ = try await CloudKitManager.shared.save(record: userProfile)
+                    print("✅😡 user blocked!")
+                } catch {
+                    DispatchQueue.main.async {
+                        self.alertItem = AlertContext.cannotRetrieveProfile
+                        print("⚠️ alert item set")
+                    }
+                    
+                    print("❌😡 error blocking friend")
+                    print(error)
+                }
+            }
+        }
+    }
+    
+    func unBlockUser(_ userToUnblock: CKRecord.Reference) {
+        if let userProfile = CloudKitManager.shared.profile {
+            let blockedUsers = userProfile.convertToOKGNProfile().blockList
+            let newBlockedUsers = blockedUsers.filter({ $0.recordID != userToUnblock.recordID })
+            
+            userProfile[OKGNProfile.kBlockList] = newBlockedUsers
+            
+            Task {
+                do {
+                    let _ = try await CloudKitManager.shared.save(record: userProfile)
+                    print("✅🤯 user UNblocked!")
+                } catch {
+                    DispatchQueue.main.async {
+                        self.alertItem = AlertContext.cannotRetrieveProfile
+                        print("⚠️ alert item set")
+                    }
+                    
+                    print("❌🤯 error blocking friend")
+                    print(error)
+                }
+            }
+        }
+    }
+    
+    
     func addSelfToFriendAndRemoveRequest(friend: CKRecord.Reference) async {
         guard let friendProfile = try? await CloudKitManager.shared.getFriendUserRecord(id: friend.recordID, completed: {}), let profileRecord = CloudKitManager.shared.profileRecordID else { return }
         let friendOKGNProfile = friendProfile.convertToOKGNProfile()

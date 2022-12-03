@@ -34,9 +34,10 @@ struct FriendReviewFeed: View {
     
                 friendList
                 
-                if friendManager.friends.isEmpty {
+   
+                if friendManager.friends.isEmpty && viewModel.isShowingEmptyState {
                     emptyReviewsView(text: "It seems like you don't have any friends 😬 \n\nAdd some to see their reviews here!")
-                } else if reviewManager.allFriendsReviews.isEmpty {
+                } else if reviewManager.allFriendsReviews.isEmpty && viewModel.isShowingEmptyState{
                     emptyReviewsView(text: "It seems like your friends haven't posted any reviews yet! \n\nInvite them to your favourite spot and see what they think!")
                 }
 
@@ -112,6 +113,9 @@ struct FriendReviewFeed: View {
                             viewModel.alertItem = AlertContext.cannotRetrieveProfile
                             viewModel.showAlertView = true
                         }
+                        if reviewManager.allFriendsReviews.isEmpty || friendManager.friends.isEmpty {
+                            viewModel.isShowingEmptyState = true
+                        }
                     }
                 }
             }
@@ -169,26 +173,31 @@ extension FriendReviewFeed {
     private var reviewFeed: some View {
         ScrollView {
             LazyVStack {
-                ForEach(reviewManager.allFriendsReviews.indices, id: \.self) { reviewIndex in
+                
+                if let blockList = CloudKitManager.shared.profile?.convertToOKGNProfile().blockList {
+                    let filteredReviews = reviewManager.allFriendsReviews.filter({ !blockList.contains($0.reviewer) })
+                    
+                    ForEach(filteredReviews.indices, id: \.self) { reviewIndex in
 
-                    let review = reviewManager.allFriendsReviews[reviewIndex]
+                        let review = reviewManager.allFriendsReviews[reviewIndex]
 
-                    ReviewCell(review: review, showTrophy: false, height: 130)
-                        .padding(.horizontal, 8)
-                        .transition(.move(edge: .trailing))
-                        .onTapGesture {
-                            withAnimation {
-                                viewModel.isShowingDetailedModalView = true
-                                viewModel.detailedReviewToShow = review
+                        ReviewCell(review: review, showTrophy: false, height: 130)
+                            .padding(.horizontal, 8)
+                            .transition(.move(edge: .trailing))
+                            .onTapGesture {
+                                withAnimation {
+                                    viewModel.isShowingDetailedModalView = true
+                                    viewModel.detailedReviewToShow = review
+                                }
                             }
-                        }
-                        .onAppear {
-                            if reviewIndex == reviewManager.allFriendsReviews.count - 1{
-                                reviewManager.getAllFriendsReviews()
+                            .onAppear {
+                                if reviewIndex == reviewManager.allFriendsReviews.count - 1{
+                                    reviewManager.getAllFriendsReviews()
+                                }
                             }
-                        }
+                    }
+                    .listRowBackground(Color.OKGNDarkGray)
                 }
-                .listRowBackground(Color.OKGNDarkGray)
             }
             .listStyle(.plain)
             .offset(x: viewModel.isShowingFriendsList ? -screen.width : 0)

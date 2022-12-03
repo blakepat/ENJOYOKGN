@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CloudKit
 
 struct FriendProfileView: View {
     
@@ -59,6 +60,13 @@ struct FriendProfileView: View {
         .task {
             reviewManager.getOneFriendReviews(id: friend.id)
         }
+        .onAppear {
+            if let blockList = CloudKitManager.shared.profile?.convertToOKGNProfile().blockList {
+                if blockList.contains(where: { $0.recordID == friend.id })  {
+                    viewModel.userIsBlocked = true
+                }
+            }
+        }
     }
 }
 
@@ -91,9 +99,29 @@ extension FriendProfileView {
                     .foregroundColor(.white)
                 
                 Spacer()
-            
+                
+                Button {
+                    if viewModel.userIsBlocked {
+                        viewModel.unBlockUser(CKRecord.Reference(recordID: friend.id, action: .none))
+                    } else {
+                        viewModel.blockUser(CKRecord.Reference(recordID: friend.id, action: .none))
+                    }
+                    
+                } label: {
+                    VStack(spacing: 0) {
+                        Image(systemName: "person.crop.circle.fill.badge.xmark")
+                            .foregroundColor(viewModel.userIsBlocked ? .green : .red )
+                            .imageScale(.large)
+                            .frame(width: 32, height: 32)
+                        
+                        Text(viewModel.userIsBlocked ? "unblock" : "block")
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                    }
+
+                }
             }
-            .padding(.leading)
+            .padding(.horizontal)
         }
         .padding(.horizontal)
         .frame(height: 70)

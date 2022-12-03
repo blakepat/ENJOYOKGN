@@ -13,7 +13,7 @@ struct EmailAddLocation {
     
     let toAddress: String
     let subject: String
-    let messageHeader: String
+    var messageHeader: String
     var body: String { "\(messageHeader)" }
     
     

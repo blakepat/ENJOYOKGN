@@ -36,24 +36,34 @@ struct OnboardView: View {
                             .ignoresSafeArea(edges: .bottom)
                     }
                 )
-            
-            TabView(selection: $selection) {
-                OnboardInfoView(imageName: "building.2.crop.circle",
-                                title: "See Points of Interest",
-                                description: "Find cool places to eat, drink, or play in the Okanagan!"
-                                ,selection: $selection).tag(0)
+            VStack {
+                Spacer()
                 
-                OnboardInfoView(imageName: "newspaper.circle",
-                                title: "Review and Share",
-                                description: "Review locations by sharing a photo and rating with friends!",
-                                selection: $selection).tag(1)
-                
-                OnboardInfoView(imageName: "star.circle",
-                                title: "Awarded Locations",
-                                description: "Your top rated locations will get awards, see these top locations for you and your friends so you know where to visit next!",
-                                selection: $selection).tag(2)
+                TabView(selection: $selection) {
+                    OnboardInfoView(imageName: "building.2.crop.circle",
+                                    title: "See Points of Interest",
+                                    description: "Find cool places to eat, drink, or play in the Okanagan!"
+                                    ,selection: $selection).tag(0)
+                    
+                    OnboardInfoView(imageName: "newspaper.circle",
+                                    title: "Review and Share",
+                                    description: "Review locations by sharing a photo and rating with friends!",
+                                    selection: $selection).tag(1)
+                    
+                    OnboardInfoView(imageName: "star.circle",
+                                    title: "Awarded Locations",
+                                    description: "Your top rated locations will get awards, see these top locations for you and your friends so you know where to visit next!",
+                                    selection: $selection).tag(2)
+                    
+                    OnboardInfoView(imageName: "newspaper.circle",
+                                    title: "End User License Agreement",
+                                    description: EULA,
+                                    selection: $selection).tag(3)
+                }
+                .tabViewStyle(PageTabViewStyle())
+                .padding(.bottom, 32)
             }
-            .tabViewStyle(PageTabViewStyle())
+
         }
     }
 }
@@ -106,87 +116,92 @@ struct OnboardInfoView: View {
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
-        VStack(alignment: .center, spacing: 4)  {
-                HStack {
-                    Image(systemName: imageName)
-                        .resizable()
-                        .frame(width: 50, height: 50)
-                        .foregroundColor(.OKGNDarkYellow)
+
+            VStack(alignment: .center, spacing: 4)  {
+                    HStack {
+                        Image(systemName: imageName)
+                            .resizable()
+                            .frame(width: 50, height: 50)
+                            .foregroundColor(.OKGNDarkYellow)
+                        
+                        LinearGradient(colors: [.OKGNLightGreen, .OKGNDarkYellow],
+                                       startPoint: .topLeading,
+                                       endPoint: .bottomTrailing)
+                        .frame(height: 100)
+                        .mask {
+                            Text(title)
+                                .font(.largeTitle)
+                                .bold()
+                        }
+                    }
+                    .padding()
                     
-                    LinearGradient(colors: [.OKGNLightGreen, .OKGNDarkYellow],
-                                   startPoint: .topLeading,
-                                   endPoint: .bottomTrailing)
-                    .frame(height: 100)
-                    .mask {
-                        Text(title)
-                            .font(.largeTitle)
-                            .bold()
-                    }
+                ScrollView {
+                    Text(description)
+                        .foregroundColor(.white.opacity(0.8))
+//                        .lineLimit(0)
+                        .minimumScaleFactor(0.75)
+                        .padding(.bottom)
                 }
-                .padding()
+                .frame(height: 300)
+
+
                 
-
-                Text(description)
-                    .foregroundColor(.white.opacity(0.8))
-                    .lineLimit(3)
-                    .minimumScaleFactor(0.75)
-                    .padding(.bottom)
-
-            
-            //button here
-            Button {
-                if selection == 2 {
-                    dismiss()
-                } else {
-                    withAnimation(.linear) {
-                        selection += 1
+                //button here
+                Button {
+                    if selection == 3 {
+                        dismiss()
+                    } else {
+                        withAnimation(.linear) {
+                            selection += 1
+                        }
                     }
+                } label: {
+                    Text(selection == 3 ? "I Agree" : "Next")
+                        .font(.subheadline)
+                        .foregroundColor(.white)
+                        .frame(width: 120, height: 30, alignment: .center)
+                        .background(Color.OKGNDarkYellow.opacity(0.5))
+                        .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 30, style: .continuous)
+                                .stroke(Color.white.opacity(0.3), lineWidth: 2)
+                                .blur(radius: 1)
+                        )
                 }
-            } label: {
-                Text(selection == 2 ? "Get Started!" : "Next")
-                    .font(.subheadline)
-                    .foregroundColor(.white)
-                    .frame(width: 120, height: 30, alignment: .center)
-                    .background(Color.OKGNDarkYellow.opacity(0.5))
-                    .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+            }
+            .padding()
+            .background(
+                LinearGradient(colors: [.OKGNDarkBlue, .clear],
+                               startPoint: .top,
+                               endPoint: .bottom)
+            
+            )
+            .mask(RoundedRectangle(cornerRadius: 30, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: 30, style: .continuous)
+                    .stroke(
+                        LinearGradient(colors: [.white, .clear],
+                                       startPoint: .top,
+                                       endPoint: .bottom)
+                        , lineWidth: 1)
+                    .blendMode(.overlay)
                     .overlay(
                         RoundedRectangle(cornerRadius: 30, style: .continuous)
-                            .stroke(Color.white.opacity(0.3), lineWidth: 2)
-                            .blur(radius: 1)
+                            .stroke(
+                                LinearGradient(colors: [.white, .clear],
+                                               startPoint: .top,
+                                               endPoint: .bottom)
+                                , lineWidth: 2)
+                            .blur(radius: 5)
                     )
-            }
-        }
-        .padding()
-        .background(
-            LinearGradient(colors: [.OKGNDarkBlue, .clear],
-                           startPoint: .top,
-                           endPoint: .bottom)
+            )
+            .background(
+                VisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterialDark))
+                    .mask(RoundedRectangle(cornerRadius: 30, style: .continuous))
+            )
+                
+            .padding()
         
-        )
-        .mask(RoundedRectangle(cornerRadius: 30, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 30, style: .continuous)
-                .stroke(
-                    LinearGradient(colors: [.white, .clear],
-                                   startPoint: .top,
-                                   endPoint: .bottom)
-                    , lineWidth: 1)
-                .blendMode(.overlay)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 30, style: .continuous)
-                        .stroke(
-                            LinearGradient(colors: [.white, .clear],
-                                           startPoint: .top,
-                                           endPoint: .bottom)
-                            , lineWidth: 2)
-                        .blur(radius: 5)
-                )
-        )
-        .background(
-            VisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterialDark))
-                .mask(RoundedRectangle(cornerRadius: 30, style: .continuous))
-        )
-            
-        .padding()
     }
 }
