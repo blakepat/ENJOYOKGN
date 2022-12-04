@@ -50,7 +50,7 @@ struct TopRatedScrollView: View {
                                 }
                                 
                                 
-                                ReviewCell(review: review, showTrophy: true, height: 100)
+                                ReviewCell(review: review, showTrophy: true, height: 120)
                                     .frame(width: 300)
                                     .padding(.horizontal, 4)
                                     .onTapGesture {
