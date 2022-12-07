@@ -15,7 +15,7 @@ struct SettingsView: View {
                                          subject: "EnjoyOKGN Location Request",
                                          messageHeader: "Please include name, address, and recommended category. Thank you!")
     
-    let coffeeURL = URL(string: "https://www.buymeacoffee.com/blakepat")!
+//    let coffeeURL = URL(string: "https://www.buymeacoffee.com/blakepat")!
     let portfolioURL = URL(string: "https://blakepat.wixsite.com/portfolio")!
     @Environment(\.presentationMode) var presentationMode
     
@@ -61,14 +61,14 @@ extension SettingsView {
                     .scaledToFit()
                     .frame(width: 60, height: 60)
                     .clipShape(RoundedRectangle(cornerRadius: 20))
-                Text("This app was created by me, Blake Pat. I am an aspiring iOS Developer! If you enjoy using the app, want to support me in my journey, or just want to support my caffeine addiction use the link below.")
+                Text("This app was created by me, Blake Pat. I am an aspiring iOS Developer! Check out my portfolio below so you can see my other iOS apps!")
                     .font(.callout)
                     .fontWeight(.medium)
                     .foregroundColor(Color.gray)
             }
             .padding(.vertical)
             
-            Link("Support coffee addiction ☕️", destination: coffeeURL)
+//            Link("Support coffee addiction ☕️", destination: coffeeURL)
             Link("iOS Portfolio 💼", destination: portfolioURL)
             
         } header: {
