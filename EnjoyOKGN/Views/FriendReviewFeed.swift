@@ -35,9 +35,9 @@ struct FriendReviewFeed: View {
                 friendList
                 
    
-                if friendManager.friends.isEmpty && viewModel.isShowingEmptyState {
+                if friendManager.friends.isEmpty && viewModel.isShowingEmptyState && !viewModel.isShowingFriendsList {
                     emptyReviewsView(text: "It seems like you don't have any friends 😬 \n\nAdd some to see their reviews here!")
-                } else if reviewManager.allFriendsReviews.isEmpty && viewModel.isShowingEmptyState{
+                } else if reviewManager.allFriendsReviews.isEmpty && viewModel.isShowingEmptyState && !viewModel.isShowingFriendsList {
                     emptyReviewsView(text: "It seems like your friends haven't posted any reviews yet! \n\nInvite them to your favourite spot and see what they think!")
                 }
 

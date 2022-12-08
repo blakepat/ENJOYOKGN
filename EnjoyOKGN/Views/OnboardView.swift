@@ -132,6 +132,7 @@ struct OnboardInfoView: View {
                             Text(title)
                                 .font(.largeTitle)
                                 .bold()
+                                .minimumScaleFactor(0.6)
                         }
                     }
                     .padding()

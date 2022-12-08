@@ -34,7 +34,7 @@ struct noVisitBanner: ViewModifier {
 
 extension Text {
     
-    func createNoVisitsBanner(minX: Double, category: Category) -> some View {
-        modifier(noVisitBanner(backgroundColor: category.color, minX: minX))
+    func createNoVisitsBanner(minX: Double, color: Color) -> some View {
+        modifier(noVisitBanner(backgroundColor: color, minX: minX))
     }
 }

@@ -173,13 +173,20 @@ extension FriendProfileView {
                             .foregroundColor(.white)
                         
                         
-                        if index > 0 && reviewManager.friendReviews.filter({ $0.locationCategory == categories[index - 1].description }).isEmpty {
-                            
+                        if index == 0 && reviewManager.friendReviews.isEmpty {
+                            HStack {
+                                Spacer()
+                                Text("\(friend.name) hasn't visited any locations yet!")
+                                    .createNoVisitsBanner(minX: minX, color: .OKGNDarkYellow)
+
+                                Spacer()
+                            }
+                        } else if index > 0 && reviewManager.friendReviews.filter({ $0.locationCategory == categories[index - 1].description }).isEmpty {
                             HStack {
                                 
                                 Spacer()
-                                    Text("You haven't visited any \(categories[index-1].description) locations yet!")
-                                        .createNoVisitsBanner(minX: minX, category: categories[index - 1])
+                                Text("\(friend.name) hasn't visited any \(categories[index-1].description) locations yet!")
+                                        .createNoVisitsBanner(minX: minX, color: categories[index - 1].color)
 
                                 Spacer()
                             }
@@ -197,7 +204,7 @@ extension FriendProfileView {
       
                         }
                         
-                        Spacer()
+                        Spacer().frame(height: 500)
                     }
                     .background(
                         VisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterialDark))

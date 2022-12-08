@@ -26,6 +26,7 @@ final class CreateReviewViewModel: ObservableObject {
     @Published var showAlertView = false
     @Published var showingExpandedList = false
     @Published var searchText = ""
+    var captionCharacterLimit = 30
     
     var searchResults: [(CKRecord.ID, String, String)] {
        if searchText.isEmpty {

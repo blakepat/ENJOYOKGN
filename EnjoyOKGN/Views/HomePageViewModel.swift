@@ -80,6 +80,8 @@ final class HomePageViewModel: ObservableObject {
                 self.alertItem = AlertContext.profileCreateFailure
                 showAlertView = true
             }
+            
+            getProfile()
         }
     }
     

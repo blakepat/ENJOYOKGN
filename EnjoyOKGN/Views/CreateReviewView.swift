@@ -158,6 +158,11 @@ struct CreateReviewView: View {
                                     reviewRecord[OKGNReview.klocationCategory] = viewModel.selectedLocationCategory
                                     print("🐤\(viewModel.selectedLocationCategory ?? "")")
                                     reviewRecord[OKGNReview.kReviewerName] = cacheManager.getNameFromCache()
+                                    
+//                                    let reviewerProfile = CloudKitManager.shared.profile?.convertToOKGNProfile()
+//                                    reviewRecord[OKGNReview.kReviewerName] = reviewerProfile?.name
+//                                    reviewRecord[OKGNReview.kReviewerAvatar] = reviewerProfile?.avatar
+                                    
                                     reviewRecord[OKGNReview.kReviewerAvatar] = cacheManager.getAvatarFromCache()?.convertToCKAsset(path: "profileAvatar")
                                 }
                             } else {
@@ -282,7 +287,7 @@ struct CreateReviewView: View {
     
     
     func checkReviewIsProperlySet() -> Bool {
-        if (viewModel.locationName != "" && viewModel.caption != "" && viewModel.firstNumber + viewModel.secondNumber != 0) && !(viewModel.firstNumber == 10 && viewModel.secondNumber > 0) {
+        if (viewModel.locationName != "" && viewModel.caption != "" && viewModel.caption.count <= viewModel.captionCharacterLimit && viewModel.firstNumber + viewModel.secondNumber != 0) && !(viewModel.firstNumber == 10 && viewModel.secondNumber > 0) {
             return true
         } else {
             DispatchQueue.main.async {
@@ -425,7 +430,7 @@ extension CreateReviewView {
                 Text("\(20 - viewModel.caption.count)")
                     .bold()
                     .font(.callout)
-                    .foregroundColor(viewModel.caption.count <= 20 ? .OKGNDarkYellow : Color(.systemPink))
+                    .foregroundColor(viewModel.caption.count <= viewModel.captionCharacterLimit ? .OKGNDarkYellow : Color(.systemPink))
                     +
                 Text(" Characters Remain")
                     .font(.callout)

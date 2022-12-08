@@ -27,6 +27,7 @@
 		3421BEA127B48BE400921D70 /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BEA027B48BE400921D70 /* MapViewModel.swift */; };
 		3421BEA327B4935B00921D70 /* AlertItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BEA227B4935B00921D70 /* AlertItem.swift */; };
 		3421BEA527B7045A00921D70 /* OldOnboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BEA427B7045A00921D70 /* OldOnboardView.swift */; };
+		34377BBC2940E55900F05B34 /* NSLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34377BBB2940E55900F05B34 /* NSLocation.swift */; };
 		344D349D28C96CE9007C3F56 /* NewMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 344D349C28C96CE9007C3F56 /* NewMapView.swift */; };
 		345C50CE28DE4C3B00B75F2F /* AddFriendModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345C50CD28DE4C3B00B75F2F /* AddFriendModalView.swift */; };
 		345C50D028E0F65500B75F2F /* CarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345C50CF28E0F65500B75F2F /* CarouselView.swift */; };
@@ -119,6 +120,8 @@
 		3421BEA027B48BE400921D70 /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
 		3421BEA227B4935B00921D70 /* AlertItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertItem.swift; sourceTree = "<group>"; };
 		3421BEA427B7045A00921D70 /* OldOnboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OldOnboardView.swift; sourceTree = "<group>"; };
+		34377BBB2940E55900F05B34 /* NSLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLocation.swift; sourceTree = "<group>"; };
+		34377BBD294104DF00F05B34 /* EnjoyOKGN.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EnjoyOKGN.entitlements; sourceTree = "<group>"; };
 		344D349C28C96CE9007C3F56 /* NewMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMapView.swift; sourceTree = "<group>"; };
 		345C50CD28DE4C3B00B75F2F /* AddFriendModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendModalView.swift; sourceTree = "<group>"; };
 		345C50CF28E0F65500B75F2F /* CarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselView.swift; sourceTree = "<group>"; };
@@ -333,6 +336,7 @@
 		34D19685279BE4AE00C1CE19 = {
 			isa = PBXGroup;
 			children = (
+				34377BBD294104DF00F05B34 /* EnjoyOKGN.entitlements */,
 				34D19690279BE4AE00C1CE19 /* EnjoyOKGN */,
 				34D196A1279BE4AF00C1CE19 /* EnjoyOKGNTests */,
 				34D196AB279BE4AF00C1CE19 /* EnjoyOKGNUITests */,
@@ -459,6 +463,7 @@
 				3421BE9027B1FD6E00921D70 /* OKGNProfile.swift */,
 				3421BE7A279F6AFE00921D70 /* OKGNReview.swift */,
 				34F004FF279CC2E800899561 /* Award.swift */,
+				34377BBB2940E55900F05B34 /* NSLocation.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -665,6 +670,7 @@
 				3421BE9927B34EF600921D70 /* CloudKitManager.swift in Sources */,
 				3480A9FE27C590B20031BB09 /* FriendReviewFeed.swift in Sources */,
 				3421BE8F27B1FC2300921D70 /* CKAsset+Ext.swift in Sources */,
+				34377BBC2940E55900F05B34 /* NSLocation.swift in Sources */,
 				346883252866B1780056B09F /* LaunchView.swift in Sources */,
 				34C165D1289B75BD00179451 /* DropDown.swift in Sources */,
 				34F7F0BD28C5237500E72C0F /* EmailAddLocation.swift in Sources */,
