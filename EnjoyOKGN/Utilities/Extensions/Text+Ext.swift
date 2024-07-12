@@ -18,7 +18,7 @@ struct noVisitBanner: ViewModifier {
             .multilineTextAlignment(.center)
             .padding(8)
             .font(.title2)
-            .foregroundColor(.black)
+            .foregroundColor(.white)
             .background(
                 backgroundColor
                     .opacity(0.4)

@@ -427,7 +427,7 @@ extension CreateReviewView {
                     .font(.callout)
                     .foregroundColor(.white)
                     +
-                Text("\(20 - viewModel.caption.count)")
+                Text("\(viewModel.captionCharacterLimit - viewModel.caption.count)")
                     .bold()
                     .font(.callout)
                     .foregroundColor(viewModel.caption.count <= viewModel.captionCharacterLimit ? .OKGNDarkYellow : Color(.systemPink))

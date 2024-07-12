@@ -30,6 +30,7 @@ final class HomePageViewModel: ObservableObject {
     @Published var existingProfileRecord: CKRecord? {
         didSet {
             profileContext = .update
+//            showCreateProfileScreen = false
             print("✅ Existing profile set and context changed to .update!")
         }
     }
@@ -54,6 +55,7 @@ final class HomePageViewModel: ObservableObject {
     @Published var showAlertView = false
     @Published var topRatedFilter: Category?
     @Published var userReviews: [OKGNReview]?
+    @Published var showCreateProfileScreen: Bool = false
     
     func createProfile() {
         //Create our CKRecord from the profile view

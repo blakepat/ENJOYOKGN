@@ -147,8 +147,6 @@ struct OnboardInfoView: View {
                 .frame(height: 300)
 
 
-                
-                //button here
                 Button {
                     if selection == 3 {
                         dismiss()

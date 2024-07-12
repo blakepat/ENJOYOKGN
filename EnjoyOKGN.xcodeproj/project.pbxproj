@@ -28,6 +28,7 @@
 		3421BEA327B4935B00921D70 /* AlertItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BEA227B4935B00921D70 /* AlertItem.swift */; };
 		3421BEA527B7045A00921D70 /* OldOnboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BEA427B7045A00921D70 /* OldOnboardView.swift */; };
 		34377BBC2940E55900F05B34 /* NSLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34377BBB2940E55900F05B34 /* NSLocation.swift */; };
+		34377BBF2946B1A700F05B34 /* CreateProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34377BBE2946B1A700F05B34 /* CreateProfileView.swift */; };
 		344D349D28C96CE9007C3F56 /* NewMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 344D349C28C96CE9007C3F56 /* NewMapView.swift */; };
 		345C50CE28DE4C3B00B75F2F /* AddFriendModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345C50CD28DE4C3B00B75F2F /* AddFriendModalView.swift */; };
 		345C50D028E0F65500B75F2F /* CarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345C50CF28E0F65500B75F2F /* CarouselView.swift */; };
@@ -122,6 +123,7 @@
 		3421BEA427B7045A00921D70 /* OldOnboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OldOnboardView.swift; sourceTree = "<group>"; };
 		34377BBB2940E55900F05B34 /* NSLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLocation.swift; sourceTree = "<group>"; };
 		34377BBD294104DF00F05B34 /* EnjoyOKGN.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EnjoyOKGN.entitlements; sourceTree = "<group>"; };
+		34377BBE2946B1A700F05B34 /* CreateProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateProfileView.swift; sourceTree = "<group>"; };
 		344D349C28C96CE9007C3F56 /* NewMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMapView.swift; sourceTree = "<group>"; };
 		345C50CD28DE4C3B00B75F2F /* AddFriendModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendModalView.swift; sourceTree = "<group>"; };
 		345C50CF28E0F65500B75F2F /* CarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselView.swift; sourceTree = "<group>"; };
@@ -292,6 +294,7 @@
 				34D19693279BE4AE00C1CE19 /* HomePageView.swift */,
 				34BEA4A527BAF1D6006F91C1 /* HomePageViewModel.swift */,
 				34A78B7F28F48CC6003CEA9C /* VenuesVisitedView.swift */,
+				34377BBE2946B1A700F05B34 /* CreateProfileView.swift */,
 			);
 			name = HomePageView;
 			sourceTree = "<group>";
@@ -660,6 +663,7 @@
 				34BEA49F27B7502B006F91C1 /* PhotoPicker.swift in Sources */,
 				3421BE9C27B353C400921D70 /* CKRecord+Ext.swift in Sources */,
 				3421BE7B279F6AFE00921D70 /* OKGNReview.swift in Sources */,
+				34377BBF2946B1A700F05B34 /* CreateProfileView.swift in Sources */,
 				34D19692279BE4AE00C1CE19 /* EnjoyOKGNApp.swift in Sources */,
 				3421BE9F27B48B2900921D70 /* LocationManager.swift in Sources */,
 				34B0E91328D8B45000A775B3 /* Double+Ext.swift in Sources */,
@@ -861,7 +865,7 @@
 				CODE_SIGN_ENTITLEMENTS = EnjoyOKGN/EnjoyOKGN.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_ASSET_PATHS = "\"EnjoyOKGN/Preview Content\"";
 				DEVELOPMENT_TEAM = 5S28H6FD88;
 				ENABLE_PREVIEWS = YES;
@@ -873,13 +877,12 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.blakepat.EnjoyOKGN;
 				PRODUCT_NAME = EnjoyOKGN;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -897,7 +900,7 @@
 				CODE_SIGN_ENTITLEMENTS = EnjoyOKGN/EnjoyOKGN.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_ASSET_PATHS = "\"EnjoyOKGN/Preview Content\"";
 				DEVELOPMENT_TEAM = 5S28H6FD88;
 				ENABLE_PREVIEWS = YES;
@@ -909,13 +912,12 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.blakepat.EnjoyOKGN;
 				PRODUCT_NAME = EnjoyOKGN;
 				PROVISIONING_PROFILE_SPECIFIER = "";
