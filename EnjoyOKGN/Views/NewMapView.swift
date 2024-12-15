@@ -19,7 +19,7 @@ struct NewMapView: UIViewRepresentable {
     @Binding var centerOnUserLocation: MKUserTrackingMode?
     
     var startingRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 49.8853, longitude: -119.4947),
-                                        span: MKCoordinateSpan(latitudeDelta: 0.08, longitudeDelta: 0.08))
+                                            span: MKCoordinateSpan(latitudeDelta: 0.08, longitudeDelta: 0.08))
     
     var annotations: [MKPointAnnotation]
     
@@ -35,7 +35,6 @@ struct NewMapView: UIViewRepresentable {
             DispatchQueue.main.async {
                 self.parent.centerCoordinate.center = mapView.centerCoordinate
             }
-            
         }
         
         
@@ -77,17 +76,39 @@ struct NewMapView: UIViewRepresentable {
         mapView.delegate = context.coordinator
         mapView.showsUserLocation = true
         mapView.region.span = MKCoordinateSpan(latitudeDelta: 0.08, longitudeDelta: 0.08)
-
+        
         mapView.setRegion(startingRegion, animated: false)
         
         return mapView
     }
     
+    //
+    //    func updateUIView(_ uiView: MKMapView, context: Context) {
+    //
+    ////        if annotations.count + 1 != uiView.annotations.count || !(uiView.annotations.contains(where: {$0.subtitle == annotations.first?.subtitle })) {
+    ////
+    ////            uiView.removeAnnotations(uiView.annotations)
+    ////            uiView.addAnnotations(annotations)
+    ////        }
+    //
+    //        if uiView.annotations.compactMap { $0.coordinate } != annotations.map { $0.coordinate } {
+    //            uiView.removeAnnotations(uiView.annotations)
+    //            uiView.addAnnotations(annotations)
+    //        }
+    //
+    //        if let centerOnUserLocation = centerOnUserLocation {
+    //            uiView.userTrackingMode = centerOnUserLocation
+    //            self.centerOnUserLocation = nil
+    //            uiView.userTrackingMode = .none
+    //        }
+    //    }
+    //}
     
     func updateUIView(_ uiView: MKMapView, context: Context) {
+        let existingAnnotations = Set(uiView.annotations.compactMap { CoordinateWrapper($0.coordinate) })
+        let newAnnotations = Set(annotations.map { CoordinateWrapper($0.coordinate) })
         
-        if annotations.count + 1 != uiView.annotations.count || !(uiView.annotations.contains(where: {$0.subtitle == annotations.first?.subtitle })) {
-            
+        if existingAnnotations != newAnnotations {
             uiView.removeAnnotations(uiView.annotations)
             uiView.addAnnotations(annotations)
         }
@@ -95,7 +116,45 @@ struct NewMapView: UIViewRepresentable {
         if let centerOnUserLocation = centerOnUserLocation {
             uiView.userTrackingMode = centerOnUserLocation
             self.centerOnUserLocation = nil
-            uiView.userTrackingMode = .none
+        }
+    }
+    
+
+    
+    
+    
+    class LocationMarkerView: MKMarkerAnnotationView {
+        override var annotation: MKAnnotation? {
+            willSet {
+                guard let marker = newValue as? MKPointAnnotation else {
+                    return
+                }
+                
+                tintColor = UIColor(returnCategoryFromString(marker.subtitle ?? "Brewery").color)
+                canShowCallout = true
+                rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+                markerTintColor = UIColor(returnCategoryFromString(marker.subtitle ?? "Brewery").color)
+            }
+        }
+    }
+    
+    
+    struct CoordinateWrapper: Hashable {
+        let latitude: Double
+        let longitude: Double
+        
+        init(_ coordinate: CLLocationCoordinate2D) {
+            self.latitude = coordinate.latitude
+            self.longitude = coordinate.longitude
+        }
+        
+        static func == (lhs: CoordinateWrapper, rhs: CoordinateWrapper) -> Bool {
+            return lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude
+        }
+        
+        func hash(into hasher: inout Hasher) {
+            hasher.combine(latitude)
+            hasher.combine(longitude)
         }
     }
 }
@@ -109,21 +168,4 @@ extension MKPointAnnotation {
         annotation.coordinate = CLLocationCoordinate2D(latitude: 51.5, longitude: -0.13)
         return annotation
     }
-}
-
-
-
-class LocationMarkerView: MKMarkerAnnotationView {
-  override var annotation: MKAnnotation? {
-    willSet {
-        guard let marker = newValue as? MKPointAnnotation else {
-            return
-        }
-        
-        tintColor = UIColor(returnCategoryFromString(marker.subtitle ?? "Brewery").color)
-        canShowCallout = true
-        rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
-        markerTintColor = UIColor(returnCategoryFromString(marker.subtitle ?? "Brewery").color)
-    }
-  }
 }

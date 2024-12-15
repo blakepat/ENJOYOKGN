@@ -153,6 +153,7 @@ final class FriendManager: ObservableObject {
                 print("✅ Success getting followers")
                 var nonDeletedFriends: [CKRecord] = []
                 if CloudKitManager.shared.profile!.convertToOKGNProfile().deleteList.isEmpty {
+                    print(friends.count)
                     populateFriendsList(friendList: friends)
                 } else {
                     for deletedUser in CloudKitManager.shared.profile!.convertToOKGNProfile().deleteList {
@@ -180,7 +181,8 @@ final class FriendManager: ObservableObject {
                 Task {
                     do {
                         let newFriend = try await CloudKitManager.shared.fetchRecord(with: friend.recordID)
-                        DispatchQueue.main.async {
+                        
+                        if !self.friends.contains(where: { $0.id == friend.recordID }) {
                             self.friends.append(OKGNProfile(record: newFriend))
                         }
                     } catch {
