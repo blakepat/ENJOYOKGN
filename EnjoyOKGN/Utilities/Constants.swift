@@ -91,7 +91,7 @@ enum RecordType {
 }
 
 
-// To-do: Change these default images (something more bland and small in storage size
+// To-do: Change these default images (something more bland and small in storage size)
 enum PlaceholderImage {
     static let avatar = UIImage(named: "default-profileAvatar")!
     static let square = UIImage(named: "default-squarePlaceholder")!

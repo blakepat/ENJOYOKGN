@@ -167,6 +167,18 @@ final class CloudKitManager: ObservableObject {
     }
     
     
+    func getIfUsernameExists(username: String) async throws -> Bool {
+        print("HHH - getIfUsernameExists Called")
+        let predicate = NSPredicate(format: "name == %@", username)
+        let query = CKQuery(recordType: "OKGNProfile", predicate: predicate)
+        
+        
+        let (matchResults, _) = try await container.publicCloudDatabase.records(matching: query, inZoneWith: .default)
+        
+        return !matchResults.isEmpty
+    }
+    
+    
     func getUsers(for profile: CKRecord, passedCursor: CKQueryOperation.Cursor?) async throws -> ([OKGNProfile], CKQueryOperation.Cursor?) {
         print("HHH - getUsers Called")
         

@@ -85,9 +85,8 @@ struct CreateProfileView: View {
                         showPickerView = true
                     }
                     
-                
                 VStack {
-                    TextField("create username", text: $username)
+                    TextField(profileContext == .create ? "Create Username" : "Update Username", text: $username)
                         .frame(width: 200)
                         .textFieldStyle(.roundedBorder)
                         .background(Color.OKGNDarkBlue)
@@ -100,7 +99,9 @@ struct CreateProfileView: View {
 
                 
                 Button {
-                    profileContext == .create ? createProfile() : updateProfile()
+                    Task {
+                        await profileContext == .create ? createProfile() : updateProfile()
+                    }
                 } label: {
                     Text(profileContext == .create ? "Create Profile" : "Update Profile")
                         .padding(8)
@@ -154,66 +155,75 @@ struct CreateProfileView: View {
     }
     
     
-    private func createProfile() {
-        
-        print("Created profile")
-        //Create our CKRecord from the profile view
-        let profileRecord = createProfileRecord()
-        
-        guard let userRecord = CloudKitManager.shared.userRecord else {
-            // show an alert
-            self.alertItem = AlertContext.profileCreateFailure
+    private func createProfile() async {
+        if await checkIfUsernameExists() {
+            alertItem = AlertContext.usernameAlreadyExists
             showAlertView = true
-            return
-        }
-        
-        userRecord["userProfile"] = CKRecord.Reference(recordID: profileRecord.recordID, action: .none)
-        
-        Task {
-            do {
-                if let records = try await CloudKitManager.shared.batchSave(records: [userRecord, profileRecord]) {
-                    for record in records where record.recordType == RecordType.profile {
-                        CloudKitManager.shared.profileRecordID = record.recordID
-                    }
-                    DispatchQueue.main.async {
-                        profileContext = .update
-                        dismiss()
-                        showCreateProfileView = false
-                    }
-                }
-            } catch {
+        } else {
+            print("Created profile")
+            //Create our CKRecord from the profile view
+            let profileRecord = createProfileRecord()
+            
+            guard let userRecord = CloudKitManager.shared.userRecord else {
+                // show an alert
                 self.alertItem = AlertContext.profileCreateFailure
                 showAlertView = true
+                return
+            }
+            
+            userRecord["userProfile"] = CKRecord.Reference(recordID: profileRecord.recordID, action: .none)
+            
+            Task {
+                do {
+                    if let records = try await CloudKitManager.shared.batchSave(records: [userRecord, profileRecord]) {
+                        for record in records where record.recordType == RecordType.profile {
+                            CloudKitManager.shared.profileRecordID = record.recordID
+                        }
+                        DispatchQueue.main.async {
+                            profileContext = .update
+                            dismiss()
+                            showCreateProfileView = false
+                        }
+                    }
+                } catch {
+                    self.alertItem = AlertContext.profileCreateFailure
+                    showAlertView = true
+                }
             }
         }
     }
     
-    func updateProfile() {
-        guard let profileRecord = createdProfileRecord else {
-            self.alertItem = AlertContext.profileCreateFailure
+    func updateProfile() async {
+        if await checkIfUsernameExists() {
+            alertItem = AlertContext.usernameAlreadyExists
             showAlertView = true
-            return
-        }
-        
-        profileRecord[OKGNProfile.kName] = username
-        profileRecord[OKGNProfile.kAvatar] = avatarImage.convertToCKAsset(path: "profileAvatar")
-
-        
-        Task {
-            do {
-                let _ = try await CloudKitManager.shared.save(record: profileRecord)
-//                alertItem = AlertContext.profileUpdateSuccess
-                cacheManager.addNameToCache(name: username)
-                cacheManager.addAvatarToCache(avatar: avatarImage)
-//                showAlertView = true
-                
-                DispatchQueue.main.async {
-                    dismiss()
-                    showCreateProfileView = false
-                }
-            } catch {
-                alertItem = AlertContext.profileUpdateFailure
+        } else {
+            guard let profileRecord = createdProfileRecord else {
+                self.alertItem = AlertContext.profileCreateFailure
                 showAlertView = true
+                return
+            }
+            
+            profileRecord[OKGNProfile.kName] = username.lowercased()
+            profileRecord[OKGNProfile.kAvatar] = avatarImage.convertToCKAsset(path: "profileAvatar")
+            
+            
+            Task {
+                do {
+                    let _ = try await CloudKitManager.shared.save(record: profileRecord)
+                    //                alertItem = AlertContext.profileUpdateSuccess
+                    cacheManager.addNameToCache(name: username)
+                    cacheManager.addAvatarToCache(avatar: avatarImage)
+                    //                showAlertView = true
+                    
+                    DispatchQueue.main.async {
+                        dismiss()
+                        showCreateProfileView = false
+                    }
+                } catch {
+                    alertItem = AlertContext.profileUpdateFailure
+                    showAlertView = true
+                }
             }
         }
     }
@@ -221,7 +231,7 @@ struct CreateProfileView: View {
     
     private func createProfileRecord() -> CKRecord {
         let profileRecord = CKRecord(recordType: RecordType.profile)
-        profileRecord[OKGNProfile.kName] = username
+        profileRecord[OKGNProfile.kName] = username.lowercased()
         profileRecord[OKGNProfile.kAvatar] = avatarImage.convertToCKAsset(path: "avatarImage")
         
         return profileRecord
@@ -231,6 +241,15 @@ struct CreateProfileView: View {
     
     private func profileCorrectlyMade() -> Bool {
         return (username != "" && username.count >= 3 && username.count <= 20 && (username.rangeOfCharacter(from: .alphanumerics) != nil))
+    }
+    
+    private func checkIfUsernameExists() async -> Bool {
+        do {
+            return try await CloudKitManager.shared.getIfUsernameExists(username: username.lowercased())
+        } catch let error {
+            print(error)
+            return true
+        }
     }
 }
 

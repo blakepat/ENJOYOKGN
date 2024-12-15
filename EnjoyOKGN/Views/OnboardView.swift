@@ -42,22 +42,28 @@ struct OnboardView: View {
                 TabView(selection: $selection) {
                     OnboardInfoView(imageName: "building.2.crop.circle",
                                     title: "See Points of Interest",
-                                    description: "Find cool places to eat, drink, or play in the Okanagan!"
-                                    ,selection: $selection).tag(0)
+                                    descriptionOne: "☼ Find cool places to eat, drink, or play in the Okanagan!",
+                                    descriptionTwo: "☼ You can search either by map or list!",
+                                    descriptionThree: "☼ On the list you can filter by category or favourites",
+                                    selection: $selection).tag(0)
                     
                     OnboardInfoView(imageName: "newspaper.circle",
                                     title: "Review and Share",
-                                    description: "Review locations by sharing a photo and rating with friends!",
+                                    descriptionOne: "☼ Review locations by sharing a photo and rating with friends!",
+                                    descriptionTwo: "☼ See your friends favourites spots and visit them next!",
+                                    descriptionThree: "☼ Show your friends your favourite spots!",
                                     selection: $selection).tag(1)
                     
                     OnboardInfoView(imageName: "star.circle",
                                     title: "Awarded Locations",
-                                    description: "Your top rated locations will get awards, see these top locations for you and your friends so you know where to visit next!",
+                                    descriptionOne: "☼ Your top rated locations will get awards",
+                                    descriptionTwo: "☼ Keep track of what is the best Pizza, Brewery, Winery in town!",
+                                    descriptionThree: "☼ Compare your top spots with your friends top spots!",
                                     selection: $selection).tag(2)
                     
                     OnboardInfoView(imageName: "newspaper.circle",
                                     title: "End User License Agreement",
-                                    description: EULA,
+                                    descriptionOne: EULA,
                                     selection: $selection).tag(3)
                 }
                 .tabViewStyle(PageTabViewStyle())
@@ -111,7 +117,9 @@ struct OnboardInfoView: View {
     
     var imageName: String
     var title: String
-    var description: String
+    var descriptionOne: String
+    var descriptionTwo: String?
+    var descriptionThree: String?
     @Binding var selection: Int
     @Environment(\.dismiss) private var dismiss
     
@@ -138,11 +146,23 @@ struct OnboardInfoView: View {
                     .padding()
                     
                 ScrollView {
-                    Text(description)
-                        .foregroundColor(.white.opacity(0.8))
-//                        .lineLimit(0)
-                        .minimumScaleFactor(0.75)
-                        .padding(.bottom)
+                    VStack(alignment: .leading) {
+                        Text(descriptionOne)
+                            .foregroundColor(.white.opacity(0.8))
+                            .minimumScaleFactor(0.75)
+                            .padding(.bottom)
+                        
+                        Text(descriptionTwo ?? "")
+                            .foregroundColor(.white.opacity(0.8))
+                            .minimumScaleFactor(0.75)
+                            .padding(.bottom)
+                        
+                        
+                        Text(descriptionThree ?? "")
+                            .foregroundColor(.white.opacity(0.8))
+                            .minimumScaleFactor(0.75)
+                            .padding(.bottom)
+                    }
                 }
                 .frame(height: 300)
 

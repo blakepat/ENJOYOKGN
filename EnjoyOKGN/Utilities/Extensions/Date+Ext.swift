@@ -13,7 +13,7 @@ extension DateFormatter {
     static let shortDate: DateFormatter = {
         let date = Date()
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "EEE, MMM d"
+        dateFormatter.dateFormat = "MMM d"
     
         return dateFormatter
     }()

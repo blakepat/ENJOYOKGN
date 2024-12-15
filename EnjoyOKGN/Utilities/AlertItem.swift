@@ -94,4 +94,8 @@ struct AlertContext {
                                             message: Text("Please check that have a internet connection and you are signed into your iCloud account in the settings of your iPhone and try again later. Thank you!"),
                                             dismissButton: .default(Text("Ok")))
     
+    static let usernameAlreadyExists = AlertItem(title: Text("User already exists"),
+                                            message: Text("Please change your username to a different one"),
+                                            dismissButton: .default(Text("Ok")))
+    
 }

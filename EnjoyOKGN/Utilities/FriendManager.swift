@@ -119,11 +119,7 @@ final class FriendManager: ObservableObject {
                     print("⚠️⚠️\(error)")
                 }
             }
-            
         }
-        
-        
-        
     }
     
     
@@ -176,18 +172,20 @@ final class FriendManager: ObservableObject {
         
         DispatchQueue.main.async {
             self.friends = []
-        }
-        for friend in friendList {
-            self.removeRequestAfterAccepting(follower: CKRecord.Reference(record: friend, action: .none))
             
-            Task {
-                do {
-                    let newFriend = try await CloudKitManager.shared.fetchRecord(with: friend.recordID)
-                    DispatchQueue.main.async {
-                        self.friends.append(OKGNProfile(record: newFriend))
+            print("😛😛\(friendList.count)")
+            for friend in friendList {
+                self.removeRequestAfterAccepting(follower: CKRecord.Reference(record: friend, action: .none))
+                
+                Task {
+                    do {
+                        let newFriend = try await CloudKitManager.shared.fetchRecord(with: friend.recordID)
+                        DispatchQueue.main.async {
+                            self.friends.append(OKGNProfile(record: newFriend))
+                        }
+                    } catch {
+                        print("❌🤢 error retreving friend")
                     }
-                } catch {
-                    print("❌🤢 error retreving friend")
                 }
             }
         }
