@@ -16,6 +16,8 @@ struct FriendReviewFeed: View {
     @StateObject var friendManager = FriendManager()
     @StateObject var viewModel = FriendReviewFeedModel()
     
+    @State private var isShowingMyReviews: Bool = false
+    
     @Binding var tabSelection: TabBarItem
     
     init(tabSelection: Binding<TabBarItem>) {
@@ -62,7 +64,7 @@ struct FriendReviewFeed: View {
             }, message: {
                 viewModel.alertItem?.message ?? Text("")
             })
-            .navigationTitle(viewModel.isShowingFriendsList ? "Friends" : "Friend's Reviews")
+            .navigationTitle(viewModel.isShowingFriendsList ? "Friends" : isShowingMyReviews ? "My Reviews" : "Friend's Reviews")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar(content: {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -72,11 +74,13 @@ struct FriendReviewFeed: View {
                         } else {
                             reviewManager.allFriendsReviews = []
                             reviewManager.cursor = nil
-                            viewModel.reviewsSortedByRating.toggle()
-                            reviewManager.getAllFriendsReviews(sortBy: viewModel.reviewsSortedByRating ? "rating" : "date")
+//                            viewModel.reviewsSortedByRating.toggle()
+                            isShowingMyReviews.toggle()
+                            isShowingMyReviews ? reviewManager.getUserReviews() : reviewManager.getAllFriendsReviews()
+                            
                         }
                     } label: {
-                        Image(systemName: viewModel.isShowingFriendsList ? "plus" : viewModel.reviewsSortedByRating ? "calendar.badge.clock" : "list.number")
+                        Image(systemName: viewModel.isShowingFriendsList ? "plus" : isShowingMyReviews ? "person.2.wave.2.fill" : "person.bubble")
                             .foregroundColor(Color.OKGNDarkYellow)
                     }
                 }
@@ -113,7 +117,8 @@ struct FriendReviewFeed: View {
                             viewModel.alertItem = AlertContext.cannotRetrieveProfile
                             viewModel.showAlertView = true
                         }
-                        if reviewManager.allFriendsReviews.isEmpty || friendManager.friends.isEmpty {
+                        if (isShowingMyReviews && reviewManager.userReviews.isEmpty) ||
+                            (!isShowingMyReviews && (reviewManager.allFriendsReviews.isEmpty || friendManager.friends.isEmpty)) {
                             viewModel.isShowingEmptyState = true
                         }
                     }
@@ -146,6 +151,7 @@ extension FriendReviewFeed {
             }
             .listRowBackground(Color.OKGNDarkGray)
         }
+        .padding(.bottom, 44)
         .alert(viewModel.twoButtonAlertItem?.title ?? Text(""), isPresented: $viewModel.showFriendAlertView, actions: {
             HStack {
                 Button {
@@ -175,11 +181,11 @@ extension FriendReviewFeed {
             LazyVStack {
                 
                 if let blockList = CloudKitManager.shared.profile?.convertToOKGNProfile().blockList {
-                    let filteredReviews = reviewManager.allFriendsReviews.filter({ !blockList.contains($0.reviewer) })
+                    let filteredReviews = isShowingMyReviews ? reviewManager.userReviews : reviewManager.allFriendsReviews.filter({ !blockList.contains($0.reviewer) })
                     
                     ForEach(filteredReviews.indices, id: \.self) { reviewIndex in
 
-                        let review = reviewManager.allFriendsReviews[reviewIndex]
+                        let review = filteredReviews[reviewIndex]
 
                         ReviewCell(review: review, showTrophy: false, height: 130)
                             .padding(.horizontal, 8)
@@ -202,6 +208,7 @@ extension FriendReviewFeed {
             .listStyle(.plain)
             .offset(x: viewModel.isShowingFriendsList ? -screen.width : 0)
         }
+        .padding(.bottom, 44)
         .refreshable { await reviewManager.refreshReviewFeed() }
         .alert(viewModel.alertItem?.title ?? Text(""), isPresented: $viewModel.showFriendAlertView, actions: {
             // actions

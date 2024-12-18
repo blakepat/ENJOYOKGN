@@ -26,6 +26,8 @@ struct CreateProfileView: View {
     @Binding var createdProfileRecord: CKRecord?
     @Binding var showCreateProfileView: Bool
     
+    @State private var originalUsername: String = ""
+    
     var body: some View {
         ZStack {
             
@@ -152,6 +154,9 @@ struct CreateProfileView: View {
         }, message: {
             alertItem?.message ?? Text("")
         })
+        .onAppear {
+            self.originalUsername = self.username
+        }
     }
     
     
@@ -244,6 +249,7 @@ struct CreateProfileView: View {
     }
     
     private func checkIfUsernameExists() async -> Bool {
+        if (self.originalUsername.lowercased() == self.username.lowercased()) { return false }
         do {
             return try await CloudKitManager.shared.getIfUsernameExists(username: username.lowercased())
         } catch let error {

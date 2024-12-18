@@ -8,6 +8,7 @@
 
 import SwiftUI
 import CloudKit
+import Combine
 
 struct LocationListView: View {
     
@@ -29,6 +30,9 @@ struct LocationListView: View {
     @State private var showLoadingView = false
     @State private var searchText = ""
     @State private var showAlertView = false
+    @State private var topPadding = false
+    
+    @FocusState private var isSearchFocused: Bool
     
     var searchResults: [OKGNLocation] {
         
@@ -64,12 +68,10 @@ struct LocationListView: View {
     }
     
     var body: some View {
-        
         ZStack {
             Color.OKGNDarkGray.ignoresSafeArea()
-            
             NavigationView {
-                List {                    
+                List {
                     ForEach(0..<searchResults.count, id: \.self) { locationIndex in
                         
                         let location = searchResults[locationIndex]
@@ -77,15 +79,16 @@ struct LocationListView: View {
                         HStack {
                             LocationCell(location: location)
                             Spacer()
-                            }
-                            .contentShape(Rectangle())
-                            .listRowBackground(Color.clear)
-                            .onTapGesture {
-                                segue(location: location)
+                        }
+                        .contentShape(Rectangle())
+                        .listRowBackground(Color.clear)
+                        .onTapGesture {
+                            segue(location: location)
                         }
                     }
                     .listRowBackground(Color.clear)
                 }
+
                 .searchable(text: $searchText)
                 .listRowBackground(Color.clear)
                 .background(
@@ -129,7 +132,7 @@ struct LocationListView: View {
                                     self.showLoadingView = returnedBool
                                     
                                     Task {
-//                                        await LocationManager().uploadLocations() USED TO MIGRATE DATA FROM DEVELOPMENT TO PRODUCTION
+                                        //                                        await LocationManager().uploadLocations() USED TO MIGRATE DATA FROM DEVELOPMENT TO PRODUCTION
                                     }
                                 }
                             } catch {
@@ -138,7 +141,7 @@ struct LocationListView: View {
                                 self.showAlertView = true
                                 self.showLoadingView = false
                             }
-                        
+                            
                         }
                     }
                 }
@@ -161,7 +164,10 @@ struct LocationListView: View {
                 }
                 .background(Color.black.opacity(0.45)).edgesIgnoringSafeArea(.all)
             }
+            
         }
+        .padding(.top, 20)
+        .edgesIgnoringSafeArea(.all)
     }
     
     //function used as Lazy Navigation Link to stop from all LocationDetailViews loading when list is created
@@ -197,9 +203,45 @@ struct LocationListView: View {
 }
 
 
+
+
 extension UICollectionReusableView {
     override open var backgroundColor: UIColor? {
         get { .clear }
         set { }
+    }
+}
+
+
+
+struct KeyboardAdaptive: ViewModifier {
+    @State private var keyboardHeight: CGFloat = 0
+
+    private var keyboardHeightPublisher: AnyPublisher<CGFloat, Never> {
+        Publishers.Merge(
+            NotificationCenter.default
+                .publisher(for: UIResponder.keyboardWillShowNotification)
+                .compactMap { ($0.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect)?.height },
+            NotificationCenter.default
+                .publisher(for: UIResponder.keyboardWillHideNotification)
+                .map { _ in CGFloat(0) }
+        )
+        .eraseToAnyPublisher()
+    }
+
+    func body(content: Content) -> some View {
+        content
+            .padding(.bottom, keyboardHeight)
+            .onReceive(keyboardHeightPublisher) { newHeight in
+                withAnimation(.easeOut(duration: 0.16)) {
+                    self.keyboardHeight = newHeight
+                }
+            }
+    }
+}
+
+extension View {
+    func keyboardAdaptive() -> some View {
+        self.modifier(KeyboardAdaptive())
     }
 }

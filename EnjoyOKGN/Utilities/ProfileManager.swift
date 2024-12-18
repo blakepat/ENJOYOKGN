@@ -11,7 +11,7 @@ import CloudKit
 final class ProfileManager: ObservableObject {
     
     @Published var avatar: UIImage = PlaceholderImage.avatar
-    @Published var name: String = "Create Account"
+    @Published var name: String = ""
 }
 
 

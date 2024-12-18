@@ -98,11 +98,14 @@ struct HomePageView: View {
             }
             
         }, content: {
-            CreateProfileView(username: viewModel.usernameText,
+            CreateProfileView(username: viewModel.profileManager.name,
                               avatarImage: viewModel.profileManager.avatar,
                               profileContext: $viewModel.profileContext,
                               createdProfileRecord: $viewModel.existingProfileRecord,
                               showCreateProfileView: $viewModel.showCreateProfileScreen)
+            .onDisappear {
+                viewModel.getProfile()
+            }
         })
         .sheet(isPresented: $viewModel.isShowingPhotoPicker, onDismiss: {
             viewModel.existingProfileRecord == nil ? print("•Profile CREATED") : print("😍 Profile UPDATED")
@@ -149,7 +152,7 @@ extension HomePageView {
                                 .foregroundColor(.white)
                         )
                     
-                    Text(cacheManager.getNameFromCache() ?? viewModel.profileManager.name)
+                    Text(viewModel.profileManager.name.isEmpty ? "Create Account" : (cacheManager.getNameFromCache() ?? viewModel.profileManager.name))
                         .font(.system(.headline, design: .rounded))
                         .foregroundColor(.white)
                         .lineLimit(1)

@@ -112,6 +112,7 @@ final class HomePageViewModel: ObservableObject {
                     profile = importedProfile
                     profileManager.name = importedProfile.name
                     profileManager.avatar = importedProfile.createProfileImage()
+                    
                     cacheManager.addAvatarToCache(avatar: importedProfile.createProfileImage())
                     cacheManager.addNameToCache(name: importedProfile.name)
                 }

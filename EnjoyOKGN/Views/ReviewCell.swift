@@ -69,14 +69,14 @@ struct ReviewCell: View {
                     Text("\(review.locationName)")
                         .font(.subheadline)
                         .fontWeight(.semibold)
-                        .lineLimit(4)
+                        .lineLimit(2)
                         .minimumScaleFactor(0.7)
                         .allowsTightening(true)
                     
                     Text("\"" + review.reviewCaption + "\"")
                         .font(.footnote)
                         .minimumScaleFactor(0.7)
-                        .lineLimit(4)
+                        .lineLimit(2)
                     
                     HStack {
                         Text(review.reviewerName)
