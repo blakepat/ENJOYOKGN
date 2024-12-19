@@ -9,7 +9,7 @@ import CloudKit
 import SwiftUI
 
 
-struct OKGNProfile: Identifiable {
+struct OKGNProfile: Identifiable, Equatable {
     
     static let kName = "name"
     static let kAvatar = "avatar"
@@ -45,6 +45,10 @@ struct OKGNProfile: Identifiable {
         awards = record[OKGNProfile.kAwards] as? [String] ?? []
         blockList = record[OKGNProfile.kBlockList] as? [CKRecord.Reference] ?? []
     }
+    
+    static func == (lhs: OKGNProfile, rhs: OKGNProfile) -> Bool {
+          return lhs.id == rhs.id
+      }
     
     
     func createProfileImage() -> UIImage {

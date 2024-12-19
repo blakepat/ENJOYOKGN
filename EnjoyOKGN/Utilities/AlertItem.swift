@@ -99,3 +99,36 @@ struct AlertContext {
                                             dismissButton: .default(Text("Ok")))
     
 }
+
+extension AlertContext {
+    static let profileNotFound = AlertItem(
+        title: Text("Profile Error"),
+        message: Text("Unable to find your profile. Please try again later."),
+        dismissButton: .default(Text("OK"))
+    )
+    
+    static let unableToLoadUsers = AlertItem(
+        title: Text("Loading Error"),
+        message: Text("Unable to load users. Please check your connection and try again."),
+        dismissButton: .default(Text("OK"))
+    )
+    
+    static let unableToLoadMoreUsers = AlertItem(
+        title: Text("Loading Error"),
+        message: Text("Unable to load more users. Please try again."),
+        dismissButton: .default(Text("OK"))
+    )
+    
+    
+    static let unableToSendFriendRequest = AlertItem(
+        title: Text("Friend Request Error"),
+        message: Text("Unable to send friend request. Please try again later."),
+        dismissButton: .default(Text("OK"))
+    )
+    
+    static let unableToCancelRequest = AlertItem(
+        title: Text("Cancel Request Error"),
+        message: Text("Unable to cancel friend request. Please try again later."),
+        dismissButton: .default(Text("OK"))
+    )
+}

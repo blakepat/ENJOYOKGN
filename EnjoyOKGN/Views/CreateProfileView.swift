@@ -220,6 +220,7 @@ struct CreateProfileView: View {
                     cacheManager.addNameToCache(name: username)
                     cacheManager.addAvatarToCache(avatar: avatarImage)
                     //                showAlertView = true
+                    updateProfileForReviews(avatar: avatarImage, name: username)
                     
                     DispatchQueue.main.async {
                         dismiss()
@@ -257,7 +258,24 @@ struct CreateProfileView: View {
             return true
         }
     }
+    
+    
+    func updateProfileForReviews(avatar: UIImage, name: String) {
+        guard let id = CloudKitManager.shared.profileRecordID else { return }
+        
+        Task {
+            let reviewsToUpdate = try await CloudKitManager.shared.getUserReviewsForProfileUpdate(for: id)
+            
+            for review in reviewsToUpdate {
+                review[OKGNReview.kReviewerAvatar] = avatar.convertToCKAsset(path: "profileAvatar")
+                review[OKGNReview.kReviewerName] = name
+            }
+           let _ = try await CloudKitManager.shared.batchSave(records: reviewsToUpdate)
+        }
+    }
 }
+
+
 
 //struct CreateProfileView_Previews: PreviewProvider {
 //    static var previews: some View {
