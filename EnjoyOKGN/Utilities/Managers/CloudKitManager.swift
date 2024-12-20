@@ -290,7 +290,7 @@ final class CloudKitManager: ObservableObject {
         let predicates = NSCompoundPredicate(type: .and, subpredicates: [userPredicate, locationPredicate])
         
         let query = CKQuery(recordType: "OKGNReview", predicate: predicates)
-        query.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
+        query.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
         
         let (matchedResults, _) = try await container.publicCloudDatabase.records(matching: query)
         let reviews = matchedResults.compactMap { _, result in try? result.get() }

@@ -409,93 +409,83 @@ extension CreateReviewView {
         }
     }
     
-    
+
     private var reviewLocationSelector: some View {
-        
-        ZStack {
+        VStack(alignment: .leading, spacing: 12) {
+            // Header
+            Text("Location")
+                .bold()
+                .font(.title3)
+                .foregroundColor(.white)
             
-            VStack {
-                HStack(spacing: 0) {
-                    Text("Location: ")
-                        .bold()
-                        .font(.callout)
-                        .foregroundColor(.white)
-                        .minimumScaleFactor(0.7)
-                    
+            // Selected Location Display
+            if !viewModel.locationName.isEmpty {
+                HStack {
                     Text(viewModel.locationName)
                         .font(.callout)
-                        .lineLimit(2)
-                        .minimumScaleFactor(0.60)
                         .foregroundColor(returnCategoryFromString(viewModel.selectedLocationCategory ?? "Activity").color)
                     
                     Spacer()
+                    
+                    // Optional: Clear selection button
+                    Button {
+                        viewModel.locationName = ""
+                        viewModel.selectedLocationId = nil
+                        viewModel.selectedLocationCategory = nil
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundColor(.gray)
+                    }
                 }
-                .padding(.horizontal, 16)
-                List {
-                    ForEach(0..<viewModel.searchResults.count, id: \.self) { index in
-                        let location = viewModel.searchResults[index]
+                .padding(.vertical, 8)
+            }
+            
+            // Search field
+            TextField("Search locations...", text: $viewModel.searchText)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .foregroundColor(.white)
+                .padding(.vertical, 8)
+            
+            // Location List
+            ScrollView {
+                LazyVStack(alignment: .leading, spacing: 2) {
+                    ForEach(viewModel.searchResults, id: \.0) { location in
                         Button {
                             viewModel.locationName = location.1
                             viewModel.selectedLocationId = location.0
                             viewModel.selectedLocationCategory = location.2
+                            
+                            // Optionally dismiss keyboard
+                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder),
+                                                          to: nil, from: nil, for: nil)
                         } label: {
-                            Text(location.1)
-                                .foregroundColor(.white)
-                                .onTapGesture {
-                                    viewModel.locationName = location.1
-                                    viewModel.selectedLocationId = location.0
-                                    viewModel.selectedLocationCategory = location.2
-                                }
+                            HStack {
+                                Text(location.1)
+                                    .foregroundColor(.white)
+                                Spacer()
+                                
+                                // Optional: Show category indicator
+                                Circle()
+                                    .fill(returnCategoryFromString(location.2).color)
+                                    .frame(width: 8, height: 8)
+                            }
+                            .padding(.vertical, 12)
+                            .padding(.horizontal, 16)
+                            .background(Color.black.opacity(0.3))
+                            .cornerRadius(8)
                         }
-                        .listRowBackground(VisualEffectView(effect: UIBlurEffect(style: .systemThinMaterialDark)))
                     }
                 }
-                .searchable(text: $viewModel.searchText)
-                .clipShape(RoundedRectangle(cornerRadius: 16))
-                .frame(height: viewModel.showingExpandedList ? screen.height / 2 : screen.height / 3 - 100)
+                .padding(.vertical, 8)
             }
-            
-            VStack {
-                HStack {
-                    Image(systemName: "magnifyingglass.circle")
-                    
-                    if #available(iOS 16.0, *) {
-                        TextEditor(text: $viewModel.searchText)
-                            .multilineTextAlignment(.leading)
-                            .scrollContentBackground(.hidden)    // new technique for iOS 16
-                    } else {
-                        TextEditor(text: $viewModel.searchText)
-                    }
-                }
-                .frame(height: typeSize >= .accessibility2 ? 50 : 36)
-                .foregroundColor(.white)
-                .padding(.horizontal, 8)
-                .background(VisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterialDark)).cornerRadius(8))
-                .overlay { RoundedRectangle(cornerRadius: 8).stroke(Color.gray, lineWidth: 1) }
-                .padding(.horizontal, 20)
-                .offset(y: typeSize >= .accessibility2 ? 50 : 36)
-
-                
-                Spacer()
-                HStack {
-                    Spacer()
-                    Image(systemName: viewModel.showingExpandedList ? "chevron.up" : "chevron.down")
-                        .frame(width: 20, height: 20)
-                        .foregroundColor(.white)
-                    Spacer()
-                }
-                .contentShape(Rectangle())
-                .background(Color.OKGNDarkGray)
-                .cornerRadius(16)
-                .onTapGesture {
-                    withAnimation {
-                        viewModel.showingExpandedList.toggle()
-                    }
-                }
-            }
+            .background(Color.black.opacity(0.2))
+            .cornerRadius(12)
+            .frame(maxHeight: 300)
         }
-        .padding(.horizontal, 16)
+        .padding(16)
     }
+    
+    
     
     
     private var reviewCaption: some View {
@@ -517,8 +507,6 @@ extension CreateReviewView {
                 
                 Spacer()
             }
-//            
-//            if #available(iOS 16.0, *) {
                 TextEditor(text: $viewModel.caption)
                     .multilineTextAlignment(.leading)
                     .foregroundColor(.white)
@@ -527,35 +515,76 @@ extension CreateReviewView {
                     .scrollContentBackground(.hidden)    // new technique for iOS 16
                     .frame(height: typeSize >= .accessibility2 ? 54 : 44)
                     .accessibilityHint(Text("Summarize your experience in a fun and short way. (20 character maximum"))
-//            } else {
-//                // Fallback on earlier versions
-//                TextEditor(text: $viewModel.caption)
-//                    .frame(height: typeSize >= .accessibility2 ? 54 : 44)
-//                    .background(Color(white: 0.35).opacity(0.35))
-//                    .foregroundColor(.white)
-//                    .cornerRadius(8)
-//                    .overlay { RoundedRectangle(cornerRadius: 8).stroke(Color.gray, lineWidth: 1) }
-//                    .accessibilityHint(Text("Summarize your experience in a fun and short way. (20 character maximum"))
-//            }
         }
         .padding(.horizontal, 16)
     }
     
     
+//    private var reviewRatingSelector: some View {
+//        VStack {
+//            HStack {
+//                Text("Rating: ")
+//                    .bold()
+//                    .font(.callout)
+//                    .foregroundColor(.white)
+//                Text((viewModel.firstNumber > 0 || viewModel.secondNumber > 0) && !(viewModel.firstNumber == 10 && viewModel.secondNumber > 0) ? "\(viewModel.firstNumber).\(viewModel.secondNumber)" : "Rate experience from 0.1 to 10.0")
+//                    .font(.callout)
+//                    .foregroundColor((viewModel.firstNumber > 0 || viewModel.secondNumber > 0) && !(viewModel.firstNumber == 10 && viewModel.secondNumber > 0) ? (viewModel.firstNumber > 5 ? (viewModel.firstNumber > 7 ? .OKGNLightGreen : .OKGNDarkYellow) : Color(.systemPink)) : .gray)
+//                
+//                Spacer()
+//            }
+//            
+//            GeometryReader { geometry in
+//                HStack {
+//                    Picker(selection: self.$viewModel.firstNumber, label: Text("")) {
+//                        ForEach(0...10, id: \.self) { index in
+//                            Text("\(index)").tag(index)
+//                                .foregroundColor(.white)
+//                        }
+//                    }
+//                    .pickerStyle(.wheel)
+//                    .frame(width: geometry.size.width / 2, height: 80, alignment: .center)
+//                    .compositingGroup()
+//                    .clipped()
+//                    
+//                    Picker(selection: self.$viewModel.secondNumber, label: Text("")) {
+//                        ForEach(0...9, id: \.self) { index in
+//                            Text("\(index)").tag(index)
+//                                .foregroundColor(.white)
+//                        }
+//                    }
+//                    .frame(width: geometry.size.width / 2, height: 80, alignment: .center)
+//                    .pickerStyle(.wheel)
+//                    .compositingGroup()
+//                    .clipped()
+//                }
+//            }
+//            .frame(height: 100)
+//        }
+//        .padding(.horizontal, 16)
+//    }
+    
+    
     private var reviewRatingSelector: some View {
-        VStack {
-            HStack {
-                Text("Rating: ")
+        VStack(alignment: .leading, spacing: 12) { // CHANGE: Added consistent spacing
+            HStack(spacing: 8) { // CHANGE: Added spacing
+                Text("Rating")  // CHANGE: Simplified text
                     .bold()
-                    .font(.callout)
+                    .font(.title3)  // CHANGE: Matched font with other sections
                     .foregroundColor(.white)
-                Text((viewModel.firstNumber > 0 || viewModel.secondNumber > 0) && !(viewModel.firstNumber == 10 && viewModel.secondNumber > 0) ? "\(viewModel.firstNumber).\(viewModel.secondNumber)" : "Rate experience from 0.1 to 10.0")
-                    .font(.callout)
-                    .foregroundColor((viewModel.firstNumber > 0 || viewModel.secondNumber > 0) && !(viewModel.firstNumber == 10 && viewModel.secondNumber > 0) ? (viewModel.firstNumber > 5 ? (viewModel.firstNumber > 7 ? .OKGNLightGreen : .OKGNDarkYellow) : Color(.systemPink)) : .gray)
                 
-                Spacer()
+                Text((viewModel.firstNumber > 0 || viewModel.secondNumber > 0) && !(viewModel.firstNumber == 10 && viewModel.secondNumber > 0)
+                    ? "\(viewModel.firstNumber).\(viewModel.secondNumber)"
+                    : "Select rating")  // CHANGE: Simplified placeholder text
+                    .font(.callout)
+                    .foregroundColor((viewModel.firstNumber > 0 || viewModel.secondNumber > 0) && !(viewModel.firstNumber == 10 && viewModel.secondNumber > 0)
+                        ? (viewModel.firstNumber > 5
+                            ? (viewModel.firstNumber > 7 ? .OKGNLightGreen : .OKGNDarkYellow)
+                            : Color(.systemPink))
+                        : .gray)
             }
             
+            // CHANGE: Added background to picker
             GeometryReader { geometry in
                 HStack {
                     Picker(selection: self.$viewModel.firstNumber, label: Text("")) {
@@ -565,9 +594,7 @@ extension CreateReviewView {
                         }
                     }
                     .pickerStyle(.wheel)
-                    .frame(width: geometry.size.width / 2, height: 80, alignment: .center)
-                    .compositingGroup()
-                    .clipped()
+                    .frame(width: geometry.size.width / 2, height: 80)
                     
                     Picker(selection: self.$viewModel.secondNumber, label: Text("")) {
                         ForEach(0...9, id: \.self) { index in
@@ -575,50 +602,70 @@ extension CreateReviewView {
                                 .foregroundColor(.white)
                         }
                     }
-                    .frame(width: geometry.size.width / 2, height: 80, alignment: .center)
+                    .frame(width: geometry.size.width / 2, height: 80)
                     .pickerStyle(.wheel)
-                    .compositingGroup()
-                    .clipped()
                 }
             }
             .frame(height: 100)
+            .background(Color.black.opacity(0.2))  // CHANGE: Added subtle background
+            .cornerRadius(12)  // CHANGE: Added corner radius
         }
         .padding(.horizontal, 16)
+        .padding(.vertical, 8)  // CHANGE: Added vertical padding
     }
     
+
     
     private var reviewPhotoPicker: some View {
-        VStack {
-            HStack {
-                Text("Photo:")
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(spacing: 8) {
+                Text("Photo")
                     .bold()
-                    .font(.callout)
+                    .font(.title3)
                     .foregroundColor(.white)
                 
-                Text("Select a photo to remember your visit!")
+                Text("Add a memory to your review")
                     .font(.callout)
                     .foregroundColor(.gray)
-                
-                Spacer()
             }
-            
-            HStack {
-                Image(uiImage: viewModel.selectedImage)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 80 ,height: 80)
-                    .clipped()
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
-                    .onTapGesture {
-                        viewModel.isShowingPhotoPicker = true
+            GeometryReader { geometry in
+                Button {
+                    viewModel.isShowingPhotoPicker = true
+                } label: {
+                    ZStack {
+                        if viewModel.selectedImage == PlaceholderImage.square {
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(Color.black.opacity(0.3))
+                                .frame(width: min(geometry.size.width, 200), height: min(geometry.size.width, 200))
+                                .overlay(
+                                    VStack(spacing: 8) {
+                                        Image(systemName: "camera.fill")
+                                            .font(.system(size: 30))
+                                            .foregroundColor(.gray)
+                                        Text("Tap to select photo")
+                                            .font(.callout)
+                                            .foregroundColor(.gray)
+                                    }
+                                )
+           
+                            Image(uiImage: viewModel.selectedImage)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: min(geometry.size.width, 200), height: min(geometry.size.width, 200))
+                                .clipShape(RoundedRectangle(cornerRadius: 12))
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .stroke(Color.white.opacity(0.3), lineWidth: 1)
+                                )
+                        }
                     }
-                
-                Spacer()
+                    .frame(maxWidth: .infinity, alignment: .center)
+                }
             }
-            
+            .frame(height: 200)
         }
         .padding(.horizontal, 16)
-        .padding(.bottom, 4)
+        .padding(.vertical, 8)
     }
     
     
