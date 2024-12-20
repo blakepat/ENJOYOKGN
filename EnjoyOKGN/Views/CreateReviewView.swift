@@ -115,40 +115,133 @@ struct CreateReviewView: View {
     }
     
     
+//    func createReview() {
+//        CKContainer.default().accountStatus { (accountStatus, error) in
+//            if accountStatus == .available {
+//                if checkReviewIsProperlySet()  {
+//                    guard let profileRecordID = CloudKitManager.shared.profileRecordID else {
+//                        DispatchQueue.main.async {
+//                            viewModel.alertItem = AlertContext.notSignedIntoProfile
+//                            viewModel.showAlertView = true
+//                        }
+//                        
+//                        return
+//                    }
+//                    
+//                    Task {
+//                        do {
+//                            let reviewRecord = CKRecord(recordType: RecordType.review)
+//                            
+//                            let profileRecord = try await CloudKitManager.shared.fetchRecord(with: profileRecordID)
+//                            DispatchQueue.main.async { [self] in
+//                                print("✅ success getting profile")
+//                                
+//                                CloudKitManager.shared.profile = profileRecord
+//                                let importedProfile = OKGNProfile(record: profileRecord)
+//                                cacheManager.addAvatarToCache(avatar: importedProfile.createProfileImage())
+//                                cacheManager.addNameToCache(name: importedProfile.name)
+//                            }
+//                            //Create a reference to the location
+//                            if await !locationManager.locationNamesIdsCategory.isEmpty {
+//                                
+//                                print("trying to create record")
+//                                
+//                                if let selectedLocationId = await viewModel.selectedLocationId {
+//                                    reviewRecord[OKGNReview.kLocation] = CKRecord.Reference(recordID: selectedLocationId, action: .none)
+//                                    //create a rereference to profile
+//                                    reviewRecord[OKGNReview.kReviewer] = CKRecord.Reference(recordID: profileRecordID, action: .none)
+//                                    reviewRecord[OKGNReview.kCaption] = await viewModel.caption
+//                                    reviewRecord[OKGNReview.kPhoto] = await viewModel.selectedImage.convertToCKAsset(path: "selectedPhoto")
+//                                    reviewRecord[OKGNReview.kRating] = "\(await viewModel.firstNumber).\(await viewModel.secondNumber)"
+//                                    reviewRecord[OKGNReview.kDate] = await selectedDate
+//                                    reviewRecord[OKGNReview.klocationName] = await viewModel.locationName
+//                                    reviewRecord[OKGNReview.klocationCategory] = await viewModel.selectedLocationCategory
+//                                    print("🐤\(await viewModel.selectedLocationCategory ?? "")")
+//                                    reviewRecord[OKGNReview.kReviewerName] = await cacheManager.getNameFromCache()
+//                                    
+////                                    let reviewerProfile = CloudKitManager.shared.profile?.convertToOKGNProfile()
+////                                    reviewRecord[OKGNReview.kReviewerName] = reviewerProfile?.name
+////                                    reviewRecord[OKGNReview.kReviewerAvatar] = reviewerProfile?.avatar
+//                                    
+//                                    reviewRecord[OKGNReview.kReviewerAvatar] = await cacheManager.getAvatarFromCache()?.convertToCKAsset(path: "profileAvatar")
+//                                }
+//                            } else {
+//                                print("❌❌ unable to get locations")
+//                                DispatchQueue.main.async {
+//                                    viewModel.alertItem = AlertContext.reviewCreationFailed
+//                                    viewModel.showAlertView = true
+//                                }
+//                                
+//                                return
+//                            }
+//                            do {
+//                                
+//                                if let _ = try await CloudKitManager.shared.batchSave(records: [reviewRecord]) {
+//                                    
+//                                    await addNewReviewToTotals(reviewCategory: returnCategoryFromString(viewModel.selectedLocationCategory ?? ""))
+//                                    DispatchQueue.main.async {
+//                                        viewModel.alertItem = AlertContext.successfullyCreatedReview
+//                                        viewModel.showAlertView = true
+//                                    }
+//                                    
+//                                    print("✅ created review successfully")
+//                                    await resetReviewPage()
+//                                    
+//                                    
+//                                    
+//                                    
+//                                } else {
+//                                    viewModel.alertItem = AlertContext.reviewCreationFailed
+//                                    viewModel.showAlertView = true
+//                                }
+//                                
+//                            } catch {
+//                                print("❌ failed saving review")
+//                            }
+//                        } catch {
+//                            print("failure in fetching record review")
+//                        }
+//                    }
+//                }
+//            } else {
+//                print("⚠️ Error creating review / checking icloud status")
+//                DispatchQueue.main.async {
+//                    viewModel.alertItem = AlertContext.reviewCreationFailed
+//                    viewModel.showAlertView = true
+//                }
+//            }
+//        }
+//    }
+    
     func createReview() {
         CKContainer.default().accountStatus { (accountStatus, error) in
             if accountStatus == .available {
-                if checkReviewIsProperlySet()  {
-                    guard let profileRecordID = CloudKitManager.shared.profileRecordID else {
-                        DispatchQueue.main.async {
+                if checkReviewIsProperlySet() {
+                    Task { @MainActor in  // Explicitly mark as MainActor task
+                        // Now we can safely access profileRecordID on the main actor
+                        guard let profileRecordID = CloudKitManager.shared.profileRecordID else {
                             viewModel.alertItem = AlertContext.notSignedIntoProfile
                             viewModel.showAlertView = true
+                            return
                         }
                         
-                        return
-                    }
-                    
-                    Task {
                         do {
                             let reviewRecord = CKRecord(recordType: RecordType.review)
                             
                             let profileRecord = try await CloudKitManager.shared.fetchRecord(with: profileRecordID)
-                            DispatchQueue.main.async { [self] in
-                                print("✅ success getting profile")
-                                
-                                CloudKitManager.shared.profile = profileRecord
-                                let importedProfile = OKGNProfile(record: profileRecord)
-                                cacheManager.addAvatarToCache(avatar: importedProfile.createProfileImage())
-                                cacheManager.addNameToCache(name: importedProfile.name)
-                            }
-                            //Create a reference to the location
+                            
+                            // These operations are now safely on the main actor
+                            CloudKitManager.shared.profile = profileRecord
+                            let importedProfile = OKGNProfile(record: profileRecord)
+                            cacheManager.addAvatarToCache(avatar: importedProfile.createProfileImage())
+                            cacheManager.addNameToCache(name: importedProfile.name)
+                            print("✅ success getting profile")
+                            
                             if !locationManager.locationNamesIdsCategory.isEmpty {
-                                
                                 print("trying to create record")
                                 
                                 if let selectedLocationId = viewModel.selectedLocationId {
                                     reviewRecord[OKGNReview.kLocation] = CKRecord.Reference(recordID: selectedLocationId, action: .none)
-                                    //create a rereference to profile
                                     reviewRecord[OKGNReview.kReviewer] = CKRecord.Reference(recordID: profileRecordID, action: .none)
                                     reviewRecord[OKGNReview.kCaption] = viewModel.caption
                                     reviewRecord[OKGNReview.kPhoto] = viewModel.selectedImage.convertToCKAsset(path: "selectedPhoto")
@@ -156,47 +249,31 @@ struct CreateReviewView: View {
                                     reviewRecord[OKGNReview.kDate] = selectedDate
                                     reviewRecord[OKGNReview.klocationName] = viewModel.locationName
                                     reviewRecord[OKGNReview.klocationCategory] = viewModel.selectedLocationCategory
-                                    print("🐤\(viewModel.selectedLocationCategory ?? "")")
                                     reviewRecord[OKGNReview.kReviewerName] = cacheManager.getNameFromCache()
-                                    
-//                                    let reviewerProfile = CloudKitManager.shared.profile?.convertToOKGNProfile()
-//                                    reviewRecord[OKGNReview.kReviewerName] = reviewerProfile?.name
-//                                    reviewRecord[OKGNReview.kReviewerAvatar] = reviewerProfile?.avatar
-                                    
                                     reviewRecord[OKGNReview.kReviewerAvatar] = cacheManager.getAvatarFromCache()?.convertToCKAsset(path: "profileAvatar")
+                                }
+                                
+                                do {
+                                    if let _ = try await CloudKitManager.shared.batchSave(records: [reviewRecord]) {
+                                        addNewReviewToTotals(reviewCategory: returnCategoryFromString(viewModel.selectedLocationCategory ?? ""))
+                                        
+                                        viewModel.alertItem = AlertContext.successfullyCreatedReview
+                                        viewModel.showAlertView = true
+                                        
+                                        print("✅ created review successfully")
+                                        resetReviewPage()
+                                    } else {
+                                        viewModel.alertItem = AlertContext.reviewCreationFailed
+                                        viewModel.showAlertView = true
+                                    }
+                                } catch {
+                                    print("❌ failed saving review")
                                 }
                             } else {
                                 print("❌❌ unable to get locations")
-                                DispatchQueue.main.async {
-                                    viewModel.alertItem = AlertContext.reviewCreationFailed
-                                    viewModel.showAlertView = true
-                                }
-                                
+                                viewModel.alertItem = AlertContext.reviewCreationFailed
+                                viewModel.showAlertView = true
                                 return
-                            }
-                            do {
-                                
-                                if let _ = try await CloudKitManager.shared.batchSave(records: [reviewRecord]) {
-                                    
-                                    addNewReviewToTotals(reviewCategory: returnCategoryFromString(viewModel.selectedLocationCategory ?? ""))
-                                    DispatchQueue.main.async {
-                                        viewModel.alertItem = AlertContext.successfullyCreatedReview
-                                        viewModel.showAlertView = true
-                                    }
-                                    
-                                    print("✅ created review successfully")
-                                    resetReviewPage()
-                                    
-                                    
-                                    
-                                    
-                                } else {
-                                    viewModel.alertItem = AlertContext.reviewCreationFailed
-                                    viewModel.showAlertView = true
-                                }
-                                
-                            } catch {
-                                print("❌ failed saving review")
                             }
                         } catch {
                             print("failure in fetching record review")
@@ -205,13 +282,15 @@ struct CreateReviewView: View {
                 }
             } else {
                 print("⚠️ Error creating review / checking icloud status")
-                DispatchQueue.main.async {
+                Task { @MainActor in
                     viewModel.alertItem = AlertContext.reviewCreationFailed
                     viewModel.showAlertView = true
                 }
             }
         }
     }
+    
+    
     
     
     func addNewReviewToTotals(reviewCategory: Category) {
@@ -438,8 +517,8 @@ extension CreateReviewView {
                 
                 Spacer()
             }
-            
-            if #available(iOS 16.0, *) {
+//            
+//            if #available(iOS 16.0, *) {
                 TextEditor(text: $viewModel.caption)
                     .multilineTextAlignment(.leading)
                     .foregroundColor(.white)
@@ -448,16 +527,16 @@ extension CreateReviewView {
                     .scrollContentBackground(.hidden)    // new technique for iOS 16
                     .frame(height: typeSize >= .accessibility2 ? 54 : 44)
                     .accessibilityHint(Text("Summarize your experience in a fun and short way. (20 character maximum"))
-            } else {
-                // Fallback on earlier versions
-                TextEditor(text: $viewModel.caption)
-                    .frame(height: typeSize >= .accessibility2 ? 54 : 44)
-                    .background(Color(white: 0.35).opacity(0.35))
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
-                    .overlay { RoundedRectangle(cornerRadius: 8).stroke(Color.gray, lineWidth: 1) }
-                    .accessibilityHint(Text("Summarize your experience in a fun and short way. (20 character maximum"))
-            }
+//            } else {
+//                // Fallback on earlier versions
+//                TextEditor(text: $viewModel.caption)
+//                    .frame(height: typeSize >= .accessibility2 ? 54 : 44)
+//                    .background(Color(white: 0.35).opacity(0.35))
+//                    .foregroundColor(.white)
+//                    .cornerRadius(8)
+//                    .overlay { RoundedRectangle(cornerRadius: 8).stroke(Color.gray, lineWidth: 1) }
+//                    .accessibilityHint(Text("Summarize your experience in a fun and short way. (20 character maximum"))
+//            }
         }
         .padding(.horizontal, 16)
     }

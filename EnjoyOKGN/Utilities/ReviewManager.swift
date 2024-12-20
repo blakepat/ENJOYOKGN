@@ -8,7 +8,7 @@
 import SwiftUI
 import CloudKit
 
-
+@MainActor
 final class ReviewManager: ObservableObject {
     
     @Published var userReviews: [OKGNReview] = [] {

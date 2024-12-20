@@ -8,6 +8,7 @@
 import Foundation
 import CloudKit
 
+@MainActor
 final class FriendManager: ObservableObject {
     
     @Published var friends: [OKGNProfile] = [] {
@@ -19,7 +20,7 @@ final class FriendManager: ObservableObject {
     @Published var alertItem: AlertItem?
     
     
-    func acceptFriend(_ friend: CKRecord.Reference) {
+    @MainActor func acceptFriend(_ friend: CKRecord.Reference) {
 
         if let userProfile = CloudKitManager.shared.profile {
             
@@ -48,7 +49,7 @@ final class FriendManager: ObservableObject {
     }
     
     
-    func blockUser(_ userToBlock: CKRecord.Reference) {
+    @MainActor func blockUser(_ userToBlock: CKRecord.Reference) {
         if let userProfile = CloudKitManager.shared.profile {
             var blockedUsers = userProfile.convertToOKGNProfile().blockList
             blockedUsers.append(userToBlock)
@@ -72,7 +73,7 @@ final class FriendManager: ObservableObject {
         }
     }
     
-    func unBlockUser(_ userToUnblock: CKRecord.Reference) {
+    @MainActor func unBlockUser(_ userToUnblock: CKRecord.Reference) {
         if let userProfile = CloudKitManager.shared.profile {
             let blockedUsers = userProfile.convertToOKGNProfile().blockList
             let newBlockedUsers = blockedUsers.filter({ $0.recordID != userToUnblock.recordID })
@@ -124,7 +125,7 @@ final class FriendManager: ObservableObject {
     
     
     
-    func removeRequestAfterAccepting(follower: CKRecord.Reference) {
+    @MainActor func removeRequestAfterAccepting(follower: CKRecord.Reference) {
         
         if let userProfile = CloudKitManager.shared.profile {
             if userProfile.convertToOKGNProfile().followers.contains(CKRecord.Reference(recordID: follower.recordID, action: .none)) {
@@ -217,7 +218,7 @@ final class FriendManager: ObservableObject {
     }
     
     
-    func compareRequestsAndFriends() {
+    @MainActor func compareRequestsAndFriends() {
         
         guard let userProfile = CloudKitManager.shared.profile else {
             return
@@ -240,7 +241,7 @@ final class FriendManager: ObservableObject {
         }
     }
     
-    func deleteFriends(index: IndexSet) {
+    @MainActor func deleteFriends(index: IndexSet) {
         if let profile = CloudKitManager.shared.profile {
             
             let friendToDelete = CKRecord.Reference(recordID: friends[index[index.startIndex]].id, action: .none)

@@ -41,6 +41,7 @@ struct AddFriendModalView: View {
             .navigationTitle("Add a new friend")
             .navigationBarTitleDisplayMode(.inline)
             .searchable(text: $searchText, prompt: "Search users")
+            .foregroundStyle(Color.white)
             .task {
                 await loadInitialData()
             }
@@ -115,7 +116,7 @@ struct AddFriendModalView: View {
                     return
                 }
                 
-                var friendOKGNProfile = friendProfile.convertToOKGNProfile()
+                let friendOKGNProfile = friendProfile.convertToOKGNProfile()
                 friendOKGNProfile.requests.append(CKRecord.Reference(recordID: profileRecord, action: .none))
                 
                 friendProfile[OKGNProfile.kRequests] = friendOKGNProfile.requests
@@ -124,7 +125,7 @@ struct AddFriendModalView: View {
                 
                 // Update the local users array to reflect the change
                 if let index = users.firstIndex(where: { $0.id == friendRecord.recordID }) {
-                    var updatedUser = users[index]
+                    let updatedUser = users[index]
                     updatedUser.requests.append(CKRecord.Reference(recordID: profileRecord, action: .none))
                     users[index] = updatedUser
                 }
@@ -145,7 +146,7 @@ struct AddFriendModalView: View {
                     return
                 }
                 
-                var friendOKGNProfile = friendProfile.convertToOKGNProfile()
+                let friendOKGNProfile = friendProfile.convertToOKGNProfile()
                 friendOKGNProfile.requests.removeAll { $0.recordID == profileRecord }
                 
                 friendProfile[OKGNProfile.kRequests] = friendOKGNProfile.requests
@@ -154,7 +155,7 @@ struct AddFriendModalView: View {
                 
                 // Update the local users array to reflect the change
                 if let index = users.firstIndex(where: { $0.id == request }) {
-                    var updatedUser = users[index]
+                    let updatedUser = users[index]
                     updatedUser.requests.removeAll { $0.recordID == profileRecord }
                     users[index] = updatedUser
                 }

@@ -57,19 +57,58 @@ final class LocationManager: ObservableObject {
     }
     
     
+//    func uploadLocations() async {
+//        print("UPLOAD LOCATIONS CALLED")
+//        let fullPath = getDocumentsDirectory().appendingPathComponent(randomFileName)
+//        do {
+//            let data = try Data(contentsOf: fullPath)
+//            if let loadedLocations = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as? [NSLocation] {
+////            if let loadedLocations = try NSKeyedUnarchiver.unarchiveObject(withFile: randomFileName) as? [NSLocation] {
+//                print(loadedLocations)
+//                if loadedLocations.isEmpty { print("isEMPTY!!!")}
+//                for location in loadedLocations {
+//                    
+////                    print(location.longitude)
+//                    
+//                    let latLong = CLLocation(latitude: Double(location.latitude) ?? 0, longitude: Double(location.longitude) ?? 0)
+//                    let squarePhoto = UIImage(data: location.squareAsset as Data)?.convertToCKAsset(path: "\(location.name)squareAsset")
+//                    let bannerPhoto = UIImage(data: location.bannerAsset as Data)?.convertToCKAsset(path: "\(location.name)bannerAsset")
+//                    
+//                    let CKLocation = CKRecord(recordType: RecordType.location)
+//                    CKLocation[OKGNLocation.kName] = location.name
+//                    CKLocation[OKGNLocation.kDescription] = location.locationDescription
+//                    CKLocation[OKGNLocation.kSquareAsset] = squarePhoto
+//                    CKLocation[OKGNLocation.kBannerAsset] = bannerPhoto
+//                    CKLocation[OKGNLocation.kAddress] = location.address
+//                    CKLocation[OKGNLocation.kLocation] = latLong
+//                    CKLocation[OKGNLocation.kWebsiteURL] = location.websiteURL
+//                    CKLocation[OKGNLocation.kPhoneNumber] = location.phoneNumber
+//                    CKLocation[OKGNLocation.kCategory] = location.category
+//
+//                    self.locationsToUpload.append(CKLocation)
+//                    
+//                }
+//                
+//                if let _ = try await CloudKitManager.shared.batchSave(records: self.locationsToUpload) {
+//                    print(self.locationsToUpload)
+//                }
+//            } else {
+//                print("😈😈 unable to get loadedLocaions")
+//            }
+//        } catch {
+//            print("Couldn't read file.")
+//        }
+//        
+//    }
     func uploadLocations() async {
         print("UPLOAD LOCATIONS CALLED")
         let fullPath = getDocumentsDirectory().appendingPathComponent(randomFileName)
         do {
             let data = try Data(contentsOf: fullPath)
-            if let loadedLocations = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as? [NSLocation] {
-//            if let loadedLocations = try NSKeyedUnarchiver.unarchiveObject(withFile: randomFileName) as? [NSLocation] {
+            if let loadedLocations = try NSKeyedUnarchiver.unarchivedObject(ofClass: NSArray.self, from: data) as? [NSLocation] {
                 print(loadedLocations)
-                if loadedLocations.isEmpty { print("isEMPTY!!!")}
+                if loadedLocations.isEmpty { print("isEMPTY!!!") }
                 for location in loadedLocations {
-                    
-//                    print(location.longitude)
-                    
                     let latLong = CLLocation(latitude: Double(location.latitude) ?? 0, longitude: Double(location.longitude) ?? 0)
                     let squarePhoto = UIImage(data: location.squareAsset as Data)?.convertToCKAsset(path: "\(location.name)squareAsset")
                     let bannerPhoto = UIImage(data: location.bannerAsset as Data)?.convertToCKAsset(path: "\(location.name)bannerAsset")
@@ -86,19 +125,17 @@ final class LocationManager: ObservableObject {
                     CKLocation[OKGNLocation.kCategory] = location.category
 
                     self.locationsToUpload.append(CKLocation)
-                    
                 }
                 
                 if let _ = try await CloudKitManager.shared.batchSave(records: self.locationsToUpload) {
                     print(self.locationsToUpload)
                 }
             } else {
-                print("😈😈 unable to get loadedLocaions")
+                print("😈😈 unable to get loadedLocations")
             }
         } catch {
-            print("Couldn't read file.")
+            print("Couldn't read file: \(error)")
         }
-        
     }
 }
 

@@ -25,13 +25,16 @@ struct HomePageView: View {
         
         ZStack {
             VStack(alignment: .leading, spacing: 0) {
-                Spacer().frame(height: 32)
+                Spacer().frame(height: 24)
                 
                 TrophyScrollView(categoryVisitCounts: reviewManager.eachCategoryVisitCount)
+                    .padding(.bottom, 8)
 
                 iconView
+                    .padding(.top, 4)
+                
                 carouselView
-                    .padding(.top)
+                    .padding(.top, 8)
                 
                 Spacer()
             }
@@ -41,7 +44,7 @@ struct HomePageView: View {
             if viewModel.isShowingDetailedModalView {
                 Color(.systemBackground)
                     .ignoresSafeArea(.all)
-                    .opacity(0.4)
+                    .opacity(0.5)
                     .transition(.opacity)
                     .animation(.easeOut, value: viewModel.isShowingDetailedModalView)
                     .zIndex(1)
@@ -58,7 +61,7 @@ struct HomePageView: View {
         .sheet(isPresented: $viewModel.showSettingsView, content: {
             SettingsView()
         })
-        .background(RadialGradient(gradient: Gradient(colors: [.OKGNDarkBlue, .black.opacity(0.5)]), center: .center, startRadius: 100, endRadius: 800))
+        .background(RadialGradient(gradient: Gradient(colors: [.OKGNDarkBlue, .black.opacity(0.6)]), center: .center, startRadius: 150, endRadius: 750))
         .onReceive(CloudKitManager.shared.$userRecord) { user in
             DispatchQueue.main.async {
                 viewModel.getProfile()
@@ -138,17 +141,15 @@ extension HomePageView {
     private var userHeaderBar: some View {
         VStack {
             HStack(alignment: .top) {
-                
-                HStack(alignment: .center) {
+                HStack(alignment: .center, spacing: 8) {
                     Image(uiImage: cacheManager.getAvatarFromCache() ?? viewModel.profileManager.avatar)
                         .resizable()
-                        .frame(width: 30, height: 30)
+                        .frame(width: 34, height: 34)
                         .clipShape(Circle())
-                        .shadow(color: .black.opacity(0.5), radius: 2, x: 0, y: 6)
-//                        .onTapGesture { viewModel.isShowingPhotoPicker = true }
+                        .shadow(color: .black.opacity(0.5), radius: 3, x: 0, y: 3)
                         .overlay(
                             Circle()
-                                .stroke(lineWidth: 1)
+                                .stroke(Color.white.opacity(0.8), lineWidth: 1.5)
                                 .foregroundColor(.white)
                         )
                     
@@ -156,7 +157,7 @@ extension HomePageView {
                         .font(.system(.headline, design: .rounded))
                         .foregroundColor(.white)
                         .lineLimit(1)
-                        .minimumScaleFactor(0.5)
+                        .minimumScaleFactor(0.75)
 //                        .onTapGesture {
 //                            viewModel.changeNameAlertView()
 //                        }
@@ -166,11 +167,11 @@ extension HomePageView {
                 .padding(.vertical, 6)
                 .overlay(
                     Capsule()
-                        .stroke(Color.OKGNDarkYellow, lineWidth: 2)
+                        .stroke(Color.OKGNDarkYellow, lineWidth: 1.5)
                 )
                 .background {
                     Capsule()
-                        .fill(Color.OKGNDarkBlue)
+                        .fill(Color.OKGNDarkBlue.opacity(0.95))
                 }
                 .onTapGesture {
                     viewModel.showCreateProfileScreen.toggle()
@@ -181,16 +182,17 @@ extension HomePageView {
                 // Number of venues visited
                 VenuesVisitedView(showVenuesVisitedSubCategories: $viewModel.isShowingVenuesVisitedSubCategories,
                                   allCategoriesVisitCount: reviewManager.eachCategoryVisitCount)
-                    .shadow(color: .black.opacity(0.5), radius: 4, x: 0, y: 6)
+                    .shadow(color: .black.opacity(0.3), radius: 3, x: 0, y: 3)
                     .frame(alignment: .trailing)
                     .frame(minWidth: 140)
                 
                 
                 Image(systemName: "gear.circle.fill")
                     .resizable()
-                    .foregroundColor(.white)
+                    .foregroundColor(.white.opacity(0.9))
                     .frame(width: 30, height: 30, alignment: .trailing)
                     .scaledToFit()
+                    .shadow(color: .black.opacity(0.2), radius: 2, x: 0, y: 1)
                     .onTapGesture {
                         viewModel.showSettingsView.toggle()
                     }
@@ -222,7 +224,7 @@ extension HomePageView {
                         .frame(minHeight: typeSize >= .accessibility1 ? 60 : 36)
                         .mask {
                             Text(index == 0 ? "Champions" : "\(categories[index-1].description) Leaders")
-                                .font(.title2)
+                                .font(.title2.weight(.semibold))
                                 .minimumScaleFactor(0.9)
                                 .padding(.vertical, 8)
                         }
@@ -286,20 +288,20 @@ extension HomePageView {
 //                    )
                     .background(
                         VisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterialDark))
-                            .clipShape(RoundedRectangle(cornerRadius: 30))
+                            .clipShape(RoundedRectangle(cornerRadius: 24))
                             .padding(.top, 20)
-                            .padding(.horizontal, 24)
+                            .padding(.horizontal, 20)
                             .offset(x: minX / 2)
                             .offset(y: -20)
                     )
                     .shadow(color: .black.opacity(0.3), radius: 10, x: 0, y: 10)
-                    .blur(radius: abs(minX / 80))
+                    .blur(radius: abs(minX / 90))
                 }
                 .padding(.bottom)
             }
         }
         .tabViewStyle(.page(indexDisplayMode: .never))
-        .frame(height: (screen.height / 2) + 30)
+        .frame(height: (screen.height / 2) + 20)
         .onChange(of: viewModel.currentIndex) { value in
             if value == 0 {
                 withAnimation(.linear(duration: 1.5)) {

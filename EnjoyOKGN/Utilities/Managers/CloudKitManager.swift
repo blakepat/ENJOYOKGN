@@ -8,7 +8,7 @@
 import CloudKit
 import SwiftUI
 
-
+@MainActor
 final class CloudKitManager: ObservableObject {
     
     static let shared = CloudKitManager()
@@ -31,34 +31,6 @@ final class CloudKitManager: ObservableObject {
     let container = CKContainer.default()
 
     
-//    // Base functions
-//    func getUserRecord() {
-//        CKContainer.default().fetchUserRecordID { recordID, error in
-//            guard let recordID = recordID, error == nil else {
-//                print(error!.localizedDescription)
-//                return
-//            }
-//
-//            //Get UserRecordID from the container
-//            CKContainer.default().publicCloudDatabase.fetch(withRecordID: recordID) { userRecord, error in
-//                guard let userRecord = userRecord, error == nil else {
-//                    print(error!.localizedDescription)
-//                    return
-//                }
-//                DispatchQueue.main.async {
-//                    self.userRecord = userRecord
-//                }
-//
-//                if let profileReference = userRecord["userProfile"] as? CKRecord.Reference {
-//                    DispatchQueue.main.async {
-//                        self.profileRecordID = profileReference.recordID
-//                    }
-//                }
-//            }
-//        }
-//    }
-    
-    
     // Base functions
     func getUserRecord() async throws {
         print("AAA - getUserRecord Called")
@@ -76,7 +48,6 @@ final class CloudKitManager: ObservableObject {
         } catch {
             print("❌ unable to get userRecord!")
         }
-        
     }
     
     func getFriendUserRecord(id: CKRecord.ID, completed: @escaping () -> () ) async throws -> CKRecord? {
