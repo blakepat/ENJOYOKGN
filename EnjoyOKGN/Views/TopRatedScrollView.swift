@@ -49,16 +49,7 @@ struct TopRatedScrollView: View {
                                     Spacer(minLength: 20)
                                 }
                                 
-                                
-                                //                                ReviewCell(review: review, showTrophy: true, height: 140)
-                                //                                    .frame(width: 360)
-                                //                                    .padding(.horizontal, 4)
-                                //                                    .onTapGesture {
-                                //                                        detailedReviewToShow = review
-                                //                                        withAnimation {
-                                //                                            isShowingDetailedModalView = true
-                                //                                        }
-                                //                                    }
+                        
                                 GeometryReader { geometry in
                                     HStack {
                                         Spacer()
@@ -82,46 +73,6 @@ struct TopRatedScrollView: View {
                 
             }
             .padding(.horizontal, 8)
-            //            .padding(.top, 46)
-            
         }
     }
 }
-
-//
-//VStack(alignment: .leading) {
-//
-//    HStack(alignment: .top) {
-//        Text("Top Rated Visits: ")
-//            .foregroundColor(.white)
-//            .font(.title2)
-//            .fontWeight(.semibold)
-//            .padding(.top, 6)
-//
-//
-//        DropDown(category: $topRatedFilter)
-//
-//        Spacer()
-//
-//
-//    }
-//    .padding(.horizontal, 12)
-//    .onTapGesture {
-//        isShowingTopRatedFilterAlert.toggle()
-//    }
-//    .alert("See Top Rated For:", isPresented: $isShowingTopRatedFilterAlert) {
-//        ForEach(categories, id: \.self) { category in
-//            Button {
-//                topRatedFilter = category
-//            } label: {
-//                Text(category.description)
-//            }
-//        }
-//        Button("All") {
-//            topRatedFilter = nil
-//        }
-//
-//        Button("Cancel", role: .cancel) {
-//            isShowingTopRatedFilterAlert = false
-//        }
-//    }

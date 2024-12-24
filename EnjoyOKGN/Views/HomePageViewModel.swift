@@ -212,43 +212,43 @@ final class HomePageViewModel: ObservableObject {
     }
     
     
-//    func requestNotifcationPermission() {
-//
-//        let options: UNAuthorizationOptions = [.alert, .sound, .badge]
-//        UNUserNotificationCenter.current().requestAuthorization(options: options) { success, error in
-//            if let error = error {
-//                print("⚠️ \(error)")
-//            } else if success {
-//                print("✅💜 notification permission success!")
-//                DispatchQueue.main.async {
-//                    UIApplication.shared.registerForRemoteNotifications()
-//                }
-//            } else {
-//                print("notification big failure")
-//            }
-//        }
-//    }
-//
-//
-//    func subscribeToNotifications(profile: OKGNProfile) async {
-//
-//        let predicate = NSPredicate(format: "name == %@", profile.name)
-//        let subscription = CKQuerySubscription(recordType: "OKGNProfile", predicate: predicate, subscriptionID: "friendRequestAddedToDatabase", options: .firesOnRecordUpdate)
-//
-//        let notification = CKSubscription.NotificationInfo()
-//        notification.title = "Friend Request"
-//        notification.alertBody = "Open friend feed in app to see new friend request from \(profile.name)!"
-//        notification.soundName = "default"
-//
-//        subscription.notificationInfo = notification
-//
-//
-//        CKContainer.default().publicCloudDatabase.save(subscription) { returnedSub, returnedError in
-//            if let error = returnedError {
-//                print(error)
-//            } else {
-//                print("💜✅ sucessfully subscribed to notfications")
-//            }
-//        }
-//    }
+    func requestNotifcationPermission() {
+
+        let options: UNAuthorizationOptions = [.alert, .sound, .badge]
+        UNUserNotificationCenter.current().requestAuthorization(options: options) { success, error in
+            if let error = error {
+                print("⚠️ \(error)")
+            } else if success {
+                print("✅💜 notification permission success!")
+                DispatchQueue.main.async {
+                    UIApplication.shared.registerForRemoteNotifications()
+                }
+            } else {
+                print("notification big failure")
+            }
+        }
+    }
+
+
+    func subscribeToNotifications(profile: OKGNProfile) async {
+
+        let predicate = NSPredicate(format: "name == %@", profile.name)
+        let subscription = CKQuerySubscription(recordType: "OKGNProfile", predicate: predicate, subscriptionID: "friendRequestAddedToDatabase", options: .firesOnRecordUpdate)
+
+        let notification = CKSubscription.NotificationInfo()
+        notification.title = "Friend Request"
+        notification.alertBody = "Open friend feed in app to see new friend request from \(profile.name)!"
+        notification.soundName = "default"
+
+        subscription.notificationInfo = notification
+
+
+        CKContainer.default().publicCloudDatabase.save(subscription) { returnedSub, returnedError in
+            if let error = returnedError {
+                print(error)
+            } else {
+                print("💜✅ sucessfully subscribed to notfications")
+            }
+        }
+    }
 }

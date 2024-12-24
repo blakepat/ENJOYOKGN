@@ -115,103 +115,6 @@ struct CreateReviewView: View {
     }
     
     
-//    func createReview() {
-//        CKContainer.default().accountStatus { (accountStatus, error) in
-//            if accountStatus == .available {
-//                if checkReviewIsProperlySet()  {
-//                    guard let profileRecordID = CloudKitManager.shared.profileRecordID else {
-//                        DispatchQueue.main.async {
-//                            viewModel.alertItem = AlertContext.notSignedIntoProfile
-//                            viewModel.showAlertView = true
-//                        }
-//                        
-//                        return
-//                    }
-//                    
-//                    Task {
-//                        do {
-//                            let reviewRecord = CKRecord(recordType: RecordType.review)
-//                            
-//                            let profileRecord = try await CloudKitManager.shared.fetchRecord(with: profileRecordID)
-//                            DispatchQueue.main.async { [self] in
-//                                print("✅ success getting profile")
-//                                
-//                                CloudKitManager.shared.profile = profileRecord
-//                                let importedProfile = OKGNProfile(record: profileRecord)
-//                                cacheManager.addAvatarToCache(avatar: importedProfile.createProfileImage())
-//                                cacheManager.addNameToCache(name: importedProfile.name)
-//                            }
-//                            //Create a reference to the location
-//                            if await !locationManager.locationNamesIdsCategory.isEmpty {
-//                                
-//                                print("trying to create record")
-//                                
-//                                if let selectedLocationId = await viewModel.selectedLocationId {
-//                                    reviewRecord[OKGNReview.kLocation] = CKRecord.Reference(recordID: selectedLocationId, action: .none)
-//                                    //create a rereference to profile
-//                                    reviewRecord[OKGNReview.kReviewer] = CKRecord.Reference(recordID: profileRecordID, action: .none)
-//                                    reviewRecord[OKGNReview.kCaption] = await viewModel.caption
-//                                    reviewRecord[OKGNReview.kPhoto] = await viewModel.selectedImage.convertToCKAsset(path: "selectedPhoto")
-//                                    reviewRecord[OKGNReview.kRating] = "\(await viewModel.firstNumber).\(await viewModel.secondNumber)"
-//                                    reviewRecord[OKGNReview.kDate] = await selectedDate
-//                                    reviewRecord[OKGNReview.klocationName] = await viewModel.locationName
-//                                    reviewRecord[OKGNReview.klocationCategory] = await viewModel.selectedLocationCategory
-//                                    print("🐤\(await viewModel.selectedLocationCategory ?? "")")
-//                                    reviewRecord[OKGNReview.kReviewerName] = await cacheManager.getNameFromCache()
-//                                    
-////                                    let reviewerProfile = CloudKitManager.shared.profile?.convertToOKGNProfile()
-////                                    reviewRecord[OKGNReview.kReviewerName] = reviewerProfile?.name
-////                                    reviewRecord[OKGNReview.kReviewerAvatar] = reviewerProfile?.avatar
-//                                    
-//                                    reviewRecord[OKGNReview.kReviewerAvatar] = await cacheManager.getAvatarFromCache()?.convertToCKAsset(path: "profileAvatar")
-//                                }
-//                            } else {
-//                                print("❌❌ unable to get locations")
-//                                DispatchQueue.main.async {
-//                                    viewModel.alertItem = AlertContext.reviewCreationFailed
-//                                    viewModel.showAlertView = true
-//                                }
-//                                
-//                                return
-//                            }
-//                            do {
-//                                
-//                                if let _ = try await CloudKitManager.shared.batchSave(records: [reviewRecord]) {
-//                                    
-//                                    await addNewReviewToTotals(reviewCategory: returnCategoryFromString(viewModel.selectedLocationCategory ?? ""))
-//                                    DispatchQueue.main.async {
-//                                        viewModel.alertItem = AlertContext.successfullyCreatedReview
-//                                        viewModel.showAlertView = true
-//                                    }
-//                                    
-//                                    print("✅ created review successfully")
-//                                    await resetReviewPage()
-//                                    
-//                                    
-//                                    
-//                                    
-//                                } else {
-//                                    viewModel.alertItem = AlertContext.reviewCreationFailed
-//                                    viewModel.showAlertView = true
-//                                }
-//                                
-//                            } catch {
-//                                print("❌ failed saving review")
-//                            }
-//                        } catch {
-//                            print("failure in fetching record review")
-//                        }
-//                    }
-//                }
-//            } else {
-//                print("⚠️ Error creating review / checking icloud status")
-//                DispatchQueue.main.async {
-//                    viewModel.alertItem = AlertContext.reviewCreationFailed
-//                    viewModel.showAlertView = true
-//                }
-//            }
-//        }
-//    }
     
     func createReview() {
         CKContainer.default().accountStatus { (accountStatus, error) in
@@ -412,13 +315,11 @@ extension CreateReviewView {
 
     private var reviewLocationSelector: some View {
         VStack(alignment: .leading, spacing: 12) {
-            // Header
             Text("Location")
                 .bold()
                 .font(.title3)
                 .foregroundColor(.white)
             
-            // Selected Location Display
             if !viewModel.locationName.isEmpty {
                 HStack {
                     Text(viewModel.locationName)
@@ -427,7 +328,6 @@ extension CreateReviewView {
                     
                     Spacer()
                     
-                    // Optional: Clear selection button
                     Button {
                         viewModel.locationName = ""
                         viewModel.selectedLocationId = nil
@@ -440,13 +340,10 @@ extension CreateReviewView {
                 .padding(.vertical, 8)
             }
             
-            // Search field
             TextField("Search locations...", text: $viewModel.searchText)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
-                .foregroundColor(.white)
                 .padding(.vertical, 8)
             
-            // Location List
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 2) {
                     ForEach(viewModel.searchResults, id: \.0) { location in
@@ -455,7 +352,6 @@ extension CreateReviewView {
                             viewModel.selectedLocationId = location.0
                             viewModel.selectedLocationCategory = location.2
                             
-                            // Optionally dismiss keyboard
                             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder),
                                                           to: nil, from: nil, for: nil)
                         } label: {
@@ -464,7 +360,6 @@ extension CreateReviewView {
                                     .foregroundColor(.white)
                                 Spacer()
                                 
-                                // Optional: Show category indicator
                                 Circle()
                                     .fill(returnCategoryFromString(location.2).color)
                                     .frame(width: 8, height: 8)
@@ -520,62 +415,18 @@ extension CreateReviewView {
     }
     
     
-//    private var reviewRatingSelector: some View {
-//        VStack {
-//            HStack {
-//                Text("Rating: ")
-//                    .bold()
-//                    .font(.callout)
-//                    .foregroundColor(.white)
-//                Text((viewModel.firstNumber > 0 || viewModel.secondNumber > 0) && !(viewModel.firstNumber == 10 && viewModel.secondNumber > 0) ? "\(viewModel.firstNumber).\(viewModel.secondNumber)" : "Rate experience from 0.1 to 10.0")
-//                    .font(.callout)
-//                    .foregroundColor((viewModel.firstNumber > 0 || viewModel.secondNumber > 0) && !(viewModel.firstNumber == 10 && viewModel.secondNumber > 0) ? (viewModel.firstNumber > 5 ? (viewModel.firstNumber > 7 ? .OKGNLightGreen : .OKGNDarkYellow) : Color(.systemPink)) : .gray)
-//                
-//                Spacer()
-//            }
-//            
-//            GeometryReader { geometry in
-//                HStack {
-//                    Picker(selection: self.$viewModel.firstNumber, label: Text("")) {
-//                        ForEach(0...10, id: \.self) { index in
-//                            Text("\(index)").tag(index)
-//                                .foregroundColor(.white)
-//                        }
-//                    }
-//                    .pickerStyle(.wheel)
-//                    .frame(width: geometry.size.width / 2, height: 80, alignment: .center)
-//                    .compositingGroup()
-//                    .clipped()
-//                    
-//                    Picker(selection: self.$viewModel.secondNumber, label: Text("")) {
-//                        ForEach(0...9, id: \.self) { index in
-//                            Text("\(index)").tag(index)
-//                                .foregroundColor(.white)
-//                        }
-//                    }
-//                    .frame(width: geometry.size.width / 2, height: 80, alignment: .center)
-//                    .pickerStyle(.wheel)
-//                    .compositingGroup()
-//                    .clipped()
-//                }
-//            }
-//            .frame(height: 100)
-//        }
-//        .padding(.horizontal, 16)
-//    }
-    
     
     private var reviewRatingSelector: some View {
-        VStack(alignment: .leading, spacing: 12) { // CHANGE: Added consistent spacing
-            HStack(spacing: 8) { // CHANGE: Added spacing
-                Text("Rating")  // CHANGE: Simplified text
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(spacing: 8) {
+                Text("Rating")
                     .bold()
-                    .font(.title3)  // CHANGE: Matched font with other sections
+                    .font(.title3)
                     .foregroundColor(.white)
                 
                 Text((viewModel.firstNumber > 0 || viewModel.secondNumber > 0) && !(viewModel.firstNumber == 10 && viewModel.secondNumber > 0)
                     ? "\(viewModel.firstNumber).\(viewModel.secondNumber)"
-                    : "Select rating")  // CHANGE: Simplified placeholder text
+                    : "Select rating")
                     .font(.callout)
                     .foregroundColor((viewModel.firstNumber > 0 || viewModel.secondNumber > 0) && !(viewModel.firstNumber == 10 && viewModel.secondNumber > 0)
                         ? (viewModel.firstNumber > 5
@@ -584,7 +435,7 @@ extension CreateReviewView {
                         : .gray)
             }
             
-            // CHANGE: Added background to picker
+            
             GeometryReader { geometry in
                 HStack {
                     Picker(selection: self.$viewModel.firstNumber, label: Text("")) {
@@ -607,11 +458,11 @@ extension CreateReviewView {
                 }
             }
             .frame(height: 100)
-            .background(Color.black.opacity(0.2))  // CHANGE: Added subtle background
-            .cornerRadius(12)  // CHANGE: Added corner radius
+            .background(Color.black.opacity(0.2))
+            .cornerRadius(12)
         }
         .padding(.horizontal, 16)
-        .padding(.vertical, 8)  // CHANGE: Added vertical padding
+        .padding(.vertical, 8)
     }
     
 
@@ -684,62 +535,3 @@ extension CreateReviewView {
     }
 }
 
-
-
-
-
-//OLD CODE FOR ADDING RANKING ON REVIEW CREATION
-    
-//    func setRankingForReview(id: CKRecord.ID, categoryName: String) async -> String {
-//        
-//        let reviews = reviewManager.userReviews.filter({ $0.locationCategory == categoryName }).sorted() { $0.rating > $1.rating }
-//        
-//        if id == reviews.first?.id {
-//            print("RANK = 1")
-//            let _ = await adjustRankingsForPlace(1, reviews: reviews)
-//            return "1"
-//            
-//        } else if id == reviews.dropFirst().first?.id {
-//            print("RANK = 2")
-//            return "2"
-//        } else if id == reviews.dropFirst(2).first?.id {
-//            print("RANK = 3")
-//            return "3"
-//        } else {
-//            print("RANK = 0")
-//            return "0"
-//        }
-//    }
-//    
-//    
-//    //create func to change other rankings when new one is created
-//    func adjustRankingsForPlace(_ rank: Int, reviews: [OKGNReview]) async {
-//        if rank == 1 {
-//            Task {
-//                print("💜 Adjust called!")
-//                if let id = reviewManager.userReviews.dropFirst().first?.id {
-//                    print("ID FOR RANKING TO CHANGE SET")
-//                    let reviewToChange = try await CloudKitManager.shared.fetchRecord(with: id)
-//                    reviewToChange[OKGNReview.kRanking] = "2"
-//                    print(reviewToChange)
-//                    //save review to cloudkit
-//                    do {
-//                        if let _ = try await CloudKitManager.shared.batchSave(records: [reviewToChange]) {
-//
-//                        } else {
-//                            alertItem = AlertContext.reviewCreationFailed
-//                        }
-//                    } catch {
-//                        print("❌ failed editing review ranking")
-//                    }
-//                }
-//            }
-//        }
-//    }
-
-
-//struct CreateReviewView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        CreateReviewView(locations: [])
-//    }
-//}

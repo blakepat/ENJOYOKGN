@@ -26,9 +26,9 @@ struct TwoButtonAlertItem: Identifiable {
 
 struct AlertContext {
     
-    static let cannotRetrieveLocations = AlertItem(title: Text("Cannot Retrieve Locations"), message: Text("Unable to retrieve locations at this time. Please check your internet connection and that your are signed in to your iCloud again and try again later, Thank you."), dismissButton: .default(Text("OK")))
+    static let cannotRetrieveLocations = AlertItem(title: Text("Cannot Retrieve Locations"), message: Text("Unable to retrieve locations at this time. Please check your internet connection and that your are signed in to your iCloud and try again later, Thank you."), dismissButton: .default(Text("OK")))
     
-    static let cannotRetrieveProfile = AlertItem(title: Text("Cannot Retrieve Profile"), message: Text("Unable to retrieve profile at this time. Please check your internet connection and that your are signed in to your iCloud again and try again later, Thank you."), dismissButton: .default(Text("OK")))
+    static let cannotRetrieveProfile = AlertItem(title: Text("Cannot Retrieve Profile"), message: Text("Unable to retrieve profile at this time. Please check your internet connection and that your are signed in to your iCloud and try again later, Thank you."), dismissButton: .default(Text("OK")))
     
     
     static let locationRestricted = AlertItem(title: Text("Location Restricted"), message: Text("Your location is restricted, this may be due to parental controls"), dismissButton: .default(Text("OK")))

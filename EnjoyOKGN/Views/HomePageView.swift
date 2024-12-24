@@ -66,7 +66,7 @@ struct HomePageView: View {
             DispatchQueue.main.async {
                 viewModel.getProfile()
                 reviewManager.getUserReviews()
-//                viewModel.requestNotifcationPermission()
+                viewModel.requestNotifcationPermission()
             }
         }
         .onReceive(reviewManager.$userReviews) { _ in
@@ -158,9 +158,6 @@ extension HomePageView {
                         .foregroundColor(.white)
                         .lineLimit(1)
                         .minimumScaleFactor(0.75)
-//                        .onTapGesture {
-//                            viewModel.changeNameAlertView()
-//                        }
                 }
                 .padding(.leading, 8)
                 .padding(.trailing, 12)

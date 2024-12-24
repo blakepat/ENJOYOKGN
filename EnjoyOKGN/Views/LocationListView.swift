@@ -61,9 +61,15 @@ struct LocationListView: View {
     
     init(locations: [OKGNLocation], tabSelection: Binding<TabBarItem>) {
         self._locations = State(initialValue: locations)
+        let appearance = UINavigationBarAppearance()
+        appearance.titleTextAttributes = [.foregroundColor : UIColor.white]
+        appearance.largeTitleTextAttributes = [.foregroundColor : UIColor.white]
+        appearance.backgroundColor = UIColor(named: "OKGNDarkGray")
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().compactAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
         UICollectionView.appearance().backgroundColor = UIColor(named: "OKGNDarkGray")
-        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor : UIColor.white]
-        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor : UIColor.white]
+        UICollectionView.appearance().tintColor = UIColor.white
         self._tabSelection = tabSelection
     }
     
@@ -88,8 +94,8 @@ struct LocationListView: View {
                     }
                     .listRowBackground(Color.clear)
                 }
-
                 .searchable(text: $searchText)
+                .foregroundStyle(Color.white)
                 .listRowBackground(Color.clear)
                 .background(
                     NavigationLink(destination: createLocationDetailView(for: selectedLocation, in: sizeCategory),
