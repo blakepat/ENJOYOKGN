@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		342129502D7AAE3B00F10BA6 /* UserRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421294F2D7AAE3B00F10BA6 /* UserRowView.swift */; };
+		342129522D7AAE6E00F10BA6 /* AddFriendViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 342129512D7AAE6E00F10BA6 /* AddFriendViewModel.swift */; };
 		3421BE79279F693600921D70 /* OLD-TrophyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BE78279F693600921D70 /* OLD-TrophyCell.swift */; };
 		3421BE7B279F6AFE00921D70 /* OKGNReview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BE7A279F6AFE00921D70 /* OKGNReview.swift */; };
 		3421BE7D27A1D1D100921D70 /* Date+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3421BE7C27A1D1D100921D70 /* Date+Ext.swift */; };
@@ -100,6 +102,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3421294F2D7AAE3B00F10BA6 /* UserRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRowView.swift; sourceTree = "<group>"; };
+		342129512D7AAE6E00F10BA6 /* AddFriendViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendViewModel.swift; sourceTree = "<group>"; };
 		3421BE78279F693600921D70 /* OLD-TrophyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OLD-TrophyCell.swift"; sourceTree = "<group>"; };
 		3421BE7A279F6AFE00921D70 /* OKGNReview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OKGNReview.swift; sourceTree = "<group>"; };
 		3421BE7C27A1D1D100921D70 /* Date+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Ext.swift"; sourceTree = "<group>"; };
@@ -256,6 +260,7 @@
 				3480A9FD27C590B20031BB09 /* FriendReviewFeed.swift */,
 				3480AA0227C9E8D80031BB09 /* FriendReviewFeedModel.swift */,
 				345C50CD28DE4C3B00B75F2F /* AddFriendModalView.swift */,
+				342129512D7AAE6E00F10BA6 /* AddFriendViewModel.swift */,
 			);
 			name = FriendReviewFeed;
 			sourceTree = "<group>";
@@ -478,6 +483,7 @@
 				3421BE9427B348B600921D70 /* LocationCell.swift */,
 				3480AA0427C9EAAF0031BB09 /* FriendCell.swift */,
 				3421BE78279F693600921D70 /* OLD-TrophyCell.swift */,
+				3421294F2D7AAE3B00F10BA6 /* UserRowView.swift */,
 			);
 			name = CustomCells;
 			sourceTree = "<group>";
@@ -683,9 +689,11 @@
 				3421BE8327AC760500921D70 /* DetailedVisitView.swift in Sources */,
 				3480AA0327C9E8D80031BB09 /* FriendReviewFeedModel.swift in Sources */,
 				3490221029155E97007774C6 /* TabBarItemsPreferenceKey.swift in Sources */,
+				342129502D7AAE3B00F10BA6 /* UserRowView.swift in Sources */,
 				34926A7A291E9E8E00F0AF75 /* Text+Ext.swift in Sources */,
 				34F004FD279CB00F00899561 /* ProgressBar.swift in Sources */,
 				3480A9F627C470670031BB09 /* OKGNAnnotation.swift in Sources */,
+				342129522D7AAE6E00F10BA6 /* AddFriendViewModel.swift in Sources */,
 				3421BEA327B4935B00921D70 /* AlertItem.swift in Sources */,
 				34F7F0BB28C50A3F00E72C0F /* LoadingView.swift in Sources */,
 				3421BE9127B1FD6E00921D70 /* OKGNProfile.swift in Sources */,
