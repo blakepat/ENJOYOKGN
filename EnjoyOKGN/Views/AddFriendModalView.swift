@@ -1,12 +1,10 @@
 import SwiftUI
 import CloudKit
 
-
 struct AddFriendModalView: View {
     
-    @ObservedObject private var viewModel = AddFriendViewModel()
+    @StateObject private var viewModel = AddFriendViewModel()
     @Environment(\.dismiss) private var dismiss
-    
     
     var body: some View {
         NavigationView {
@@ -51,8 +49,16 @@ extension AddFriendModalView {
                 ForEach(viewModel.searchResults, id: \.id) { user in
                     UserRowView(user: user,
                                 isRequested: viewModel.hasRequestedFriend(user),
-                                onAddFriend: { viewModel.addFriend(friendRecord: CKRecord(recordType: "OKGNProfile", recordID: user.id)) },
-                                onCancelRequest: { viewModel.cancelRequest(request: user.id) })
+                                onAddFriend: {
+                                    Task {
+                                        await viewModel.addFriend(friendRecord: CKRecord(recordType: "OKGNProfile", recordID: user.id))
+                                    }
+                                },
+                                onCancelRequest: {
+                                    Task {
+                                        await viewModel.cancelRequest(request: user.id)
+                                    }
+                                })
                     .onAppear {
                         if user == viewModel.searchResults.last {
                             Task { await viewModel.loadMoreUsers() }
@@ -65,7 +71,6 @@ extension AddFriendModalView {
         }
     }
 }
-
 
 struct AddFriendModalView_Previews: PreviewProvider {
     static var previews: some View {

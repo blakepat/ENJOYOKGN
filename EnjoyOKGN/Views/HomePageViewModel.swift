@@ -19,26 +19,15 @@ final class HomePageViewModel: ObservableObject {
     @EnvironmentObject var reviewManager: ReviewManager
     
     @Published var isShowingPhotoPicker = false
-    @Published var profile: OKGNProfile? {
-        willSet {
-            Task {
-//                await subscribeToNotifications(profile: newValue!)
-            }
-            
-        }
-    }
+    @Published var profile: OKGNProfile?
     @Published var existingProfileRecord: CKRecord? {
         didSet {
             profileContext = .update
-//            showCreateProfileScreen = false
-            print("✅ Existing profile set and context changed to .update!")
         }
     }
     
     @State var usernameIsValid = false
     @State var usernameText = ""
-    
-    //carousel variables
     @Published var currentIndex: Int = 0
     @Published var category: Category?
     
@@ -58,11 +47,9 @@ final class HomePageViewModel: ObservableObject {
     @Published var showCreateProfileScreen: Bool = false
     
     func createProfile() {
-        //Create our CKRecord from the profile view
         let profileRecord = createProfileRecord()
         
         guard let userRecord = CloudKitManager.shared.userRecord else {
-            // show an alert
             self.alertItem = AlertContext.profileCreateFailure
             showAlertView = true
             return
@@ -82,19 +69,16 @@ final class HomePageViewModel: ObservableObject {
                 self.alertItem = AlertContext.profileCreateFailure
                 showAlertView = true
             }
-            
             getProfile()
         }
     }
     
     
     func getProfile() {
-            
         Task {
             do {
                 
                 guard let userRecord = CloudKitManager.shared.userRecord else {
-                    print("❌ No user record found when calling getProfile()")
                     try await CloudKitManager.shared.getUserRecord()
                     return
                 }
@@ -104,8 +88,6 @@ final class HomePageViewModel: ObservableObject {
                 let profileRecordID = profileReference.recordID
                 let record = try await CloudKitManager.shared.fetchRecord(with: profileRecordID)
                 DispatchQueue.main.async { [self] in
-                    print("✅ success getting profile")
-                    
                     existingProfileRecord = record
                     CloudKitManager.shared.profile = record
                     let importedProfile = OKGNProfile(record: record)
@@ -219,7 +201,6 @@ final class HomePageViewModel: ObservableObject {
             if let error = error {
                 print("⚠️ \(error)")
             } else if success {
-                print("✅💜 notification permission success!")
                 DispatchQueue.main.async {
                     UIApplication.shared.registerForRemoteNotifications()
                 }

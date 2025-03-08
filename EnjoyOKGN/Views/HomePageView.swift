@@ -111,14 +111,12 @@ struct HomePageView: View {
             }
         })
         .sheet(isPresented: $viewModel.isShowingPhotoPicker, onDismiss: {
-            viewModel.existingProfileRecord == nil ? print("•Profile CREATED") : print("😍 Profile UPDATED")
             viewModel.profileContext == .create ? viewModel.createProfile() : viewModel.updateProfile()
             cacheManager.addAvatarToCache(avatar: viewModel.profileManager.avatar)
         }, content: {
             PhotoPicker(image: $viewModel.profileManager.avatar)
         })
         .alert(viewModel.alertItem?.title ?? Text(""), isPresented: $viewModel.showAlertView, actions: {
-            // actions
         }, message: {
             viewModel.alertItem?.message ?? Text("")
         })
@@ -176,7 +174,6 @@ extension HomePageView {
                 
                 Spacer()
                 
-                // Number of venues visited
                 VenuesVisitedView(showVenuesVisitedSubCategories: $viewModel.isShowingVenuesVisitedSubCategories,
                                   allCategoriesVisitCount: reviewManager.eachCategoryVisitCount)
                     .shadow(color: .black.opacity(0.3), radius: 3, x: 0, y: 3)
@@ -257,32 +254,6 @@ extension HomePageView {
                         
                         Spacer().frame(height: 500)
                     }
-                    
-                    //******* Add highlight around carousel view
-                    
-//                    .mask(RoundedRectangle(cornerRadius: 30, style: .continuous))
-//                    .overlay(
-//                        RoundedRectangle(cornerRadius: 30, style: .continuous)
-//                            .stroke(
-//                                LinearGradient(colors: [.white, .clear],
-//                                               startPoint: .top,
-//                                               endPoint: .bottom)
-//                                , lineWidth: 1)
-//                            .padding(.horizontal, 24)
-//                            .offset(x: minX / 2)
-//                            .blendMode(.overlay)
-//                            .overlay(
-//                                RoundedRectangle(cornerRadius: 30, style: .continuous)
-//                                    .stroke(
-//                                        LinearGradient(colors: [.white, .clear],
-//                                                       startPoint: .top,
-//                                                       endPoint: .bottom)
-//                                        , lineWidth: 2)
-//                                    .padding(.horizontal, 24)
-//                                    .offset(x: minX / 2)
-//                                    .blur(radius: 3)
-//                            )
-//                    )
                     .background(
                         VisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterialDark))
                             .clipShape(RoundedRectangle(cornerRadius: 24))

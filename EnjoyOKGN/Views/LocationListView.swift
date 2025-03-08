@@ -18,7 +18,6 @@ struct LocationListView: View {
     @State var locations: [OKGNLocation] {
         didSet {
             showLoadingView = false
-//            LocationManager().saveLocations(locationsToSave: locations) USED TO MIGRATE DATA FROM DEVELOPMENT TO PRODUCTION
         }
     }
     @EnvironmentObject var reviewManager: ReviewManager
@@ -74,106 +73,107 @@ struct LocationListView: View {
     }
     
     var body: some View {
-        ZStack {
-            Color.OKGNDarkGray.ignoresSafeArea()
-            NavigationView {
-                List {
-                    ForEach(0..<searchResults.count, id: \.self) { locationIndex in
-                        
-                        let location = searchResults[locationIndex]
-                        
-                        HStack {
-                            LocationCell(location: location)
-                            Spacer()
+        NavigationStack {
+            ZStack {
+                Color.OKGNDarkGray.ignoresSafeArea()
+                    List {
+                        ForEach(0..<searchResults.count, id: \.self) { locationIndex in
+                            
+                            let location = searchResults[locationIndex]
+                            
+                            HStack {
+                                LocationCell(location: location)
+                                Spacer()
+                            }
+                            .contentShape(Rectangle())
+                            .listRowBackground(Color.clear)
+                            .onTapGesture {
+                                segue(location: location)
+                            }
                         }
-                        .contentShape(Rectangle())
                         .listRowBackground(Color.clear)
-                        .onTapGesture {
-                            segue(location: location)
-                        }
                     }
+                    .searchable(text: $searchText)
+                    .foregroundStyle(Color.white)
                     .listRowBackground(Color.clear)
-                }
-                .searchable(text: $searchText)
-                .foregroundStyle(Color.white)
-                .listRowBackground(Color.clear)
-                .background(
-                    NavigationLink(destination: createLocationDetailView(for: selectedLocation, in: sizeCategory),
-                                   isActive: $showLocationDetailView,
-                                   label: { EmptyView() })
-                )
-                .navigationTitle("OKGN Locations")
-                .listStyle(.grouped)
-                .toolbar(content: {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button {
-                            filterFavourites.toggle()
-                        } label: {
-                            Image(systemName: filterFavourites ? "star.fill" : "star")
+                    .background(
+                        NavigationLink(destination: createLocationDetailView(for: selectedLocation, in: sizeCategory),
+                                       isActive: $showLocationDetailView,
+                                       label: { EmptyView() })
+                    )
+                    .navigationTitle("OKGN Locations")
+                    .listStyle(.grouped)
+                    .toolbar(content: {
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Button {
+                                filterFavourites.toggle()
+                            } label: {
+                                Image(systemName: filterFavourites ? "star.fill" : "star")
+                            }
                         }
-                    }
-                    
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button {
-                            isShowingFilterModal.toggle()
-                        } label: {
-                            Text("Filter")
+                        
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button {
+                                isShowingFilterModal.toggle()
+                            } label: {
+                                Text("Filter")
+                            }
+                        }
+                    })
+                .alert(AlertContext.cannotRetrieveLocations.title, isPresented: $showAlertView, actions: {
+                    // actions
+                }, message: {
+                    AlertContext.cannotRetrieveLocations.message
+                })
+                .navigationViewStyle(StackNavigationViewStyle())
+                .onChange(of: tabSelection, perform: { newValue in
+                    if tabSelection == .list {
+                        Task {
+                            if locations.isEmpty {
+                                do {
+                                    self.showLoadingView = true
+                                    locations = try await CloudKitManager.shared.getLocations() { (returnedBool) in
+                                        self.showLoadingView = returnedBool
+                                        
+                                        Task {
+                                            //                                        await LocationManager().uploadLocations() USED TO MIGRATE DATA FROM DEVELOPMENT TO PRODUCTION
+                                        }
+                                    }
+                                } catch {
+                                    //TO-DO: create alert
+                                    print("❌ unable to get locations for locationListView")
+                                    self.showAlertView = true
+                                    self.showLoadingView = false
+                                }
+                                
+                            }
                         }
                     }
                 })
-            }
-            .alert(AlertContext.cannotRetrieveLocations.title, isPresented: $showAlertView, actions: {
-                // actions
-            }, message: {
-                AlertContext.cannotRetrieveLocations.message
-            })
-            .navigationViewStyle(StackNavigationViewStyle())
-            .onChange(of: tabSelection, perform: { newValue in
-                if tabSelection == .list {
-                    Task {
-                        if locations.isEmpty {
-                            do {
-                                self.showLoadingView = true
-                                locations = try await CloudKitManager.shared.getLocations() { (returnedBool) in
-                                    self.showLoadingView = returnedBool
-                                    
-                                    Task {
-                                        //                                        await LocationManager().uploadLocations() USED TO MIGRATE DATA FROM DEVELOPMENT TO PRODUCTION
-                                    }
-                                }
-                            } catch {
-                                //TO-DO: create alert
-                                print("❌ unable to get locations for locationListView")
-                                self.showAlertView = true
-                                self.showLoadingView = false
+                
+                SideMenuView(categoryFilter: $filterCategory, menuOpen: $isShowingFilterModal)
+                
+                
+                if showLoadingView {
+                    GeometryReader { _ in
+                        HStack {
+                            Spacer()
+                            VStack {
+                                Spacer()
+                                LoadingView()
+                                Spacer()
                             }
-                            
-                        }
-                    }
-                }
-            })
-            
-            SideMenuView(categoryFilter: $filterCategory, menuOpen: $isShowingFilterModal)
-            
-            
-            if showLoadingView {
-                GeometryReader { _ in
-                    HStack {
-                        Spacer()
-                        VStack {
-                            Spacer()
-                            LoadingView()
                             Spacer()
                         }
-                        Spacer()
                     }
+                    .background(Color.black.opacity(0.45)).edgesIgnoringSafeArea(.all)
                 }
-                .background(Color.black.opacity(0.45)).edgesIgnoringSafeArea(.all)
+                
             }
-            
+            .padding(.top, 20)
+            .edgesIgnoringSafeArea(.all)
         }
-        .padding(.top, 20)
-        .edgesIgnoringSafeArea(.all)
+
     }
     
     //function used as Lazy Navigation Link to stop from all LocationDetailViews loading when list is created

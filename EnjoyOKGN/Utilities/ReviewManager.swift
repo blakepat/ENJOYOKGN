@@ -11,61 +11,16 @@ import CloudKit
 @MainActor
 final class ReviewManager: ObservableObject {
     
-    @Published var userReviews: [OKGNReview] = [] {
-        didSet {
-            print("1️⃣ user reviews set")
-        }
-    }
-    @Published var allFriendsReviews: [OKGNReview] = [] {
-        didSet {
-            print("2️⃣ ALL FRIENDS REVIEWS SET")
-        }
-    }
-    @Published var friendReviews: [OKGNReview] = [] {
-        didSet {
-            print("4️⃣ single friend reviews set")
-        }
-    }
+    @Published var userReviews: [OKGNReview] = []
+    @Published var allFriendsReviews: [OKGNReview] = []
+    @Published var friendReviews: [OKGNReview] = []
     @Published var eachCategoryVisitCount = [0,0,0,0,0]
     var cursor: CKQueryOperation.Cursor? = nil
     
     
     
-//    func getUserReviews() {
-//        guard let profileID = CloudKitManager.shared.profileRecordID else {
-//            print("❌ could not get profileID")
-//            return
-//        }
-//        
-//        Task {
-//            do {
-//                let receivedReviews = try await CloudKitManager.shared.getUserReviews(for: profileID)
-//                
-//                DispatchQueue.main.async {
-//                    print("✅ REVIEWS SET")
-//                    
-//                    self.userReviews = []
-//                    //                    self.userReviews = receivedReviews
-//                    
-//                    
-//                    for category in categories {
-//                        var sortedReviews: [OKGNReview] = receivedReviews.filter({returnCategoryFromString($0.locationCategory) == category})
-//                        for i in 0..<min(sortedReviews.count, 3) {
-//                            sortedReviews[i].ranking = rankings[i]
-//                        }
-//                        self.userReviews.append(contentsOf: sortedReviews)
-//                    }
-//                }
-//            } catch let err {
-//                print(err)
-//                print("❌ Error fetching reviews!")
-//            }
-//        }
-//    }
-    
     func getUserReviews() {
         guard let profileID = CloudKitManager.shared.profileRecordID else {
-            print("❌ could not get profileID")
             return
         }
         
@@ -74,7 +29,6 @@ final class ReviewManager: ObservableObject {
                 let receivedReviews = try await CloudKitManager.shared.getUserReviews(for: profileID)
                 
                 DispatchQueue.main.async {
-                    print("✅ REVIEWS SET")
                     
                     self.userReviews = []
                     
@@ -88,7 +42,6 @@ final class ReviewManager: ObservableObject {
                                 return firstRating > secondRating
                             }
                         
-                        // CHANGE: Assign Ranking enum directly
                         for i in 0..<min(sortedReviews.count, 3) {
                             switch i {
                             case 0: sortedReviews[i].ranking = .first
@@ -100,12 +53,6 @@ final class ReviewManager: ObservableObject {
                         
                         self.userReviews.append(contentsOf: sortedReviews)
                     }
-                    
-                    // Debug print rankings
-                    print("🏆 Rankings after sorting:")
-                    for review in self.userReviews where review.ranking != nil {
-                        print("Location: \(review.locationName), Rating: \(review.rating), Rank: \(review.ranking?.description ?? "none")")
-                    }
                 }
             } catch let err {
                 print(err)
@@ -116,43 +63,16 @@ final class ReviewManager: ObservableObject {
     
     
     
-//    func getOneFriendReviews(id: CKRecord.ID) {
-//        Task {
-//            do {
-//                let receivedReviews = try await CloudKitManager.shared.getUserReviews(for: id)
-//                
-//                DispatchQueue.main.async {
-//                    print("✅ ONE FRIEND REVIEWS SET")
-//                    
-//                    self.friendReviews = []
-//                    //                    self.friendReviews = receivedReviews
-//                    
-//                    for category in categories {
-//                        var sortedReviews: [OKGNReview] = receivedReviews.filter({returnCategoryFromString($0.locationCategory) == category})
-//                        for i in 0..<min(sortedReviews.count, 3) {
-//                            sortedReviews[i].ranking = rankings[i]
-//                        }
-//                        self.friendReviews.append(contentsOf: sortedReviews)
-//                    }
-//                }
-//            } catch {
-//                print("❌ Error fetching reviews!")
-//            }
-//        }
-//    }
-    
     func getOneFriendReviews(id: CKRecord.ID) {
         Task {
             do {
                 let receivedReviews = try await CloudKitManager.shared.getUserReviews(for: id)
                 
                 DispatchQueue.main.async {
-                    print("✅ ONE FRIEND REVIEWS SET")
                     
                     self.friendReviews = []
                     
                     for category in categories {
-                        // CHANGE: Filter and sort by rating
                         var sortedReviews: [OKGNReview] = receivedReviews
                             .filter { returnCategoryFromString($0.locationCategory) == category }
                             .sorted { first, second in
@@ -161,7 +81,6 @@ final class ReviewManager: ObservableObject {
                                 return firstRating > secondRating
                             }
                         
-                        // CHANGE: Assign Ranking enum directly
                         for i in 0..<min(sortedReviews.count, 3) {
                             switch i {
                             case 0: sortedReviews[i].ranking = .first
@@ -173,12 +92,6 @@ final class ReviewManager: ObservableObject {
                         
                         self.friendReviews.append(contentsOf: sortedReviews)
                     }
-                    
-                    // Debug print rankings
-                    print("🏆 Friend Rankings after sorting:")
-                    for review in self.friendReviews where review.ranking != nil {
-                        print("Location: \(review.locationName), Rating: \(review.rating), Rank: \(review.ranking?.description ?? "none")")
-                    }
                 }
             } catch {
                 print("❌ Error fetching reviews!")
@@ -189,7 +102,6 @@ final class ReviewManager: ObservableObject {
     
     func refreshReviewFeed() async {
         getAllFriendsReviews()
-        print("😄")
     }
     
     
@@ -234,59 +146,9 @@ final class ReviewManager: ObservableObject {
                         self.allFriendsReviews.append(contentsOf: notAllFriendsReviews)
                     }
                 }
-                
-                //                let rankedReviews = self.getRankingForFriendsReviews(reviews: receivedReviews, friends: friends.map { $0.convertToOKGNProfile() })
-                
-                //                DispatchQueue.main.async {
-                //                    print("✅ FRIENDS REVIEWS SET")
-                ////                    self.allFriendsReviews = []
-                //                    self.allFriendsReviews.append(contentsOf: receivedReviews)
-                //                }
-                //                CloudKitManager.shared.getFriendsReviews(for: friends.map { CKRecord.Reference(recordID: $0.recordID, action: .none) }) { result in
-                //                    switch result {
-                //                    case .success(let receivedReviews):
-                //                        DispatchQueue.main.async {
-                //                            print("✅ FRIENDS REVIEWS SET")
-                //
-                //                            self.friendsReviews = []
-                //                            self.friendsReviews.append(contentsOf: receivedReviews.sorted { $0.date > $1.date } )
-                //                        }
-                //
-                //                    case .failure(_):
-                //                        print("❌ Error fetching reviews!")
-                //                    }
-                //                }
             } catch {
                 print("❌ Error getting friends for reviews")
             }
-            
-            
-            //        CloudKitManager.shared.getFriends(for: CKRecord.Reference(recordID: profile.recordID, action: .none)) { result in
-            //            switch result {
-            //
-            //            case .success(let friends):
-            //
-            //                if friends == [] { self.friendsReviews = [] }
-            //
-            //                CloudKitManager.shared.getFriendsReviews(for: friends.map { CKRecord.Reference(recordID: $0.recordID, action: .none) }) { result in
-            //                    switch result {
-            //                    case .success(let receivedReviews):
-            //                        DispatchQueue.main.async {
-            //                            print("✅ FRIENDS REVIEWS SET")
-            //
-            //                            self.friendsReviews = []
-            //                            self.friendsReviews.append(contentsOf: receivedReviews.sorted { $0.date > $1.date } )
-            //                        }
-            //
-            //                    case .failure(_):
-            //                        print("❌ Error fetching reviews!")
-            //                    }
-            //                }
-            //            case .failure(_):
-            //                print("❌ Error getting friends for reviews")
-            //            }
-            //        }
-            
         }
     }
     
@@ -307,10 +169,8 @@ final class ReviewManager: ObservableObject {
                 }
                 
                 rankedFriendReviews.append(contentsOf: sortedReviews)
-                
             }
         }
-        
         return rankedFriendReviews.sorted(by: { $0.date > $1.date })
     }
 }

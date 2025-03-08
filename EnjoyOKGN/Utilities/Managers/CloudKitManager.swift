@@ -15,25 +15,14 @@ final class CloudKitManager: ObservableObject {
     
     private init() {}
     
-    @Published var userRecord: CKRecord? {
-        didSet { print("0️⃣ userRecord set!") }
-    }
-    @Published var profileRecordID: CKRecord.ID? {
-        didSet {
-            print("6️⃣ profileRecordID set!")
-        }
-    }
-    @Published var profile: CKRecord? {
-        didSet {
-            print("7️⃣ proile CKRecord set")
-        }
-    }
+    @Published var userRecord: CKRecord?
+    @Published var profileRecordID: CKRecord.ID?
+    @Published var profile: CKRecord?
     let container = CKContainer.default()
 
-    
-    // Base functions
+ 
     func getUserRecord() async throws {
-        print("AAA - getUserRecord Called")
+   
         do {
             let recordID = try await container.userRecordID()
             let record = try await container.publicCloudDatabase.record(for: recordID)
@@ -51,18 +40,15 @@ final class CloudKitManager: ObservableObject {
     }
     
     func getFriendUserRecord(id: CKRecord.ID, completed: @escaping () -> () ) async throws -> CKRecord? {
-        print("BBB - getFriendUserRecord Called")
         do {
             return try await container.publicCloudDatabase.record(for: id)
-        } catch let err {
-            print("👺 \(err)")
+        } catch {
             return nil
         }
     }
     
     
     func getLocations(completed: @escaping (_ loader: Bool) -> Void) async throws -> [OKGNLocation] {
-        print("CCC - getLocations Called")
         let query = CKQuery(recordType: RecordType.location, predicate: NSPredicate(value: true))
         query.sortDescriptors = [NSSortDescriptor(key: OKGNLocation.kName, ascending: true)]
         
@@ -72,12 +58,10 @@ final class CloudKitManager: ObservableObject {
         completed(false)
         
         return records.map { $0.convertToOKGNLocation() }
-        
     }
     
     
     func getLocationNames(completed: @escaping (_ loader: Bool) -> Void) async throws -> [(CKRecord.ID, String, String)] {
-        print("DDD - getLocationNames Called")
         let query = CKQuery(recordType: RecordType.location, predicate: NSPredicate(value: true))
         query.sortDescriptors = [NSSortDescriptor(key: OKGNLocation.kName, ascending: true)]
         
@@ -91,7 +75,9 @@ final class CloudKitManager: ObservableObject {
             guard let record = try? result.get(),
                   let locationName = record["name"] as? String,
                   let category = record["category"] as? String
-            else { print("🤢"); return nil }
+            else {
+                return nil
+            }
                 
             completed(false)
             return (record.recordID, locationName, category)
@@ -105,7 +91,6 @@ final class CloudKitManager: ObservableObject {
     //Friends/Followers Functions
 
     func getFriendRecord(friendName: String) async throws -> CKRecord {
-        print("EEE - getFriendRecord Called")
         let predicate = NSPredicate(format: "name == %@", friendName)
         let query = CKQuery(recordType: "OKGNProfile", predicate: predicate)
         
@@ -117,7 +102,6 @@ final class CloudKitManager: ObservableObject {
     
     
     func getFollowRequests(for profileReference: CKRecord.Reference) async throws -> [CKRecord] {
-        print("FFF - getFollowRequests Called")
         let predicate = NSPredicate(format: "requestList CONTAINS %@", profileReference)
         let query = CKQuery(recordType: "OKGNProfile", predicate: predicate)
         
@@ -128,7 +112,6 @@ final class CloudKitManager: ObservableObject {
     
     
     func getFriends(for profileReference: CKRecord.Reference) async throws -> [CKRecord] {
-        print("GGG - getFriends Called")
         let predicate = NSPredicate(format: "friendList CONTAINS %@", profileReference)
         let query = CKQuery(recordType: "OKGNProfile", predicate: predicate)
         
@@ -139,7 +122,6 @@ final class CloudKitManager: ObservableObject {
     
     
     func getIfUsernameExists(username: String) async throws -> Bool {
-        print("HHH - getIfUsernameExists Called")
         let predicate = NSPredicate(format: "name == %@", username)
         let query = CKQuery(recordType: "OKGNProfile", predicate: predicate)
         
@@ -151,8 +133,6 @@ final class CloudKitManager: ObservableObject {
     
     
     func getUsers(for profile: CKRecord, passedCursor: CKQueryOperation.Cursor?) async throws -> ([OKGNProfile], CKQueryOperation.Cursor?) {
-        print("HHH - getUsers Called")
-        
         let profileReference = CKRecord.Reference.init(recordID: profile.recordID, action: .none)
         
         let friendPredicate = NSPredicate(format: "NOT (friendList CONTAINS %@)", profileReference)
@@ -183,7 +163,6 @@ final class CloudKitManager: ObservableObject {
     
     
     func getUsersToRemove(for profileReference: CKRecord.Reference) async throws -> [CKRecord] {
-        print("III - getUsersToRemove Called")
         let predicate = NSPredicate(format: "deleteList CONTAINS %@", profileReference)
         let query = CKQuery(recordType: "OKGNProfile", predicate: predicate)
         
@@ -199,7 +178,6 @@ final class CloudKitManager: ObservableObject {
     
     func getFriendsReviews(for friendList: [CKRecord.Reference], passedCursor: CKQueryOperation.Cursor?, sortBy: String) async throws -> ([OKGNReview], CKQueryOperation.Cursor?) {
         
-        print("JJJ - getFriendsReviews Called")
         if friendList.isEmpty { return ([], nil) }
         
         let predicate = NSPredicate(format: "reviewer IN %@", friendList)
@@ -207,17 +185,12 @@ final class CloudKitManager: ObservableObject {
         query.sortDescriptors = [NSSortDescriptor(key: sortBy, ascending: false)]
         
         if passedCursor == nil {
-            
-            print("✅✅ non-cursor called")
-            
             let (matchedResults, cursor) = try await self.container.publicCloudDatabase.records(matching: query, resultsLimit: 12)
             let reviews = matchedResults.compactMap { _, result in try? result.get() }
             let reviewsToReturn = reviews.map { $0.convertToOKGNReview() }
             return (reviewsToReturn, cursor)
         } else {
             if let cursor = passedCursor {
-                
-                print("✅✅✅ Cursor called")
                 
                 let (moreMatchedResults, newCursor) = try await self.container.publicCloudDatabase.records(continuingMatchFrom: cursor, resultsLimit: 1)
                 let reviews = moreMatchedResults.compactMap { _, result in try? result.get() }
@@ -226,16 +199,11 @@ final class CloudKitManager: ObservableObject {
                 return (reviewsToReturn, newCursor)
             }
         }
-        
         return ([], nil)
     }
     
     
-    
-    
     func getOneLocationFriendsReviews(for friendList: [CKRecord.Reference], location: String, passedCursor: CKQueryOperation.Cursor?) async throws -> ([OKGNReview], CKQueryOperation.Cursor?) {
-        
-        print("KKK - getOneLocationFriendReviews Called")
         
         if friendList.isEmpty { return ([], nil) }
         
@@ -261,13 +229,10 @@ final class CloudKitManager: ObservableObject {
         }
         
         return ([], nil)
-
     }
     
     
-    
     func getUserReviews(for profileID: CKRecord.ID) async throws -> [OKGNReview] {
-        print("🧑🏿‍🎤LLL - getUserReviews Called")
         let reference = CKRecord.Reference(recordID: profileID, action: .none)
         let predicate = NSPredicate(format: "reviewer == %@", reference)
         let query = CKQuery(recordType: "OKGNReview", predicate: predicate)
@@ -277,13 +242,9 @@ final class CloudKitManager: ObservableObject {
         let reviews = matchedResults.compactMap { _, result in try? result.get() }
         return reviews.map { $0.convertToOKGNReview() }
     }
-    
 
     
     func getOneLocationUserReviews(for profileID: CKRecord.ID, location: String) async throws -> [OKGNReview] {
-        print("MMM - getONELocationReviews Called")
-        //print(location)
-        
         let reference = CKRecord.Reference(recordID: profileID, action: .none)
         let userPredicate = NSPredicate(format: "reviewer == %@", reference)
         let locationPredicate = NSPredicate(format: "locationName == %@", location)
@@ -298,10 +259,7 @@ final class CloudKitManager: ObservableObject {
     }
     
     
-    
-    
     func getUserReviewsForProfileUpdate(for profileID: CKRecord.ID) async throws -> [CKRecord] {
-        print("NNN - getUserReviewsForProfileUpdate Called")
         let reference = CKRecord.Reference(recordID: profileID, action: .none)
         let predicate = NSPredicate(format: "reviewer == %@", reference)
         let query = CKQuery(recordType: "OKGNReview", predicate: predicate)
@@ -315,7 +273,6 @@ final class CloudKitManager: ObservableObject {
     //************************************************************
     // General Functions
     func batchSave(records: [CKRecord]) async throws -> [CKRecord]? {
-        print("OOO - batchSave Called")
         let (savedResults, _) = try await container.publicCloudDatabase.modifyRecords(saving: records, deleting: [])
         do {
             return try savedResults.compactMap {_, result in try result.get() }
@@ -327,19 +284,16 @@ final class CloudKitManager: ObservableObject {
     
     
     func save(record: CKRecord) async throws -> CKRecord {
-        print("PPP - save Called")
         return try await container.publicCloudDatabase.save(record)
     }
 
     
     func fetchRecord(with id: CKRecord.ID) async throws -> CKRecord {
-        print("QQQ - fetchRecord Called")
         return try await container.publicCloudDatabase.record(for: id)
     }
     
     
     func deleteRecord(recordID: CKRecord.ID) async throws -> CKRecord.ID {
-        print("OOO - deleteRecord Called")
         return try await container.publicCloudDatabase.deleteRecord(withID: recordID)
     }
 }

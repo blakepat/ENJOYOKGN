@@ -147,7 +147,12 @@ struct CreateReviewView: View {
                                     reviewRecord[OKGNReview.kLocation] = CKRecord.Reference(recordID: selectedLocationId, action: .none)
                                     reviewRecord[OKGNReview.kReviewer] = CKRecord.Reference(recordID: profileRecordID, action: .none)
                                     reviewRecord[OKGNReview.kCaption] = viewModel.caption
-                                    reviewRecord[OKGNReview.kPhoto] = viewModel.selectedImage.convertToCKAsset(path: "selectedPhoto")
+                                    
+                                    // Only convert to CKAsset if not the placeholder image
+                                    if viewModel.selectedImage != PlaceholderImage.square {
+                                        reviewRecord[OKGNReview.kPhoto] = viewModel.selectedImage.convertToCKAsset(path: "selectedPhoto")
+                                    }
+                                    
                                     reviewRecord[OKGNReview.kRating] = "\(viewModel.firstNumber).\(viewModel.secondNumber)"
                                     reviewRecord[OKGNReview.kDate] = selectedDate
                                     reviewRecord[OKGNReview.klocationName] = viewModel.locationName
@@ -158,7 +163,9 @@ struct CreateReviewView: View {
                                 
                                 do {
                                     if let _ = try await CloudKitManager.shared.batchSave(records: [reviewRecord]) {
-                                        addNewReviewToTotals(reviewCategory: returnCategoryFromString(viewModel.selectedLocationCategory ?? ""))
+                                        if let category = viewModel.selectedLocationCategory {
+                                            addNewReviewToTotals(reviewCategory: returnCategoryFromString(category))
+                                        }
                                         
                                         viewModel.alertItem = AlertContext.successfullyCreatedReview
                                         viewModel.showAlertView = true
@@ -171,6 +178,8 @@ struct CreateReviewView: View {
                                     }
                                 } catch {
                                     print("❌ failed saving review")
+                                    viewModel.alertItem = AlertContext.reviewCreationFailed
+                                    viewModel.showAlertView = true
                                 }
                             } else {
                                 print("❌❌ unable to get locations")
@@ -179,7 +188,9 @@ struct CreateReviewView: View {
                                 return
                             }
                         } catch {
-                            print("failure in fetching record review")
+                            print("failure in fetching record review: \(error)")
+                            viewModel.alertItem = AlertContext.reviewCreationFailed
+                            viewModel.showAlertView = true
                         }
                     }
                 }
@@ -192,6 +203,7 @@ struct CreateReviewView: View {
             }
         }
     }
+
     
     
     
@@ -284,7 +296,6 @@ struct CreateReviewView: View {
     
 
 extension CreateReviewView {
-    
     
     private var createReviewTitle: some View {
         HStack {
@@ -498,7 +509,7 @@ extension CreateReviewView {
                                             .foregroundColor(.gray)
                                     }
                                 )
-           
+                        } else {
                             Image(uiImage: viewModel.selectedImage)
                                 .resizable()
                                 .scaledToFill()

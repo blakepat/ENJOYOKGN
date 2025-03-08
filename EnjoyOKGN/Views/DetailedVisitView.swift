@@ -85,7 +85,7 @@ struct DetailedVisitModalView: View {
                 
                 HStack {
                     
-                    if review.reviewerName == CloudKitManager.shared.profile?.convertToOKGNProfile().name {
+                    if review.reviewerName.lowercased() == CloudKitManager.shared.profile?.convertToOKGNProfile().name.lowercased() {
                         Button {
                             deleteVisit()
                             removeFromAwards(reviewCategory: returnCategoryFromString(review.locationCategory))
